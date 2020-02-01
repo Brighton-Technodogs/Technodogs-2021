@@ -1,45 +1,35 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import org.usfirst.frc3707.Creedence.Robot;
+import frc.robot.Constants;
+import frc.robot.swerve.SwerveDrive;
+import frc.robot.swerve.SwerveWheel;
 
-import org.usfirst.frc3707.Creedence.Robot;
-import org.usfirst.frc3707.Creedence.Configuration.Constants;
-import org.usfirst.frc3707.Creedence.commands.drive.DriveCommand;
-import org.usfirst.frc3707.Creedence.pixy2API.Pixy2Line;
-import org.usfirst.frc3707.Creedence.pixy2API.Pixy2Line.Vector;
-import org.usfirst.frc3707.Creedence.swerve.SwerveDrive;
-import org.usfirst.frc3707.Creedence.swerve.SwerveWheel;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveSubsystem extends Subsystem {
+public class DriveSubsystem extends SubsystemBase {
 
-    private AnalogPotentiometer frontRightEncoder = new AnalogPotentiometer(Constants.DriveSystem.FrontRight.getEncoder(), 360.0, 0.0);
-    private VictorSP frontRightSwerve = new VictorSP(Constants.DriveSystem.FrontRight.getSwerve());
-    private PIDController frontRightTwist = new PIDController(0.05, 0.0, 0.0, 0.0, frontRightEncoder, frontRightSwerve, 0.02);
-    private AnalogPotentiometer frontLeftEncoder = new AnalogPotentiometer(Constants.DriveSystem.FrontLeft.getEncoder(), 360.0, 0.0);;
-    private VictorSP frontLeftSwerve = new VictorSP(Constants.DriveSystem.FrontLeft.getSwerve());
-    private PIDController frontLeftTwist = new PIDController(0.05, 0.0, 0.0, 0.0, frontLeftEncoder, frontLeftSwerve, 0.02);;
-    private AnalogPotentiometer backRightEncoder = new AnalogPotentiometer(Constants.DriveSystem.BackRight.getEncoder(), 360.0, 0.0);
-    private VictorSP backRightSwerve = new VictorSP(Constants.DriveSystem.BackRight.getSwerve());
-    private PIDController backRightTwist = new PIDController(0.05, 0.0, 0.0, 0.0, backRightEncoder, backRightSwerve, 0.02);
-    private AnalogPotentiometer backLeftEncoder = new AnalogPotentiometer(Constants.DriveSystem.BackLeft.getEncoder(), 360.0, 0.0);
-    private VictorSP backLeftSwerve = new VictorSP(Constants.DriveSystem.BackLeft.getSwerve());
-    private PIDController backLeftTwist = new PIDController(0.05, 0.0, 0.0, 0.0, backLeftEncoder, backLeftSwerve, 0.02);
+    private AnalogPotentiometer frontRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontRightEncoderPort, 360.0, 0.0);
+    private VictorSP frontRightTwistMotor = new VictorSP(Constants.DriveSubsystem.kFrontRightTwistMotorPort);
+    private PIDController frontRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private AnalogPotentiometer frontLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontLeftEncoderPort, 360.0, 0.0);
+    private VictorSP frontLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kFrontLeftTwistMotorPort);
+    private PIDController frontLeftTwistController = new PIDController(0.05, 0.0, 0.0);
+    private AnalogPotentiometer backRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackRightEncoderPort, 360.0, 0.0);
+    private VictorSP backRightTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearRightTwistMotorPort);
+    private PIDController backRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private AnalogPotentiometer backLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackLeftEncoderPort, 360.0, 0.0);
+    private VictorSP backLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftTwistMotorPort);
+    private PIDController backLeftTwistController = new PIDController(0.05, 0.0, 0.0);
     
-    private VictorSP frontRightDrive = new VictorSP(Constants.DriveSystem.FrontRight.getDrive());
-    private VictorSP frontLeftDrive = new VictorSP(Constants.DriveSystem.FrontLeft.getDrive());
-    private VictorSP backRightDrive = new VictorSP(Constants.DriveSystem.BackRight.getDrive());
-    private VictorSP backLeftDrive = new VictorSP(Constants.DriveSystem.BackLeft.getDrive());
+    private VictorSP frontRightDriveMotor = new VictorSP(Constants.DriveSubsystem.kFrontRightDriveMotorPort);
+    private VictorSP frontLeftDriveMotor = new VictorSP(Constants.DriveSubsystem.kFrontLeftDriveMotorPort);
+    private VictorSP backRightDriveMotor = new VictorSP(Constants.DriveSubsystem.kRearRightDriveMotorPort);
+    private VictorSP backLeftDriveMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftDriveMotorPort);
 
     // private CANSparkMax frontRightDrive = new CANSparkMax(Constants.DriveSystem.FrontRight.getDrive(), MotorType.kBrushless);
     // private CANSparkMax frontLeftDrive = new CANSparkMax(Constants.DriveSystem.FrontLeft.getDrive(), MotorType.kBrushless);
@@ -47,31 +37,20 @@ public class DriveSubsystem extends Subsystem {
     // private CANSparkMax backLeftDrive = new CANSparkMax(Constants.DriveSystem.BackLeft.getDrive(), MotorType.kBrushless);
 
 
-    private SwerveWheel frontRightWheel = new SwerveWheel(frontRightTwist, frontRightDrive, Constants.DriveSystem.FrontRight.getOffset());
-    private SwerveWheel frontLeftWheel = new SwerveWheel(frontLeftTwist, frontLeftDrive,Constants.DriveSystem.FrontLeft.getOffset());
-    private SwerveWheel backRightWheel = new SwerveWheel(backRightTwist, backRightDrive, Constants.DriveSystem.BackRight.getOffset());
-    private SwerveWheel backLeftWheel = new SwerveWheel(backLeftTwist, backLeftDrive, Constants.DriveSystem.BackLeft.getOffset());
+    private SwerveWheel frontRightWheel = new SwerveWheel(frontRightTwistController, frontRightEncoder, frontRightTwistMotor, frontRightDriveMotor, Constants.DriveSubsystem.kFrontRightEncoderOffset);
+    private SwerveWheel frontLeftWheel = new SwerveWheel(frontLeftTwistController, frontLeftEncoder, frontLeftTwistMotor, frontLeftDriveMotor,Constants.DriveSubsystem.kFrontLeftEncoderOffset);
+    private SwerveWheel backRightWheel = new SwerveWheel(backRightTwistController, backRightEncoder, backRightTwistMotor, backRightDriveMotor, Constants.DriveSubsystem.kRearRightEncoderOffset);
+    private SwerveWheel backLeftWheel = new SwerveWheel(backLeftTwistController, backLeftEncoder, backLeftTwistMotor, backLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset);
     public SwerveDrive swerve = new SwerveDrive(frontRightWheel, frontLeftWheel, backLeftWheel, backRightWheel, null);
 
     public void init() {
         //this is how you set a parameter on the spark... this one sets it to PWM
         //frontLeftDrive.setParameter(com.revrobotics.CANSparkMaxLowLevel.ConfigParameter.kInputMode, CANSparkMax.InputMode.kPWM.value);
-        
-        frontRightTwist.setInputRange(0.0, 360.0);
-        frontRightTwist.setOutputRange(-1.0, 1.0);
-        frontRightTwist.setContinuous(true);
+        frontRightTwistController.enableContinuousInput(0.0, 360.0);
+        frontLeftTwistController.enableContinuousInput(0.0, 360.0);
+        backLeftTwistController.enableContinuousInput(0.0, 360.0);
+        backRightTwistController.enableContinuousInput(0.0, 360.0);
 
-        frontLeftTwist.setInputRange(0.0, 360.0);
-        frontLeftTwist.setOutputRange(-1.0, 1.0);
-        frontLeftTwist.setContinuous(true);
-
-        backLeftTwist.setInputRange(0.0, 360.0);
-        backLeftTwist.setOutputRange(-1.0, 1.0);
-        backLeftTwist.setContinuous(true);
-
-        backRightTwist.setInputRange(0.0, 360.0);
-        backRightTwist.setOutputRange(-1.0, 1.0);
-        backRightTwist.setContinuous(true);
 
     }
 
@@ -109,11 +88,6 @@ public class DriveSubsystem extends Subsystem {
     public void drive(double directionX, double directionY, double rotation, boolean useGyro, boolean slowSpeed,
             boolean noPush) {
         swerve.drive(directionX, directionY, rotation, false, slowSpeed, noPush);
-    }
-
-    @Override
-    public void initDefaultCommand() {
-        setDefaultCommand(new DriveCommand());
     }
 
     /**

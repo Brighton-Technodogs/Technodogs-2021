@@ -7,42 +7,39 @@
 
 package frc.robot.commands.drive;
 
-import org.usfirst.frc3707.Creedence.Robot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.command.Command;
+public class DisableBackRightRotationCommand extends CommandBase {
 
-public class DisableBackRightRotationCommand extends Command {
-  public DisableBackRightRotationCommand() {
+  private final DriveSubsystem mDriveSubsystem;
+
+  public DisableBackRightRotationCommand(DriveSubsystem driveSubsystem) {
+    this.mDriveSubsystem = driveSubsystem;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
-    Robot.driveSubsystem.disableBackRightWheelRotation();
+  public void initialize() {
+    this.mDriveSubsystem.disableBackRightWheelRotation();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  public void execute() {
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
+  public boolean isFinished() {
     return false;
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-    Robot.driveSubsystem.enableBackRightWheelRotation();
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
+    this.mDriveSubsystem.enableBackRightWheelRotation();
   }
 }

@@ -10,33 +10,32 @@
 
 package frc.robot.commands.drive;
 
-import org.usfirst.frc3707.Creedence.Robot;
-
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  *
  */
-public class DriveCommand extends Command {
+public class DriveCommand extends CommandBase {
 
-    public DriveCommand() {
+    private final DriveSubsystem mDriveSubsystem;
 
-        
-        requires(Robot.driveSubsystem);
+    public DriveCommand(DriveSubsystem driveSubsystem) {
+        this.mDriveSubsystem = driveSubsystem;
 
     }
 
     // Called just before this Command runs the first time
     @Override
-    protected void initialize() {
-        Robot.driveSubsystem.enable();
+    public void initialize() {
+        this.mDriveSubsystem.enable();
     }
 
     // Lidar lidarCrab = new Lidar(new DigitalInput(10));
 
     // Called repeatedly when this Command is scheduled to run
     @Override
-    protected void execute() {
+    public void execute() {
 
         Robot.oi.driveByJoystick(-Robot.oi.driverController.getLeftStickXValue());
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
@@ -46,19 +45,14 @@ public class DriveCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
-    protected boolean isFinished() {
+    public boolean isFinished() {
         return false;
     }
 
     // Called once after isFinished returns true
     @Override
-    protected void end() {
+    public void end(boolean interrupted) {
 
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    @Override
-    protected void interrupted() {
-    }
 }

@@ -1,18 +1,23 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class SwerveWheel {
     private PIDController rotation;
-    private SpeedController speed;
+    private AnalogPotentiometer potentiometer;
+    private SpeedController driveMotor;
+    private SpeedController twistMotor;
     private double offset;
     private boolean enabled = true;
 
-    public SwerveWheel(PIDController rotation, SpeedController speed, double offset) {
+    public SwerveWheel(PIDController rotation, AnalogPotentiometer potentiometer, SpeedController twistMotor, SpeedController driveMotor, double offset) {
         System.out.println("wheel Initialized");
+        this.potentiometer = potentiometer;
         this.rotation = rotation;
-        this.speed = speed;
+        this.driveMotor = driveMotor;
+        this.twistMotor = twistMotor;
         this.offset = offset;
     }
 
@@ -34,7 +39,7 @@ public class SwerveWheel {
      */
     public void updateSpeed(double newSpeed) {
         if(enabled) {
-            speed.set(newSpeed);
+            driveMotor.set(newSpeed);
         }
     }
 
@@ -44,25 +49,32 @@ public class SwerveWheel {
      * @param newAngle The angle at which to position the drive wheel
      */
     public void updateRotation(double newAngle) {
-        newAngle = newAngle + offset;
 
-        if (newAngle < 0) {
-            rotation.setSetpoint(360 - (newAngle * -1));
-        } else if (newAngle > 360) {
-            rotation.setSetpoint(newAngle - 360);
-        } else {
-            rotation.setSetpoint(newAngle);
-
+        if (this.enabled) {
+            newAngle = newAngle + offset;
+            double setpoint;
+    
+            if (newAngle < 0) {
+                setpoint =  360 - (newAngle * -1);
+            } else if (newAngle > 360) {
+                setpoint = newAngle - 360;
+            } else {
+                setpoint = newAngle;
+            }
+    
+            twistMotor.set(rotation.calculate(this.potentiometer.get(), setpoint));
         }
+        else {
+            twistMotor.set(0);
+        }
+
     }
 
     public void disableRotation() {
-        rotation.disable();
-        enabled = false;
+        this.enabled = false;
     }
 
     public void enableRotation() {
-        rotation.enable();
-        enabled = true;
+        this.enabled = true;
     }
 }
