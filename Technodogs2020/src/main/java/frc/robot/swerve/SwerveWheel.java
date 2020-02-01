@@ -11,6 +11,7 @@ public class SwerveWheel {
     private SpeedController twistMotor;
     private double offset;
     private boolean enabled = true;
+    private double currentAngle;
 
     public SwerveWheel(PIDController rotation, AnalogPotentiometer potentiometer, SpeedController twistMotor, SpeedController driveMotor, double offset) {
         System.out.println("wheel Initialized");
@@ -43,12 +44,33 @@ public class SwerveWheel {
         }
     }
 
+        /**
+     * Update the angle at which to position the drive wheel
+     * 
+     * @param newAngle The angle at which to position the drive wheel
+     */
+    public void updateRotation() {
+
+        System.out.println(this.potentiometer.get());
+
+        if (this.enabled) {
+            twistMotor.set(rotation.calculate(this.potentiometer.get(), this.currentAngle));
+        }
+        else {
+            twistMotor.set(0);
+        }
+
+    }
+
     /**
      * Update the angle at which to position the drive wheel
      * 
      * @param newAngle The angle at which to position the drive wheel
      */
     public void updateRotation(double newAngle) {
+        this.currentAngle = newAngle;
+
+        System.out.println(this.potentiometer.get());
 
         if (this.enabled) {
             newAngle = newAngle + offset;

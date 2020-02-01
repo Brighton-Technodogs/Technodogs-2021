@@ -74,6 +74,11 @@ public class SwerveDrive implements PIDOutput {
             this.leftFrontWheel.updateSpeed(0);
             this.leftBackWheel.updateSpeed(0);
             this.rightBackWheel.updateSpeed(0);
+
+            this.rightFrontWheel.updateRotation();
+            this.leftFrontWheel.updateRotation();
+            this.leftBackWheel.updateRotation();
+            this.rightBackWheel.updateRotation();
             return;
         }
         // Deadzone if ROTATION joystick only near the center (this fixes the rotation

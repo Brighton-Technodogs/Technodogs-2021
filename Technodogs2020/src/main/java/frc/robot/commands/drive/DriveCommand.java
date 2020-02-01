@@ -10,7 +10,10 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -20,8 +23,11 @@ public class DriveCommand extends CommandBase {
 
     private final DriveSubsystem mDriveSubsystem;
 
+    XboxController m_driverController = new XboxController(Constants.DriverControl.kDriverControllerPort);
+
     public DriveCommand(DriveSubsystem driveSubsystem) {
         this.mDriveSubsystem = driveSubsystem;
+        this.addRequirements(driveSubsystem);
 
     }
 
@@ -37,7 +43,12 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
 
-        Robot.oi.driveByJoystick(-Robot.oi.driverController.getLeftStickXValue());
+        double directionX = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickXAxis);
+        double directionY = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickYAxis);
+        double rotation = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerRightStickXAxis);
+
+        this.mDriveSubsystem.drive(directionX, directionY, rotation, false, false, false);
+
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
         //             -Robot.oi.driverController.getRightStickXValue(), false,
         //             Robot.oi.driverController.getRightBumperPressed(), Robot.oi.driverController.getXButtonPressed());

@@ -17,6 +17,14 @@ package frc.robot;
  */
 public final class Constants {
 
+    public final class DriverControl {
+        public static final int kDriverControllerPort = 0;
+        public static final int kDriverControllerLeftStickXAxis = 0;
+        public static final int kDriverControllerLeftStickYAxis = 1;
+        public static final int kDriverControllerRightStickXAxis = 4;
+        public static final int kDriverControllerRightStickYAxis = 5;
+    }
+
     public final class DriveSubsystem {
         public static final int kFrontLeftDriveMotorPort = 2;
         public static final int kRearLeftDriveMotorPort = 3;
