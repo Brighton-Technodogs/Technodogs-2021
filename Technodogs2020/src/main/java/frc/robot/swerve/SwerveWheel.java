@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import frc.robot.Constants;
+
 public class SwerveWheel {
     private PIDController rotation;
     private AnalogPotentiometer potentiometer;
@@ -44,14 +46,13 @@ public class SwerveWheel {
         }
     }
 
-        /**
+    /**
      * Update the angle at which to position the drive wheel
-     * 
-     * @param newAngle The angle at which to position the drive wheel
      */
     public void updateRotation() {
 
         System.out.println(this.potentiometer.get());
+        rotation.
 
         if (this.enabled) {
             twistMotor.set(rotation.calculate(this.potentiometer.get(), this.currentAngle));
