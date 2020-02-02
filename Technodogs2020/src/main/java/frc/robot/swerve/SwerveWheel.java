@@ -52,7 +52,6 @@ public class SwerveWheel {
     public void updateRotation() {
 
         System.out.println(this.potentiometer.get());
-        rotation.
 
         if (this.enabled) {
             twistMotor.set(rotation.calculate(this.potentiometer.get(), this.currentAngle));
