@@ -1,9 +1,8 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.wpilibj.GyroBase;
-import edu.wpi.first.wpilibj.PIDOutput;
 
-public class SwerveDrive implements PIDOutput {
+public class SwerveDrive {
 
     private SwerveWheel rightFrontWheel;
     private SwerveWheel leftFrontWheel;
@@ -171,13 +170,6 @@ public class SwerveDrive implements PIDOutput {
         this.leftBackWheel.drive(backLeftSpeed, backLeftAngle);
         this.rightBackWheel.drive(backRightSpeed, backRightAngle);
 
-    }
-
-    @Override
-    public void pidWrite(double output) {
-        System.out.println("X");
-        System.out.println(output);
-        drive(output, 0, 0, false, false, false);
     }
 
     public double normalizeGyroAngle(double angle) {
