@@ -26,6 +26,7 @@ public class DriveCommand extends CommandBase {
     XboxController m_driverController = new XboxController(Constants.DriverControl.kDriverControllerPort);
 
     public DriveCommand(DriveSubsystem driveSubsystem) {
+        System.out.println("Constructing DriveCommand");
         this.mDriveSubsystem = driveSubsystem;
         this.addRequirements(driveSubsystem);
 
@@ -34,6 +35,8 @@ public class DriveCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
+        System.out.println("Initializing DriveCommand");
+        this.mDriveSubsystem.init();
         this.mDriveSubsystem.enable();
     }
 
@@ -52,18 +55,6 @@ public class DriveCommand extends CommandBase {
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
         //             -Robot.oi.driverController.getRightStickXValue(), false,
         //             Robot.oi.driverController.getRightBumperPressed(), Robot.oi.driverController.getXButtonPressed());
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    // Called once after isFinished returns true
-    @Override
-    public void end(boolean interrupted) {
-
     }
 
 }

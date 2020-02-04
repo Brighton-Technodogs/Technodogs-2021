@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import frc.robot.Constants;
 
 public class SwerveWheel {
-    private PIDController rotation;
+    private PIDController rotationController;
     private AnalogPotentiometer potentiometer;
     private SpeedController driveMotor;
     private SpeedController twistMotor;
@@ -15,10 +15,10 @@ public class SwerveWheel {
     private boolean enabled = true;
     private double currentAngle;
 
-    public SwerveWheel(PIDController rotation, AnalogPotentiometer potentiometer, SpeedController twistMotor, SpeedController driveMotor, double offset) {
+    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, SpeedController twistMotor, SpeedController driveMotor, double offset) {
         System.out.println("wheel Initialized");
         this.potentiometer = potentiometer;
-        this.rotation = rotation;
+        this.rotationController = rotationController;
         this.driveMotor = driveMotor;
         this.twistMotor = twistMotor;
         this.offset = offset;
@@ -51,10 +51,8 @@ public class SwerveWheel {
      */
     public void updateRotation() {
 
-        System.out.println(this.potentiometer.get());
-
         if (this.enabled) {
-            twistMotor.set(rotation.calculate(this.potentiometer.get(), this.currentAngle));
+            twistMotor.set(rotationController.calculate(this.potentiometer.get(), this.currentAngle));
         }
         else {
             twistMotor.set(0);
@@ -68,9 +66,7 @@ public class SwerveWheel {
      * @param newAngle The angle at which to position the drive wheel
      */
     public void updateRotation(double newAngle) {
-        this.currentAngle = newAngle;
-
-        System.out.println(this.potentiometer.get());
+        // System.out.println("Updating Rotation. Current Encoder value = [" + this.potentiometer.get() + "] Setpoint = [" + newAngle + "]");
 
         if (this.enabled) {
             newAngle = newAngle + offset;
@@ -84,7 +80,7 @@ public class SwerveWheel {
                 setpoint = newAngle;
             }
     
-            twistMotor.set(rotation.calculate(this.potentiometer.get(), setpoint));
+            twistMotor.set(rotationController.calculate(this.potentiometer.get(), setpoint));
         }
         else {
             twistMotor.set(0);

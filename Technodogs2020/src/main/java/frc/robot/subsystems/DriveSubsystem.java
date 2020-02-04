@@ -43,21 +43,22 @@ public class DriveSubsystem extends SubsystemBase {
     private SwerveWheel backLeftWheel = new SwerveWheel(backLeftTwistController, backLeftEncoder, backLeftTwistMotor, backLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset);
     public SwerveDrive swerve = new SwerveDrive(frontRightWheel, frontLeftWheel, backLeftWheel, backRightWheel, null);
 
+
     public void init() {
+        System.out.println("Initializing DriveSubsystem");
         //this is how you set a parameter on the spark... this one sets it to PWM
         //frontLeftDrive.setParameter(com.revrobotics.CANSparkMaxLowLevel.ConfigParameter.kInputMode, CANSparkMax.InputMode.kPWM.value);
         frontRightTwistController.enableContinuousInput(0.0, 360.0);
         frontLeftTwistController.enableContinuousInput(0.0, 360.0);
         backLeftTwistController.enableContinuousInput(0.0, 360.0);
         backRightTwistController.enableContinuousInput(0.0, 360.0);
-
-
     }
 
     /**
      * Enables motors. bcuz it werkz?
      */
     public void enable() {
+        System.out.println("Enabling DriveSubsystem");
         frontRightWheel.enableRotation();
         frontLeftWheel.enableRotation();
         backRightWheel.enableRotation();
@@ -68,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
      * Disables motors. bcuz it werkz?
      */
     public void disable() {
+        System.out.println("Disabling DriveSubsystem");
         frontRightWheel.disableRotation();
         frontLeftWheel.disableRotation();
         backRightWheel.disableRotation();
