@@ -41,10 +41,10 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 1;
         public static final int kBackRightEncoderPort = 2;
 
-        public static final double kFrontLeftEncoderOffset = 60;
-        public static final double kRearLeftEncoderOffset = 11;
-        public static final double kFrontRightEncoderOffset = 28;
-        public static final double kRearRightEncoderOffset = 18;
+        public static final double kFrontLeftEncoderOffset = 211.25; //60
+        public static final double kRearLeftEncoderOffset = 120.9; //11
+        public static final double kFrontRightEncoderOffset = 39.2; //28
+        public static final double kRearRightEncoderOffset = 248.75; //18
     }
 
 
