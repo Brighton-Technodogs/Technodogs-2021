@@ -4,18 +4,21 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+
 import frc.robot.Constants;
 
 public class SwerveWheel {
     private PIDController rotationController;
     private AnalogPotentiometer potentiometer;
-    private SpeedController driveMotor;
+    private BaseMotorController driveMotor;
     private SpeedController twistMotor;
     private double offset;
     private boolean enabled = true;
     private double currentAngle;
 
-    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, SpeedController twistMotor, SpeedController driveMotor, double offset) {
+    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, SpeedController twistMotor, BaseMotorController driveMotor, double offset) {
         System.out.println("wheel Initialized");
         this.potentiometer = potentiometer;
         this.rotationController = rotationController;
@@ -42,7 +45,7 @@ public class SwerveWheel {
      */
     public void updateSpeed(double newSpeed) {
         if(enabled) {
-            driveMotor.set(newSpeed);
+            driveMotor.set(ControlMode.PercentOutput, newSpeed);
         }
     }
 

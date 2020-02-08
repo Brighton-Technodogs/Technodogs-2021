@@ -5,6 +5,8 @@ import frc.robot.Constants;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.swerve.SwerveWheel;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -26,10 +28,10 @@ public class DriveSubsystem extends SubsystemBase {
     private VictorSP backLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftTwistMotorPort);
     private PIDController backLeftTwistController = new PIDController(0.05, 0.0, 0.0);
     
-    private VictorSP frontRightDriveMotor = new VictorSP(Constants.DriveSubsystem.kFrontRightDriveMotorPort);
-    private VictorSP frontLeftDriveMotor = new VictorSP(Constants.DriveSubsystem.kFrontLeftDriveMotorPort);
-    private VictorSP backRightDriveMotor = new VictorSP(Constants.DriveSubsystem.kRearRightDriveMotorPort);
-    private VictorSP backLeftDriveMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftDriveMotorPort);
+    private TalonFX frontRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontRightDriveMotorCanID);
+    private TalonFX frontLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontLeftDriveMotorCanID);
+    private TalonFX backRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearRightDriveMotorCanID);
+    private TalonFX backLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearLeftDriveMotorCanID);
 
     // private CANSparkMax frontRightDrive = new CANSparkMax(Constants.DriveSystem.FrontRight.getDrive(), MotorType.kBrushless);
     // private CANSparkMax frontLeftDrive = new CANSparkMax(Constants.DriveSystem.FrontLeft.getDrive(), MotorType.kBrushless);
