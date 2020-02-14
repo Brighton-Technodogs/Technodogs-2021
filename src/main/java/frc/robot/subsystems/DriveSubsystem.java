@@ -6,6 +6,7 @@ import frc.robot.swerve.SwerveDrive;
 import frc.robot.swerve.SwerveWheel;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -18,42 +19,43 @@ public class DriveSubsystem extends SubsystemBase {
     private AnalogPotentiometer frontRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontRightEncoderPort, 360.0, 0.0);
     private VictorSP frontRightTwistMotor = new VictorSP(Constants.DriveSubsystem.kFrontRightTwistMotorPort);
     private PIDController frontRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private TalonFX frontRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontRightDriveMotorCanID);
+    private SwerveWheel frontRightWheel = new SwerveWheel(frontRightTwistController, frontRightEncoder, frontRightTwistMotor, frontRightDriveMotor, Constants.DriveSubsystem.kFrontRightEncoderOffset);
+
     private AnalogPotentiometer frontLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontLeftEncoderPort, 360.0, 0.0);
     private VictorSP frontLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kFrontLeftTwistMotorPort);
     private PIDController frontLeftTwistController = new PIDController(0.05, 0.0, 0.0);
-    private AnalogPotentiometer backRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackRightEncoderPort, 360.0, 0.0);
-    private VictorSP backRightTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearRightTwistMotorPort);
-    private PIDController backRightTwistController = new PIDController(0.05, 0.0, 0.0);
-    private AnalogPotentiometer backLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackLeftEncoderPort, 360.0, 0.0);
-    private VictorSP backLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftTwistMotorPort);
-    private PIDController backLeftTwistController = new PIDController(0.05, 0.0, 0.0);
-    
-    private TalonFX frontRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontRightDriveMotorCanID);
     private TalonFX frontLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontLeftDriveMotorCanID);
-    private TalonFX backRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearRightDriveMotorCanID);
-    private TalonFX backLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearLeftDriveMotorCanID);
-
-    // private CANSparkMax frontRightDrive = new CANSparkMax(Constants.DriveSystem.FrontRight.getDrive(), MotorType.kBrushless);
-    // private CANSparkMax frontLeftDrive = new CANSparkMax(Constants.DriveSystem.FrontLeft.getDrive(), MotorType.kBrushless);
-    // private CANSparkMax backRightDrive = new CANSparkMax(Constants.DriveSystem.BackRight.getDrive(), MotorType.kBrushless);
-    // private CANSparkMax backLeftDrive = new CANSparkMax(Constants.DriveSystem.BackLeft.getDrive(), MotorType.kBrushless);
-
-
-    private SwerveWheel frontRightWheel = new SwerveWheel(frontRightTwistController, frontRightEncoder, frontRightTwistMotor, frontRightDriveMotor, Constants.DriveSubsystem.kFrontRightEncoderOffset);
     private SwerveWheel frontLeftWheel = new SwerveWheel(frontLeftTwistController, frontLeftEncoder, frontLeftTwistMotor, frontLeftDriveMotor,Constants.DriveSubsystem.kFrontLeftEncoderOffset);
-    private SwerveWheel backRightWheel = new SwerveWheel(backRightTwistController, backRightEncoder, backRightTwistMotor, backRightDriveMotor, Constants.DriveSubsystem.kRearRightEncoderOffset);
-    private SwerveWheel backLeftWheel = new SwerveWheel(backLeftTwistController, backLeftEncoder, backLeftTwistMotor, backLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset);
-    public SwerveDrive swerve = new SwerveDrive(frontRightWheel, frontLeftWheel, backLeftWheel, backRightWheel, null);
+
+    private AnalogPotentiometer rearRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackRightEncoderPort, 360.0, 0.0);
+    private VictorSP rearRightTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearRightTwistMotorPort);
+    private PIDController rearRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private TalonFX rearRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearRightDriveMotorCanID);
+    private SwerveWheel rearRightWheel = new SwerveWheel(rearRightTwistController, rearRightEncoder, rearRightTwistMotor, rearRightDriveMotor, Constants.DriveSubsystem.kRearRightEncoderOffset);
+
+
+    private AnalogPotentiometer rearLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackLeftEncoderPort, 360.0, 0.0);
+    private VictorSP rearLeftTwistMotor = new VictorSP(Constants.DriveSubsystem.kRearLeftTwistMotorPort);
+    private PIDController rearLeftTwistController = new PIDController(0.05, 0.0, 0.0);
+    private TalonFX rearLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearLeftDriveMotorCanID);
+    private SwerveWheel rearLeftWheel = new SwerveWheel(rearLeftTwistController, rearLeftEncoder, rearLeftTwistMotor, rearLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset);
+    
+    public SwerveDrive swerve = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel, null);
 
 
     public void init() {
         System.out.println("Initializing DriveSubsystem");
-        //this is how you set a parameter on the spark... this one sets it to PWM
-        //frontLeftDrive.setParameter(com.revrobotics.CANSparkMaxLowLevel.ConfigParameter.kInputMode, CANSparkMax.InputMode.kPWM.value);
+        setupEncoders();
+
+    }
+
+    private void setupEncoders() {
         frontRightTwistController.enableContinuousInput(0.0, 360.0);
         frontLeftTwistController.enableContinuousInput(0.0, 360.0);
-        backLeftTwistController.enableContinuousInput(0.0, 360.0);
-        backRightTwistController.enableContinuousInput(0.0, 360.0);
+        rearLeftTwistController.enableContinuousInput(0.0, 360.0);
+        rearRightTwistController.enableContinuousInput(0.0, 360.0);
+
     }
 
     /**
@@ -63,8 +65,8 @@ public class DriveSubsystem extends SubsystemBase {
         System.out.println("Enabling DriveSubsystem");
         frontRightWheel.enableRotation();
         frontLeftWheel.enableRotation();
-        backRightWheel.enableRotation();
-        backLeftWheel.enableRotation();
+        rearRightWheel.enableRotation();
+        rearLeftWheel.enableRotation();
     }
 
     /**
@@ -74,8 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
         System.out.println("Disabling DriveSubsystem");
         frontRightWheel.disableRotation();
         frontLeftWheel.disableRotation();
-        backRightWheel.disableRotation();
-        backLeftWheel.disableRotation();
+        rearRightWheel.disableRotation();
+        rearLeftWheel.disableRotation();
     }
 
     /**
@@ -99,23 +101,31 @@ public class DriveSubsystem extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Front Right Encoder", frontRightEncoder.get());
-        SmartDashboard.putNumber("Front Left Encoder", frontLeftEncoder.get());
-        SmartDashboard.putNumber("Back Right Encoder", backRightEncoder.get());
-        SmartDashboard.putNumber("Back Left Encoder", backLeftEncoder.get());
+        publishDataToSmartDashboard();
     }
 
+    private void publishDataToSmartDashboard() {
+
+        // Publish encoder values to smart dashboard for offset tuning
+        SmartDashboard.putNumber("Front Right Encoder", frontRightEncoder.get());
+        SmartDashboard.putNumber("Front Left Encoder", frontLeftEncoder.get());
+        SmartDashboard.putNumber("Back Right Encoder", rearRightEncoder.get());
+        SmartDashboard.putNumber("Back Left Encoder", rearLeftEncoder.get());
+
+    }
+
+    
     public void disableFrontRightWheelRotation(){
         frontRightWheel.disableRotation();
     }
     public void disableFrontLeftWheelRotation(){
         frontLeftWheel.disableRotation();
     }
-    public void disableBackRightWheelRotation(){
-        backRightWheel.disableRotation();
+    public void disableRearRightWheelRotation(){
+        rearRightWheel.disableRotation();
     }
-    public void disableBackLeftWheelRotation(){
-        backLeftWheel.disableRotation();
+    public void disableRearLeftWheelRotation(){
+        rearLeftWheel.disableRotation();
     }
     public void enableFrontRightWheelRotation(){
         frontRightWheel.enableRotation();
@@ -123,10 +133,10 @@ public class DriveSubsystem extends SubsystemBase {
     public void enableFrontLeftWheelRotation(){
         frontLeftWheel.enableRotation();
     }
-    public void enableBackRightWheelRotation(){
-        backRightWheel.enableRotation();
+    public void enableRearRightWheelRotation(){
+        rearRightWheel.enableRotation();
     }
-    public void enableBackLeftWheelRotation(){
-        backLeftWheel.enableRotation();
+    public void enableRearLeftWheelRotation(){
+        rearLeftWheel.enableRotation();
     }
 }

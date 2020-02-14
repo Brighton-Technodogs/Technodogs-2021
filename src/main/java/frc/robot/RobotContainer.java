@@ -12,12 +12,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.DisableBackLeftRotationCommand;
-import frc.robot.commands.drive.DisableBackRightRotationCommand;
+import frc.robot.commands.drive.DisableRearLeftRotationCommand;
+import frc.robot.commands.drive.DisableRearRightRotationCommand;
 import frc.robot.commands.drive.DisableFrontLeftRotationCommand;
 import frc.robot.commands.drive.DisableFrontRightRotationCommand;
 
-import frc.robot.subsystems.ExampleSubsystem;
+// import frc.robot.commands.drive.EnableRearLeftRotationCommand;
+// import frc.robot.commands.drive.EnableRearRightRotationCommand;
+// import frc.robot.commands.drive.EnableFrontLeftRotationCommand;
+// import frc.robot.commands.drive.EnableFrontRightRotationCommand;
+
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -33,6 +37,15 @@ public class RobotContainer {
 
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
 
+  private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
+  private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
+  private final DisableFrontLeftRotationCommand disableFrontLeftRotationCommand = new DisableFrontLeftRotationCommand(driveSubsystem);
+  private final DisableFrontRightRotationCommand disableFrontRightRotationCommand = new DisableFrontRightRotationCommand(driveSubsystem);
+
+  // private final EnableRearLeftRotationCommand enableRearLeftRotationCommand = new EnableRearLeftRotationCommand(driveSubsystem);
+  // private final EnableRearRightRotationCommand enableRearRightRotationCommand = new EnableRearRightRotationCommand(driveSubsystem);
+  // private final EnableFrontLeftRotationCommand enableFrontLeftRotationCommand = new EnableFrontLeftRotationCommand(driveSubsystem);
+  // private final EnableFrontRightRotationCommand enableFrontRightRotationCommand = new EnableFrontRightRotationCommand(driveSubsystem);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.

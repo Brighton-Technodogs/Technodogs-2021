@@ -10,12 +10,11 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DisableBackLeftRotationCommand extends CommandBase {
+public class DisableRearRightRotationCommand extends CommandBase {
 
   private final DriveSubsystem mDriveSubsystem;
 
-  public DisableBackLeftRotationCommand(DriveSubsystem driveSubsystem) {
-
+  public DisableRearRightRotationCommand(DriveSubsystem driveSubsystem) {
     this.mDriveSubsystem = driveSubsystem;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -24,7 +23,7 @@ public class DisableBackLeftRotationCommand extends CommandBase {
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    mDriveSubsystem.disableBackLeftWheelRotation();
+    this.mDriveSubsystem.disableRearRightWheelRotation();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -41,7 +40,6 @@ public class DisableBackLeftRotationCommand extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    mDriveSubsystem.enableBackLeftWheelRotation();
+    this.mDriveSubsystem.enableRearRightWheelRotation();
   }
-
 }

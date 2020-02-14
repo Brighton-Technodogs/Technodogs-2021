@@ -99,10 +99,17 @@ public class SwerveWheel {
 
     }
 
+    /**
+     * Disables rotation by turning motors off.
+     * */ 
+
     public void disableRotation() {
         this.enabled = false;
     }
 
+    /**
+     * Enables rotation by enabling PID control
+     * */ 
     public void enableRotation() {
         this.enabled = true;
     }
