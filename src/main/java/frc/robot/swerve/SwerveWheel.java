@@ -58,8 +58,12 @@ public class SwerveWheel {
             twistMotor.set(rotationController.calculate(this.potentiometer.get(), this.currentAngle));
         }
         else {
-            twistMotor.set(0);
+            twistMotor.set(0); // Turn motor off if rotation is disabled.
         }
+        // Don't set the twist to 0 when disabled, just leave it set the way it is.
+        // else {
+        //     twistMotor.set(0);
+        // }
 
     }
 
@@ -86,8 +90,12 @@ public class SwerveWheel {
             twistMotor.set(rotationController.calculate(this.potentiometer.get(), setpoint));
         }
         else {
-            twistMotor.set(0);
+            twistMotor.set(0); // Turn motor off if rotation is disabled.
         }
+        // Don't set the twist to 0 when disabled, just leave it set the way it is.
+        // else {
+        //     twistMotor.set(0);
+        // }
 
     }
 
