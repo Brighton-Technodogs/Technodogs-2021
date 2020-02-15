@@ -7,12 +7,18 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
+
+  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
   
   /**
    * Creates a new IntakeCommand.
@@ -33,7 +39,7 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void execute() 
   {
-    double intakeSpeed = 0; //add controller support when Joey allows it
+    double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger); //add controller support when Joey allows it
 
     if (intakeSpeed > 0.1)
     {

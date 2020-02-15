@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
 import frc.robot.commands.drive.DisableRearRightRotationCommand;
 import frc.robot.commands.drive.DisableFrontLeftRotationCommand;
@@ -23,6 +25,7 @@ import frc.robot.commands.drive.DisableFrontRightRotationCommand;
 // import frc.robot.commands.drive.EnableFrontRightRotationCommand;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /**
@@ -38,7 +41,10 @@ public class RobotContainer {
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  //private final 
+  private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
+
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
 
   private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
@@ -50,6 +56,8 @@ public class RobotContainer {
   // private final EnableFrontLeftRotationCommand enableFrontLeftRotationCommand = new EnableFrontLeftRotationCommand(driveSubsystem);
   // private final EnableFrontRightRotationCommand enableFrontRightRotationCommand = new EnableFrontRightRotationCommand(driveSubsystem);
 
+  private final XboxController operatrorController = new XboxController(0);
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -58,6 +66,10 @@ public class RobotContainer {
     configureButtonBindings();
 
     driveSubsystem.setDefaultCommand(driveCommand);
+
+    shooterSubsystem.setDefaultCommand(shootCommand);
+
+    intakeSubsystem.setDefaultCommand(intakeCommand);
   }
 
   /**
@@ -70,6 +82,10 @@ public class RobotContainer {
     System.out.println("Configuring Button Bindings");
   }
 
+  public XboxController getOperatorController ()
+  {
+    return operatrorController;
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

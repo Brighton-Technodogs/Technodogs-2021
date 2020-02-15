@@ -7,13 +7,17 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootCommand extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
   
+  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+
   /**
    * Creates a new ShootCommand.
    */
@@ -32,7 +36,7 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double shootSpeed = 0; //driver input when Joey allows it
+    double shootSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger);//driver input when Joey allows it
 
     if (shootSpeed > 0.1) 
     {

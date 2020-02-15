@@ -25,6 +25,12 @@ public final class Constants {
         public static final int kDriverControllerRightStickYAxis = 5;
     }
 
+    public final class XboxAxixMapping {
+        public static final int operatorControllerPort = 1;
+        public static final int operatorRightTrigger = 3;
+        public static final int operatorLeftTrigger = 2;
+    }
+
     public final class DriveSubsystem {
         public static final int kFrontLeftDriveMotorPort = 2;
         public static final int kRearLeftDriveMotorPort = 3;
