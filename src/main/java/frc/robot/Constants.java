@@ -59,4 +59,9 @@ public final class Constants {
         public static final int leftShooterFalconCan = 6;
     }
 
+    public final class IntakeSubsystem
+    {
+        public static final int innerStorageVictorCan = 0;
+    }
+
 }
