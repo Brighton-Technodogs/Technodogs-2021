@@ -52,5 +52,11 @@ public final class Constants {
         public static final double kRearRightEncoderOffset = 248.75; //18
     }
 
+    public final class ShooterSubsystem
+    {
+        public static final int bottomShooterFalconCan = 4;
+        public static final int rightShooterFalconCan = 5;
+        public static final int leftShooterFalconCan = 6;
+    }
 
 }

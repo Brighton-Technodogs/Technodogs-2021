@@ -23,6 +23,7 @@ import frc.robot.commands.drive.DisableFrontRightRotationCommand;
 // import frc.robot.commands.drive.EnableFrontRightRotationCommand;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -34,8 +35,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-
   private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  //private final 
 
   private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
