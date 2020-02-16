@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import frc.robot.Constants;
 
@@ -13,12 +14,12 @@ public class SwerveWheel {
     private PIDController rotationController;
     private AnalogPotentiometer potentiometer;
     private BaseMotorController driveMotor;
-    private SpeedController twistMotor;
+    private VictorSPX twistMotor;
     private double offset;
     private boolean enabled = true;
     private double currentAngle;
 
-    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, SpeedController twistMotor, BaseMotorController driveMotor, double offset) {
+    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, VictorSPX twistMotor, BaseMotorController driveMotor, double offset) {
         System.out.println("wheel Initialized");
         this.potentiometer = potentiometer;
         this.rotationController = rotationController;
@@ -54,7 +55,7 @@ public class SwerveWheel {
      */
     public void updateRotation() {
 
-        twistMotor.set(0);
+        twistMotor.set(ControlMode.PercentOutput, 0);
         return;
         // if (this.enabled) {
         //     twistMotor.set(rotationController.calculate(this.potentiometer.get(), this.currentAngle));
@@ -89,10 +90,10 @@ public class SwerveWheel {
                 setpoint = newAngle;
             }
     
-            twistMotor.set(rotationController.calculate(this.potentiometer.get(), setpoint));
+            twistMotor.set(ControlMode.PercentOutput, rotationController.calculate(this.potentiometer.get(), setpoint));
         }
         else {
-            twistMotor.set(0); // Turn motor off if rotation is disabled.
+            twistMotor.set(ControlMode.PercentOutput, 0); // Turn motor off if rotation is disabled.
         }
         // Don't set the twist to 0 when disabled, just leave it set the way it is.
         // else {

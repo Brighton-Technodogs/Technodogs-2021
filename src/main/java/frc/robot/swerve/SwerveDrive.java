@@ -1,6 +1,7 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive {
 
@@ -166,6 +167,7 @@ public class SwerveDrive {
 
         // update the commands to the motors
         this.rightFrontWheel.drive(frontRightSpeed, frontRightAngle);
+        // SmartDashboard.putNumber("Speed", frontLeftSpeed);
         this.leftFrontWheel.drive(frontLeftSpeed, frontLeftAngle);
         this.leftBackWheel.drive(backLeftSpeed, backLeftAngle);
         this.rightBackWheel.drive(backRightSpeed, backRightAngle);

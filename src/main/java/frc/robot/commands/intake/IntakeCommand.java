@@ -9,6 +9,7 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -39,11 +40,15 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void execute() 
   {
+    /*double speed = SmartDashboard.getNumber("Intake Speed", 0);
+
+    intakeSubsystem.runStorage(speed);*/
+
     double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger); //add controller support when Joey allows it
 
     if (intakeSpeed > 0.1)
     {
-      intakeSubsystem.runStorage(intakeSpeed);
+      intakeSubsystem.runStorage(1);
     }
     else
     {

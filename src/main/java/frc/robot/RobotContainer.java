@@ -37,8 +37,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  /*private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);*/
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
@@ -46,10 +46,10 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
 
-  private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
-  private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
-  private final DisableFrontLeftRotationCommand disableFrontLeftRotationCommand = new DisableFrontLeftRotationCommand(driveSubsystem);
-  private final DisableFrontRightRotationCommand disableFrontRightRotationCommand = new DisableFrontRightRotationCommand(driveSubsystem);
+  // private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
+  // private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
+  // private final DisableFrontLeftRotationCommand disableFrontLeftRotationCommand = new DisableFrontLeftRotationCommand(driveSubsystem);
+  // private final DisableFrontRightRotationCommand disableFrontRightRotationCommand = new DisableFrontRightRotationCommand(driveSubsystem);
 
   // private final EnableRearLeftRotationCommand enableRearLeftRotationCommand = new EnableRearLeftRotationCommand(driveSubsystem);
   // private final EnableRearRightRotationCommand enableRearRightRotationCommand = new EnableRearRightRotationCommand(driveSubsystem);
@@ -65,7 +65,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    driveSubsystem.setDefaultCommand(driveCommand);
+    // driveSubsystem.setDefaultCommand(driveCommand);
 
     shooterSubsystem.setDefaultCommand(shootCommand);
 
@@ -92,8 +92,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getDriveCommand() {
+  /*public Command getDriveCommand() {
     // An ExampleCommand will run in autonomous
     return driveCommand;
-  }
+  }*/
 }

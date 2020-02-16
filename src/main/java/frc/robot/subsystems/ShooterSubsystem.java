@@ -28,8 +28,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shoot (double bottomSpeed, double rightSpeed, double leftSpeed)
   {
-    bottomShooter.set(ControlMode.PercentOutput, bottomSpeed);
-    rightShooter.set(ControlMode.PercentOutput, rightSpeed);
+    bottomShooter.set(ControlMode.PercentOutput, -bottomSpeed);
+    rightShooter.set(ControlMode.PercentOutput, -rightSpeed);
     leftShooter.set(ControlMode.PercentOutput, leftSpeed);
   }
 
