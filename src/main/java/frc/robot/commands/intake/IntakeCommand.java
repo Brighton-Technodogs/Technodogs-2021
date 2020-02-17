@@ -8,6 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -20,6 +21,8 @@ public class IntakeCommand extends CommandBase {
   IntakeSubsystem intakeSubsystem;
 
   private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+
+  Timer timer = new Timer();
   
   /**
    * Creates a new IntakeCommand.
@@ -34,6 +37,9 @@ public class IntakeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,12 +54,35 @@ public class IntakeCommand extends CommandBase {
 
     if (intakeSpeed > 0.1)
     {
-      intakeSubsystem.runStorage(1);
+      //System.out.println(timer.get());
+      if (timer.get() >= 0.15)
+      {
+        timer.reset();
+      }
+      else if (timer.get() >= 0.1)
+      {
+        // System.out.println("reseting");
+        intakeSubsystem.runStorage(0.75);
+      }
+      else
+      {
+        // System.out.println("Have reached Else");
+        intakeSubsystem.runStorage(1);
+      }
     }
     else
     {
       intakeSubsystem.runStorage(0);
     }
+
+    /*if (intakeSpeed > 0.1)
+    {
+      intakeSubsystem.runStorage(1);
+    }
+    else
+    {
+      intakeSubsystem.runStorage(0);
+    }*/
 
   }
 

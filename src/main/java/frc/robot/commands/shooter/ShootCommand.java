@@ -43,11 +43,11 @@ public class ShootCommand extends CommandBase {
 
     double shootSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger);//driver input when Joey allows it
 
-    double testSpeed = 1;
+    double testSpeed = 0.9;
 
     if (shootSpeed > 0.2) 
     {
-      shooterSubsystem.shoot(1, testSpeed, testSpeed);
+      shooterSubsystem.shoot(1, testSpeed, 0.8);
     }
     else
     {

@@ -68,6 +68,8 @@ public final class Constants {
     public final class IntakeSubsystem
     {
         public static final int innerStorageVictorCan = 31;
+
+        public static final int outerIntakeVictorCan = 0;
     }
 
 }
