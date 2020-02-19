@@ -10,14 +10,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
+import frc.robot.commands.intake.PulseIntake;
+import frc.robot.commands.shooter.LimelightTestingCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
 import frc.robot.commands.drive.DisableRearRightRotationCommand;
 import frc.robot.commands.drive.DisableFrontLeftRotationCommand;
 import frc.robot.commands.drive.DisableFrontRightRotationCommand;
+import frc.robot.commands.drive.AssistedLimelightDriveCommand;
 
 // import frc.robot.commands.drive.EnableRearLeftRotationCommand;
 // import frc.robot.commands.drive.EnableRearRightRotationCommand;
@@ -37,14 +40,17 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  /*private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);*/
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  //private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
+  private final LimelightTestingCommand limelightTestingCommand = new LimelightTestingCommand();
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
+  private final PulseIntake pulseIntake = new PulseIntake(intakeSubsystem);
 
   // private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   // private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
@@ -56,7 +62,12 @@ public class RobotContainer {
   // private final EnableFrontLeftRotationCommand enableFrontLeftRotationCommand = new EnableFrontLeftRotationCommand(driveSubsystem);
   // private final EnableFrontRightRotationCommand enableFrontRightRotationCommand = new EnableFrontRightRotationCommand(driveSubsystem);
 
-  private final XboxController operatrorController = new XboxController(0);
+  private final XboxController operatrorController = new XboxController(1);
+  private final JoystickButton operatorAButton = new JoystickButton(operatrorController, 1);
+  private final JoystickButton operatorBButton = new JoystickButton(operatrorController, 2);
+
+  private final XboxController driverController = new XboxController(0);
+  private final JoystickButton driverAButton = new JoystickButton(driverController, 1);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -80,6 +91,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
+
+    operatorAButton.whenPressed(pulseIntake);
+    operatorBButton.whenPressed(limelightTestingCommand);
+
+    // driverAButton.whenPressed(command)
   }
 
   public XboxController getOperatorController ()

@@ -7,25 +7,15 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootCommand extends CommandBase {
-  
-  ShooterSubsystem shooterSubsystem;
-  
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+public class LimelightTestingCommand extends CommandBase {
 
-  /**
-   * Creates a new ShootCommand.
-   */
-  public ShootCommand(ShooterSubsystem subsystem){
+  public LimelightTestingCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    shooterSubsystem = subsystem;
-    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -37,22 +27,16 @@ public class ShootCommand extends CommandBase {
   @Override
   public void execute() {
 
-    /*double speed = SmartDashboard.getNumber("Shooting Speed", 0);
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-    shooterSubsystem.shoot(speed, speed, speed);*/
+    // NetworkTableEntry horizontal = limelightTable.getEntry("thor");
+    // NetworkTableEntry vertical = limelightTable.getEntry("tvert");
 
-    double shootSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger);//driver input when Joey allows it
-    
-    double testSpeed = 0.9;
+    // double computedArea = horizontal.getDouble(0) * vertical.getDouble(0);
 
-    if (shootSpeed > 0.2) 
-    {
-      shooterSubsystem.shoot(1, testSpeed, 0.8);
-    }
-    else
-    {
-      shooterSubsystem.shoot(0, 0, 0); //stop the motor without input
-    }
+    // System.out.println(computedArea);
+
+    // System.out.println(a);
 
   }
 
@@ -64,6 +48,6 @@ public class ShootCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
