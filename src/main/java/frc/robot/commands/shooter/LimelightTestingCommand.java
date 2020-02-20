@@ -11,11 +11,18 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class LimelightTestingCommand extends CommandBase {
 
-  public LimelightTestingCommand() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  ShooterSubsystem shooterSubsystem;
+
+  public LimelightTestingCommand(ShooterSubsystem subsystem) {
+    
+    shooterSubsystem = subsystem;
+
+    addRequirements(shooterSubsystem);
+
   }
 
   // Called when the command is initially scheduled.
@@ -27,16 +34,7 @@ public class LimelightTestingCommand extends CommandBase {
   @Override
   public void execute() {
 
-    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-
-    // NetworkTableEntry horizontal = limelightTable.getEntry("thor");
-    // NetworkTableEntry vertical = limelightTable.getEntry("tvert");
-
-    // double computedArea = horizontal.getDouble(0) * vertical.getDouble(0);
-
-    // System.out.println(computedArea);
-
-    // System.out.println(a);
+    System.out.println(shooterSubsystem.getArea());
 
   }
 

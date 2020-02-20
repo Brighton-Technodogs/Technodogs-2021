@@ -7,13 +7,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants.  This class should not be used for any other purpose.  All constants should be
- * declared globally (i.e. public static).  Do not put anything functional in this class.
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This class should not be used for any other
+ * purpose. All constants should be declared globally (i.e. public static). Do
+ * not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the constants are needed, to reduce verbosity.
  */
 public final class Constants {
 
@@ -70,100 +75,5 @@ public final class Constants {
         public static final int innerStorageVictorCan = 31;
 
         public static final int outerIntakeVictorCan = 0;
-    }
-
-    public final class AreaToDistance
-    {
-        int distanceOffset = 5;
-
-        int[] distances = 
-        {
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30
-        };
-
-        int[] areas = 
-        {
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30
-        };
-
-        public double getDistance (double area)
-        {
-            int half = areas.length / 2;
-
-            if (area > areas[half])
-            {
-                for(int x = 0; x < half - 1; x++)
-                {
-                    if (areas[x] < area && areas[x + 1] > area)
-                    {
-                        return areas[x] + 0.5;
-                    }
-                }
-            }
-            else if (area < areas[half])
-            {
-                for(int x = half - 1; x < areas.length - 1; x++)
-                {
-                    if (areas[x] < area && areas[x + 1] > area)
-                    {
-                        return areas[x] + 0.5;
-                    }
-                }
-            }
-            else
-            {
-                return half + distanceOffset;
-            }
-
-            return -1;
-        }
     }
 }

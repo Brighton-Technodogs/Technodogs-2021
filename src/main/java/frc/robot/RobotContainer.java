@@ -46,7 +46,7 @@ public class RobotContainer {
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
-  private final LimelightTestingCommand limelightTestingCommand = new LimelightTestingCommand();
+  private final LimelightTestingCommand limelightTestingCommand = new LimelightTestingCommand(shooterSubsystem);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
