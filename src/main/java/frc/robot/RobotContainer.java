@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.PulseIntake;
+import frc.robot.commands.intake.RunIntakeWithSensorCommand;
+import frc.robot.commands.intake.RunStorageCommand;
 import frc.robot.commands.shooter.LimelightTestingCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
@@ -51,6 +53,8 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   private final PulseIntake pulseIntake = new PulseIntake(intakeSubsystem);
+  private final RunStorageCommand runStorageCommand = new RunStorageCommand(intakeSubsystem);
+  private final RunIntakeWithSensorCommand runIntakeWithSensorCommand = new RunIntakeWithSensorCommand(intakeSubsystem);
 
   // private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   // private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
@@ -73,14 +77,13 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
     configureButtonBindings();
 
     // driveSubsystem.setDefaultCommand(driveCommand);
 
     shooterSubsystem.setDefaultCommand(shootCommand);
 
-    intakeSubsystem.setDefaultCommand(intakeCommand);
+    intakeSubsystem.setDefaultCommand(runIntakeWithSensorCommand);
   }
 
   /**
@@ -94,13 +97,6 @@ public class RobotContainer {
 
     operatorAButton.whenPressed(pulseIntake);
     operatorBButton.whenPressed(limelightTestingCommand);
-
-    // driverAButton.whenPressed(command)
-  }
-
-  public XboxController getOperatorController ()
-  {
-    return operatrorController;
   }
 
   /**

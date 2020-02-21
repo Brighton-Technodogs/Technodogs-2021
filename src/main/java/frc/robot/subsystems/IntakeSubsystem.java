@@ -17,6 +17,7 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   
   private VictorSPX innerStorageMotor = new VictorSPX(Constants.IntakeSubsystem.innerStorageVictorCan);
+  private VictorSPX intakeMotor = new VictorSPX(Constants.IntakeSubsystem.outerIntakeVictorCan);
 
   /**
    * Creates a new IntakeSubsystem.
@@ -28,6 +29,11 @@ public class IntakeSubsystem extends SubsystemBase {
   public void runStorage (double speed)
   {
     innerStorageMotor.set(ControlMode.PercentOutput, speed);
+  }
+  
+  public void runIntake (double speed)
+  {
+    intakeMotor.set(ControlMode.PercentOutput, -speed);
   }
 
   @Override

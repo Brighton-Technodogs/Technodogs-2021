@@ -74,6 +74,11 @@ public final class Constants {
     {
         public static final int innerStorageVictorCan = 31;
 
-        public static final int outerIntakeVictorCan = 0;
+        public static final int outerIntakeVictorCan = 32;
+    }
+
+    public final class Sensors
+    {
+        public static final int intakeContrastSensorDIO = 0;
     }
 }

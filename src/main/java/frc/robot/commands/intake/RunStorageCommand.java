@@ -7,27 +7,22 @@
 
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeCommand extends CommandBase {
+public class RunStorageCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
-  
-  /**
-   * Creates a new IntakeCommand.
-   */
-  public IntakeCommand(IntakeSubsystem subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
 
+  Timer timer = new Timer();
+
+  public RunStorageCommand(IntakeSubsystem subsystem) 
+  {
     intakeSubsystem = subsystem;
     addRequirements(subsystem);
   }
@@ -37,16 +32,35 @@ public class IntakeCommand extends CommandBase {
   public void initialize() 
   {
 
+    timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
+    double storageSpeed = operatorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
 
-    double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
-
-    intakeSubsystem.runIntake(intakeSpeed);
+    if (storageSpeed > 0.1)
+    {
+      if (timer.get() >= 0.15)
+      {
+        timer.reset();
+      }
+      else if (timer.get() >= 0.1)
+      {
+        intakeSubsystem.runStorage(0.75);
+      }
+      else
+      {
+        intakeSubsystem.runStorage(1);
+      }
+    }
+    else
+    {
+      intakeSubsystem.runStorage(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
