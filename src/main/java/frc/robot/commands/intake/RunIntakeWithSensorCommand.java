@@ -8,6 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -21,6 +22,10 @@ public class RunIntakeWithSensorCommand extends CommandBase {
 
   private final DigitalInput intakeContrastSensor = new DigitalInput(Constants.Sensors.intakeContrastSensorDIO);
 
+  private Timer timer = new Timer();
+  private boolean firstContact = true;
+  private double stopTime = 1;
+
   public RunIntakeWithSensorCommand(IntakeSubsystem subsystem) 
   {
     intakeSubsystem = subsystem;
@@ -30,7 +35,11 @@ public class RunIntakeWithSensorCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    firstContact = true;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,20 +48,35 @@ public class RunIntakeWithSensorCommand extends CommandBase {
   {
     boolean currentContrast = !intakeContrastSensor.get();
 
-    System.out.println(currentContrast);
+    //System.out.println(currentContrast);
 
-    // double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
+    double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
 
-    // intakeSubsystem.runIntake(intakeSpeed);
+    intakeSubsystem.runIntake(intakeSpeed);
 
-    // if (!intakeContrastSensor.get() == true)
-    // {
-    //   intakeSubsystem.runStorage(0.5);
-    // }
-    // else
-    // {
-    //   intakeSubsystem.runStorage(0);
-    // }
+    if (currentContrast == true)
+    {
+      if (firstContact)
+      {
+        timer.reset();
+        timer.start();
+        firstContact = false;
+      }
+      else if (timer.get() >= stopTime)
+      {
+        intakeSubsystem.runStorage(0);
+      }
+      else
+      {
+        intakeSubsystem.runStorage(0.5);
+      }
+    }
+    else
+    {
+      firstContact = true;
+      intakeSubsystem.runStorage(0);
+      timer.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.

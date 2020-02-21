@@ -50,7 +50,7 @@ public class DriveCommand extends CommandBase {
         double directionY = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickYAxis);
         double rotation = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerRightStickXAxis);
 
-        this.mDriveSubsystem.drive(directionX, directionY, rotation, false, false, false);
+        this.mDriveSubsystem.drive(directionX, directionY, rotation, false, true, false);
 
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
         //             -Robot.oi.driverController.getRightStickXValue(), false,

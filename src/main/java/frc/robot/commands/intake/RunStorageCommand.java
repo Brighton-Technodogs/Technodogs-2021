@@ -40,11 +40,29 @@ public class RunStorageCommand extends CommandBase {
   @Override
   public void execute() 
   {
-    double storageSpeed = operatorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
+    // double storageSpeed = operatorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
 
-    if (storageSpeed > 0.1)
-    {
-      if (timer.get() >= 0.15)
+    // if (storageSpeed > 0.1)
+    // {
+    //   if (timer.get() >= 0.15)
+    //   {
+    //     timer.reset();
+    //   }
+    //   else if (timer.get() >= 0.1)
+    //   {
+    //     intakeSubsystem.runStorage(0.75);
+    //   }
+    //   else
+    //   {
+    //     intakeSubsystem.runStorage(1);
+    //   }
+    // }
+    // else
+    // {
+    //   intakeSubsystem.runStorage(0);
+    // }
+
+    if (timer.get() >= 0.15)
       {
         timer.reset();
       }
@@ -56,16 +74,14 @@ public class RunStorageCommand extends CommandBase {
       {
         intakeSubsystem.runStorage(1);
       }
-    }
-    else
-    {
-      intakeSubsystem.runStorage(0);
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
+    intakeSubsystem.runStorage(0);
+
   }
 
   // Returns true when the command should end.

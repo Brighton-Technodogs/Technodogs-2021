@@ -16,6 +16,7 @@ import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.PulseIntake;
 import frc.robot.commands.intake.RunIntakeWithSensorCommand;
 import frc.robot.commands.intake.RunStorageCommand;
+import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.LimelightTestingCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
@@ -43,12 +44,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  //private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
   private final LimelightTestingCommand limelightTestingCommand = new LimelightTestingCommand(shooterSubsystem);
+  private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
@@ -79,9 +81,9 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
 
-    // driveSubsystem.setDefaultCommand(driveCommand);
+    driveSubsystem.setDefaultCommand(driveCommand);
 
-    shooterSubsystem.setDefaultCommand(shootCommand);
+    shooterSubsystem.setDefaultCommand(autoShootCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeWithSensorCommand);
   }
@@ -95,8 +97,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
 
-    operatorAButton.whenPressed(pulseIntake);
-    operatorBButton.whenPressed(limelightTestingCommand);
+    operatorAButton.whenHeld(runStorageCommand);
+    //operatorBButton.whenPressed(limelightTestingCommand);
   }
 
   /**

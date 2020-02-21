@@ -42,25 +42,25 @@ public final class Constants {
         public static final int kFrontRightDriveMotorPort = 1;
         public static final int kRearRightDriveMotorPort = 0;
 
-        public static final int kFrontLeftDriveMotorCanID = 4;
-        public static final int kRearLeftDriveMotorCanID = 3;
-        public static final int kFrontRightDriveMotorCanID = 1;
-        public static final int kRearRightDriveMotorCanID = 2;
+        public static final int kFrontLeftDriveMotorCanID = 2;
+        public static final int kRearLeftDriveMotorCanID = 1;
+        public static final int kFrontRightDriveMotorCanID = 3;
+        public static final int kRearRightDriveMotorCanID = 4;
 
-        public static final int kFrontLeftTwistMotorPort = 14;
-        public static final int kRearLeftTwistMotorPort = 13;
-        public static final int kFrontRightTwistMotorPort = 11;
-        public static final int kRearRightTwistMotorPort = 12;
+        public static final int kFrontLeftTwistMotorPort = 12;
+        public static final int kRearLeftTwistMotorPort = 11;
+        public static final int kFrontRightTwistMotorPort = 13;
+        public static final int kRearRightTwistMotorPort = 14;
 
-        public static final int kFrontLeftEncoderPort = 3;
-        public static final int kBackLeftEncoderPort = 2;
-        public static final int kFrontRightEncoderPort = 0;
-        public static final int kBackRightEncoderPort = 1;
+        public static final int kFrontLeftEncoderPort = 1;
+        public static final int kBackLeftEncoderPort = 0;
+        public static final int kFrontRightEncoderPort = 2;
+        public static final int kBackRightEncoderPort = 3;
 
-        public static final double kFrontLeftEncoderOffset = 210; //60
-        public static final double kRearLeftEncoderOffset = 148; //11
-        public static final double kFrontRightEncoderOffset = 154; //28
-        public static final double kRearRightEncoderOffset = 256; //18
+        public static final double kFrontLeftEncoderOffset = 328; //60
+        public static final double kRearLeftEncoderOffset = 131; //11
+        public static final double kFrontRightEncoderOffset = 61; //28
+        public static final double kRearRightEncoderOffset = 275; //18
     }
 
     public final class ShooterSubsystem

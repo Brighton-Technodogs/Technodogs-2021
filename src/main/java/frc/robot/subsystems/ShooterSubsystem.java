@@ -39,52 +39,78 @@ public class ShooterSubsystem extends SubsystemBase {
 
   int[] areas = 
   {
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30
+    4830,
+    4141,
+    3496,
+    2890,
+    2508,
+    2270,
+    1820,
+    1708,
+    1482,
+    1320,
+    1248,
+    1200,
+    1012,
+    924,
+    840,
+    760,
+    780,
+    760,
+    595
+  };
+
+  public final double[] speeds = 
+  {
+      0, //0
+      0, //1
+      0, //2
+      0.5, //3
+      0.4, //4
+      0.4, //5
+      0.4, //6
+      0.4, //7
+      0.4, //8
+      0.4, //9
+      0.425, //10
+      0.425, //11
+      0.435, //12
+      0.46, //13
+      0.46 //14
   };
 
   public double getDistance (double area)
   {
+      if (area == 0)
+      {
+        return 0;
+      }
+      else if (area < areas[areas.length - 1])
+      {
+        return areas.length;
+      }
       return getDistance(area, 0, areas.length);
   }
 
-  public double getDistance (double area, int start, int end)
+  public double getDistance (double area, int start, int end) throws ArrayIndexOutOfBoundsException
   {
-      if (areas[(end + start) / 2] == area || (areas[(end + start) / 2] > area && areas[(end + start) / 2 + 1] < area))
-      {
-          return (end + start) / 2;
-      }
-      else if (areas[(end + start) / 2] < area)
-      {
-          return getDistance(area, start, (end + start) / 2);
-      }
-      else
-      {
-          return getDistance(area, (end + start) / 2, end);
-      }
+    if (Math.abs(start - end) == 1)
+    {
+        return (end + start) / 2;
+    }
+
+    if (areas[(end + start) / 2] == area || (areas[(end + start) / 2] > area && areas[(end + start) / 2 + 1] < area))
+    {
+        return (end + start) / 2;
+    }
+    else if (areas[(end + start) / 2] < area)
+    {
+        return getDistance(area, start, (end + start) / 2);
+    }
+    else
+    {
+        return getDistance(area, (end + start) / 2, end);
+    }
   }
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");

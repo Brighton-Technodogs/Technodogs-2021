@@ -34,7 +34,7 @@ public class LimelightTestingCommand extends CommandBase {
   @Override
   public void execute() {
 
-    System.out.println(shooterSubsystem.getArea());
+    System.out.println(shooterSubsystem.getDistance(shooterSubsystem.getArea()));
 
   }
 
@@ -46,6 +46,6 @@ public class LimelightTestingCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
