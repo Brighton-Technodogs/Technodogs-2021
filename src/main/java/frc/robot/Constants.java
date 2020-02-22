@@ -23,11 +23,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public final class Constants {
 
     public final class DriverControl {
-        public static final int kDriverControllerPort = 0;
-        public static final int kDriverControllerLeftStickXAxis = 0;
-        public static final int kDriverControllerLeftStickYAxis = 1;
-        public static final int kDriverControllerRightStickXAxis = 4;
-        public static final int kDriverControllerRightStickYAxis = 5;
+        public static final int driverControllerPort = 0;
+        public static final int driverControllerLeftStickXAxis = 0;
+        public static final int driverControllerLeftStickYAxis = 1;
+        public static final int driverControllerRightStickXAxis = 4;
+        public static final int driverControllerRightStickYAxis = 5;
+        public static final int driverControllerRightTriggerAxis = 3;
     }
 
     public final class XboxAxixMapping {

@@ -23,7 +23,7 @@ public class DriveCommand extends CommandBase {
 
     private final DriveSubsystem mDriveSubsystem;
 
-    XboxController m_driverController = new XboxController(Constants.DriverControl.kDriverControllerPort);
+    XboxController m_driverController = new XboxController(Constants.DriverControl.driverControllerPort);
 
     public DriveCommand(DriveSubsystem driveSubsystem) {
         System.out.println("Constructing DriveCommand");
@@ -46,9 +46,9 @@ public class DriveCommand extends CommandBase {
     @Override
     public void execute() {
 
-        double directionX = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickXAxis);
-        double directionY = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickYAxis);
-        double rotation = m_driverController.getRawAxis(Constants.DriverControl.kDriverControllerRightStickXAxis);
+        double directionX = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
+        double directionY = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
+        double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
 
         this.mDriveSubsystem.drive(directionX, directionY, rotation, false, true, false);
 

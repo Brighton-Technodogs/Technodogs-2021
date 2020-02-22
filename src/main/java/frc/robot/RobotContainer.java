@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.PulseIntake;
 import frc.robot.commands.intake.RunIntakeWithSensorCommand;
 import frc.robot.commands.intake.RunStorageCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
+import frc.robot.commands.shooter.AutoShootCommandGroup;
 import frc.robot.commands.shooter.LimelightTestingCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
@@ -58,6 +60,8 @@ public class RobotContainer {
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(intakeSubsystem);
   private final RunIntakeWithSensorCommand runIntakeWithSensorCommand = new RunIntakeWithSensorCommand(intakeSubsystem);
 
+  private final AutoShootCommandGroup autoShootCommandGroup = new AutoShootCommandGroup(shooterSubsystem, intakeSubsystem);
+
   // private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   // private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
   // private final DisableFrontLeftRotationCommand disableFrontLeftRotationCommand = new DisableFrontLeftRotationCommand(driveSubsystem);
@@ -81,7 +85,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
 
-    driveSubsystem.setDefaultCommand(driveCommand);
+    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
     shooterSubsystem.setDefaultCommand(autoShootCommand);
 

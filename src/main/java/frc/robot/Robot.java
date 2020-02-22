@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() 
   {
 
-    SmartDashboard.putNumber("Area", new ShooterSubsystem().getArea());
+    //SmartDashboard.putNumber("Area", new ShooterSubsystem().getArea());
 
     //System.out.println(new ShooterSubsystem().getArea());
 

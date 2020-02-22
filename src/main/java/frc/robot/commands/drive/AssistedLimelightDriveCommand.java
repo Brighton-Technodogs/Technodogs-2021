@@ -19,13 +19,12 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
   DriveSubsystem driveSubsystem;
 
-  XboxController driverController = new XboxController(Constants.DriverControl.kDriverControllerPort);
+  XboxController driverController = new XboxController(Constants.DriverControl.driverControllerPort);
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
   NetworkTableEntry horizontalEntry;
   double horizontal;
-  double horizontalDisplacement;
 
   public AssistedLimelightDriveCommand(DriveSubsystem subsystem) {
     
@@ -42,16 +41,23 @@ public class AssistedLimelightDriveCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double directionX = driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickXAxis);
-    double directionY = driverController.getRawAxis(Constants.DriverControl.kDriverControllerLeftStickYAxis);
+    double directionX = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
+    double directionY = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
+    double rotation = 0;
+    
+    if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) >= 0.2)
+    {
+      horizontalEntry = limelightTable.getEntry("tx");
+      horizontal = horizontalEntry.getDouble(0);
+      rotation = horizontal / 23.0;
+      rotation = rotation * 0.6;
+    }
+    else
+    {
+      rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
+    }
 
-    horizontalEntry = limelightTable.getEntry("tx");
-    horizontal = horizontalEntry.getDouble(0);
-    horizontalDisplacement = horizontal / 23.0;
-
-    System.out.println(horizontalDisplacement);
-
-    //driveSubsystem.drive(directionX, directionY, horizontalDisplacement, false, false, false);
+    driveSubsystem.drive(directionX, directionY, rotation, false, false, false);
 
   }
 

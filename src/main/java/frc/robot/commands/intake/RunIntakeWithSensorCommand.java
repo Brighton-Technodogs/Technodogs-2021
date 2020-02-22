@@ -24,7 +24,7 @@ public class RunIntakeWithSensorCommand extends CommandBase {
 
   private Timer timer = new Timer();
   private boolean firstContact = true;
-  private double stopTime = 1;
+  private double stopTime = 1.5;
 
   public RunIntakeWithSensorCommand(IntakeSubsystem subsystem) 
   {

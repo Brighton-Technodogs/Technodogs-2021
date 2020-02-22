@@ -13,16 +13,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutoShootCommand extends CommandBase {
-  
-  ShooterSubsystem shooterSubsystem;
+public class SmartDashboardShootingCommand extends CommandBase {
+
+  ShooterSubsystem shootingSubsystem;
 
   private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
 
-  public AutoShootCommand(ShooterSubsystem subsystem) 
+  public SmartDashboardShootingCommand(ShooterSubsystem subsystem) 
   {
-    shooterSubsystem = subsystem;
-    addRequirements(shooterSubsystem);
+    
+    shootingSubsystem = subsystem;
+
   }
 
   // Called when the command is initially scheduled.
@@ -38,35 +39,13 @@ public class AutoShootCommand extends CommandBase {
   @Override
   public void execute() 
   {
-    int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getArea());
-    
-    double autoShooterSpeed = 0;
-    
-    if (index < shooterSubsystem.speeds.length - 1)
-    {
-      autoShooterSpeed = shooterSubsystem.speeds[index];
-    }
-    else
-    {
-      autoShooterSpeed = 0.48;
-    }
+
+    double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
 
     if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger) > 0.2)
     {
-      shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed, autoShooterSpeed);
+      
     }
-
-    /*SmartDashboard.putNumber("Array Index", autoShooterSpeed);
-    
-    if (operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger) > 0.2)
-    {
-      double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
-      shooterSubsystem.shoot(shootSpeed, shootSpeed, shootSpeed);
-    }
-    else
-    {
-      shooterSubsystem.shoot(0, 0, 0);
-    }*/
 
   }
 
