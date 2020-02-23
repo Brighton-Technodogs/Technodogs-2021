@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putNumber("Area", new ShooterSubsystem().getArea());
 
     //System.out.println(new ShooterSubsystem().getArea());
-
+    
   }
 
   /**
@@ -73,12 +73,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    // autonomousCommand = robotContainer.getAutonomousCommand();
+    autonomousCommand = robotContainer.getAutoCommand();
 
-    // // schedule the autonomous command (example)
-    // if (autonomousCommand != null) {
-    //   autonomousCommand.schedule();
-    // }
+    // schedule the autonomous command (example)
+    if (autonomousCommand != null) {
+      autonomousCommand.schedule();
+    }
   }
 
   /**
@@ -94,9 +94,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // if (autonomousCommand != null) {
-    //   autonomousCommand.cancel();
-    // }
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
+    }
   }
 
   /**

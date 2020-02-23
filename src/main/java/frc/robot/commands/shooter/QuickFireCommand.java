@@ -7,25 +7,18 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootCommand extends CommandBase {
+public class QuickFireCommand extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
-  
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
 
-  /**
-   * Creates a new ShootCommand.
-   */
-  public ShootCommand(ShooterSubsystem subsystem){
-    // Use addRequirements() here to declare subsystem dependencies.
+  public QuickFireCommand(ShooterSubsystem subsystem)
+  {
     shooterSubsystem = subsystem;
-    addRequirements(subsystem);
+
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,30 +28,20 @@ public class ShootCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute() 
+  {
 
-    /*double speed = SmartDashboard.getNumber("Shooting Speed", 0);
-
-    shooterSubsystem.shoot(speed, speed, speed);*/
-
-    double shootSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger);//driver input when Joey allows it
-    
-    double testSpeed = 0.9;
-
-    if (shootSpeed > 0.2) 
-    {
-      shooterSubsystem.shoot(1, 1, 1);
-    }
-    else
-    {
-      shooterSubsystem.shoot(0, 0, 0); //stop the motor without input
-    }
+    shooterSubsystem.shoot(0.5, 0.5, 0.5);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    shooterSubsystem.shoot(0, 0, 0);
+
   }
 
   // Returns true when the command should end.

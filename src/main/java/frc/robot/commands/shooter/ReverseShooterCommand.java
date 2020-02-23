@@ -7,32 +7,28 @@
 
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class SmartDashboardShootingCommand extends CommandBase {
+public class ReverseShooterCommand extends CommandBase {
+  
+  IntakeSubsystem intakeSubsystem;
 
-  ShooterSubsystem shooterSubsystem;
+  Timer timer = new Timer();
 
-  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
-
-  public SmartDashboardShootingCommand(ShooterSubsystem subsystem) 
-  {
+  public ReverseShooterCommand(IntakeSubsystem subsystem) {
     
-    shooterSubsystem = subsystem;
-    addRequirements(shooterSubsystem);
+    intakeSubsystem = subsystem;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() 
   {
-
-    SmartDashboard.putNumber("Shooting Speed", 0);
-
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,14 +36,7 @@ public class SmartDashboardShootingCommand extends CommandBase {
   public void execute() 
   {
 
-    SmartDashboard.putNumber("Array Index", (int)shooterSubsystem.getDistance(shooterSubsystem.getArea()));
-
-    double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
-
-    if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger) > 0.2)
-    {
-      shooterSubsystem.SpinToSpeed(shootSpeed);
-    }
+    intakeSubsystem.runStorage(-0.25);
 
   }
 
@@ -59,6 +48,6 @@ public class SmartDashboardShootingCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > 0.25;
   }
 }

@@ -58,10 +58,10 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 2;
         public static final int kBackRightEncoderPort = 3;
 
-        public static final double kFrontLeftEncoderOffset = 328; //60
-        public static final double kRearLeftEncoderOffset = 131; //11
-        public static final double kFrontRightEncoderOffset = 61; //28
-        public static final double kRearRightEncoderOffset = 275; //18
+        public static final double kFrontLeftEncoderOffset = 352; //60
+        public static final double kRearLeftEncoderOffset = 191; //11
+        public static final double kFrontRightEncoderOffset = 4; //28
+        public static final double kRearRightEncoderOffset = 251; //18
     }
 
     public final class ShooterSubsystem

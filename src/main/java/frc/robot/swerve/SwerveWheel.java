@@ -1,6 +1,7 @@
 package frc.robot.swerve;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -18,14 +19,16 @@ public class SwerveWheel {
     private double offset;
     private boolean enabled = true;
     private double currentAngle;
+    private String moduleID;
 
-    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, VictorSPX twistMotor, BaseMotorController driveMotor, double offset) {
+    public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, VictorSPX twistMotor, BaseMotorController driveMotor, double offset, String moudleId) {
         System.out.println("wheel Initialized");
         this.potentiometer = potentiometer;
         this.rotationController = rotationController;
         this.driveMotor = driveMotor;
         this.twistMotor = twistMotor;
         this.offset = offset;
+        this.moduleID = moudleId;
     }
 
     /**
@@ -55,6 +58,7 @@ public class SwerveWheel {
      */
     public void updateRotation() {
 
+        SmartDashboard.putNumber("Commanded Motor Speed " + this.moduleID, 0);
         twistMotor.set(ControlMode.PercentOutput, 0);
         return;
         // if (this.enabled) {
@@ -90,7 +94,12 @@ public class SwerveWheel {
                 setpoint = newAngle;
             }
     
-            twistMotor.set(ControlMode.PercentOutput, rotationController.calculate(this.potentiometer.get(), setpoint));
+            double motorOutput = rotationController.calculate(this.potentiometer.get(), setpoint);
+
+            SmartDashboard.putNumber("Commanded Set Point " + this.moduleID, setpoint);
+            SmartDashboard.putNumber("Commanded Motor Speed " + this.moduleID, motorOutput);
+
+            twistMotor.set(ControlMode.PercentOutput, motorOutput);
         }
         else {
             twistMotor.set(ControlMode.PercentOutput, 0); // Turn motor off if rotation is disabled.

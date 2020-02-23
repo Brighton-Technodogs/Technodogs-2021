@@ -167,10 +167,13 @@ public class SwerveDrive {
 
         // update the commands to the motors
         this.rightFrontWheel.drive(frontRightSpeed, frontRightAngle);
-        // SmartDashboard.putNumber("Speed", frontLeftSpeed);
+        SmartDashboard.putNumber("front right commanded angle", frontRightAngle);
         this.leftFrontWheel.drive(frontLeftSpeed, frontLeftAngle);
+        SmartDashboard.putNumber("front left commanded angle", frontRightAngle);
         this.leftBackWheel.drive(backLeftSpeed, backLeftAngle);
+        SmartDashboard.putNumber("back left commanded angle", frontRightAngle);
         this.rightBackWheel.drive(backRightSpeed, backRightAngle);
+        SmartDashboard.putNumber("back right commanded angle", frontRightAngle);
 
     }
 
@@ -183,6 +186,14 @@ public class SwerveDrive {
         this.leftFrontWheel.drive(speed, angle);
         this.leftBackWheel.drive(speed, angle);
         this.rightBackWheel.drive(speed, angle);
+    }
+
+    public void CircleRotate (double speed)
+    {
+        this.rightFrontWheel.drive(speed, 45);
+        this.leftFrontWheel.drive(speed, 135);
+        this.leftBackWheel.drive(speed, 225);
+        this.rightBackWheel.drive(speed, 315);
     }
 
 }

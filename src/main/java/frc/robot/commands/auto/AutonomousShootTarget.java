@@ -5,23 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutoShootCommand extends CommandBase {
+public class AutonomousShootTarget extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  Timer timer = new Timer();
 
-  public AutoShootCommand(ShooterSubsystem subsystem) 
+  public AutonomousShootTarget(ShooterSubsystem subsystem, IntakeSubsystem intakeSubsystem) 
   {
     shooterSubsystem = subsystem;
+    this.intakeSubsystem = intakeSubsystem;
     addRequirements(shooterSubsystem);
   }
 
@@ -30,7 +31,7 @@ public class AutoShootCommand extends CommandBase {
   public void initialize() 
   {
 
-    SmartDashboard.putNumber("Shooting Speed", 0);
+    timer.start();
 
   }
 
@@ -39,8 +40,6 @@ public class AutoShootCommand extends CommandBase {
   public void execute() 
   {
     int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getArea());
-
-    SmartDashboard.putNumber("Array Index", index);
     
     double autoShooterSpeed = 0;
     
@@ -53,37 +52,28 @@ public class AutoShootCommand extends CommandBase {
       autoShooterSpeed = 0.65;
     }
 
-    if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger) > 0.2)
-    {
-      shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed, autoShooterSpeed);
-    }
-    else
-    {
-      shooterSubsystem.shoot(0, 0, 0);
-    }
+    shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed, autoShooterSpeed);
 
-    /*SmartDashboard.putNumber("Array Index", autoShooterSpeed);
-    
-    if (operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger) > 0.2)
+    if (timer.get() > 0.5)
     {
-      double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
-      shooterSubsystem.shoot(shootSpeed, shootSpeed, shootSpeed);
+      intakeSubsystem.runStorage(1);
     }
-    else
-    {
-      shooterSubsystem.shoot(0, 0, 0);
-    }*/
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    intakeSubsystem.runStorage(0);
+    shooterSubsystem.shoot(0, 0, 0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > 10;
   }
 }

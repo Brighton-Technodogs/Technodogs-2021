@@ -5,30 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drive;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class AssistedLimelightDriveCommand extends CommandBase {
-
+public class AutonomousRotateToTarget extends CommandBase {
+  
   DriveSubsystem driveSubsystem;
-
-  XboxController driverController = new XboxController(Constants.DriverControl.driverControllerPort);
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
   NetworkTableEntry horizontalEntry;
   double horizontal;
+  double rotation = 0.1;
 
-  public AssistedLimelightDriveCommand(DriveSubsystem subsystem) {
-    
+  public AutonomousRotateToTarget(DriveSubsystem subsystem) 
+  {
     driveSubsystem = subsystem;
     addRequirements(driveSubsystem);
   }
@@ -40,14 +36,16 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-    double directionX = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
-    double directionY = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
-    double rotation = 0;
-    
-    if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) >= 0.2)
+  public void execute() 
+  {
+    if (limelightTable.getEntry("tv").getDouble(0) == 0)
     {
+      driveSubsystem.CircleDrive(0.15);
+    }
+    else
+    {
+      driveSubsystem.CircleDrive(0);
+
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
       rotation = horizontal / 23.0;
@@ -60,37 +58,31 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       {
         rotation = -0.15;
       }
-      
+    
       if (Math.abs(rotation) <= 0.1)
       {
         rotation = 0;
       }
 
+      //System.out.println(rotation);
+
       driveSubsystem.CircleDrive(-rotation);
     }
-    else
-    {
-      rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
-      
-      SmartDashboard.putNumber("X Box X-Axis", directionX);
-      SmartDashboard.putNumber("X Box Y-Axis", directionY);
-      SmartDashboard.putNumber("X Box Rotation", rotation);
-
-      driveSubsystem.drive(directionX, directionY, rotation, false, false, false);
-    }
-
-
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    driveSubsystem.CircleDrive(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return rotation == 0;
   }
 }

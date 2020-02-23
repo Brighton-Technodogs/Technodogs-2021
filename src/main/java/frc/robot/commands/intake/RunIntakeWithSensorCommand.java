@@ -24,7 +24,7 @@ public class RunIntakeWithSensorCommand extends CommandBase {
 
   private Timer timer = new Timer();
   private boolean firstContact = true;
-  private double stopTime = 1.5;
+  private double stopTime = 1.25;
 
   public RunIntakeWithSensorCommand(IntakeSubsystem subsystem) 
   {
@@ -68,7 +68,7 @@ public class RunIntakeWithSensorCommand extends CommandBase {
       }
       else
       {
-        intakeSubsystem.runStorage(0.5);
+        intakeSubsystem.runStorage(1);
       }
     }
     else

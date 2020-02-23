@@ -15,17 +15,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeCommand;
 import frc.robot.commands.intake.PulseIntake;
+import frc.robot.commands.intake.ReverseIntakeCommand;
 import frc.robot.commands.intake.RunIntakeWithSensorCommand;
 import frc.robot.commands.intake.RunStorageCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.AutoShootCommandGroup;
 import frc.robot.commands.shooter.LimelightTestingCommand;
+import frc.robot.commands.shooter.QuickFireCommand;
+import frc.robot.commands.shooter.ReverseShooterCommand;
 import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.shooter.SmartDashboardShootingCommand;
 import frc.robot.commands.drive.DisableRearLeftRotationCommand;
 import frc.robot.commands.drive.DisableRearRightRotationCommand;
 import frc.robot.commands.drive.DisableFrontLeftRotationCommand;
 import frc.robot.commands.drive.DisableFrontRightRotationCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
 
 // import frc.robot.commands.drive.EnableRearLeftRotationCommand;
 // import frc.robot.commands.drive.EnableRearRightRotationCommand;
@@ -53,14 +58,18 @@ public class RobotContainer {
   private final ShootCommand shootCommand = new ShootCommand(shooterSubsystem);
   private final LimelightTestingCommand limelightTestingCommand = new LimelightTestingCommand(shooterSubsystem);
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
+  private final SmartDashboardShootingCommand smartDashboardShootingCommand = new SmartDashboardShootingCommand(shooterSubsystem);
+  private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem);
   private final PulseIntake pulseIntake = new PulseIntake(intakeSubsystem);
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(intakeSubsystem);
   private final RunIntakeWithSensorCommand runIntakeWithSensorCommand = new RunIntakeWithSensorCommand(intakeSubsystem);
+  private final ReverseShooterCommand reverseShooterCommand = new ReverseShooterCommand(intakeSubsystem);
+  private final ReverseIntakeCommand reverseIntakeCommand = new ReverseIntakeCommand(intakeSubsystem);
 
-  private final AutoShootCommandGroup autoShootCommandGroup = new AutoShootCommandGroup(shooterSubsystem, intakeSubsystem);
+  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
 
   // private final DisableRearLeftRotationCommand disableRearLeftRotationCommand = new DisableRearLeftRotationCommand(driveSubsystem);
   // private final DisableRearRightRotationCommand disableRearRightRotationCommand = new DisableRearRightRotationCommand(driveSubsystem);
@@ -75,6 +84,7 @@ public class RobotContainer {
   private final XboxController operatrorController = new XboxController(1);
   private final JoystickButton operatorAButton = new JoystickButton(operatrorController, 1);
   private final JoystickButton operatorBButton = new JoystickButton(operatrorController, 2);
+  private final JoystickButton operatorXButton = new JoystickButton(operatrorController, XboxController.Button.kX.value);
 
   private final XboxController driverController = new XboxController(0);
   private final JoystickButton driverAButton = new JoystickButton(driverController, 1);
@@ -102,6 +112,8 @@ public class RobotContainer {
     System.out.println("Configuring Button Bindings");
 
     operatorAButton.whenHeld(runStorageCommand);
+    operatorBButton.whenHeld(quickFireCommand);
+    operatorXButton.whenHeld(reverseIntakeCommand);
     //operatorBButton.whenPressed(limelightTestingCommand);
   }
 
@@ -114,4 +126,9 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     return driveCommand;
   }*/
+
+  public Command getAutoCommand ()
+  {
+    return autonomousSequentialCommandGroup;
+  }
 }
