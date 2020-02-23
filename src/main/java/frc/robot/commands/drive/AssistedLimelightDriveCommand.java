@@ -35,7 +35,12 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    this.driveSubsystem.init();
+    this.driveSubsystem.enable();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +51,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     double directionY = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
     double rotation = 0;
     
-    if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) >= 0.2)
+    if (driverController.getBButton())
     {
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
@@ -76,7 +81,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       SmartDashboard.putNumber("X Box Y-Axis", directionY);
       SmartDashboard.putNumber("X Box Rotation", rotation);
 
-      driveSubsystem.drive(directionX, directionY, rotation, false, false, false);
+      this.driveSubsystem.drive(directionX, directionY, rotation, false, true, false);
     }
 
 

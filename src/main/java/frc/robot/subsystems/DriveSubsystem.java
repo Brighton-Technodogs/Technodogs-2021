@@ -54,6 +54,11 @@ public class DriveSubsystem extends SubsystemBase {
         rearLeftTwistController.enableContinuousInput(0.0, 360.0);
         rearRightTwistController.enableContinuousInput(0.0, 360.0);
 
+        // frontRightTwistController.disableContinuousInput();
+        // frontLeftTwistController.disableContinuousInput();
+        // rearLeftTwistController.disableContinuousInput();
+        // rearRightTwistController.disableContinuousInput();
+
         frontRightTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
         frontLeftTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
         rearLeftTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
