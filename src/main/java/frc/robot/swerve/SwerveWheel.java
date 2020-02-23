@@ -98,6 +98,7 @@ public class SwerveWheel {
 
             SmartDashboard.putNumber("Commanded Set Point " + this.moduleID, setpoint);
             SmartDashboard.putNumber("Commanded Motor Speed " + this.moduleID, motorOutput);
+            SmartDashboard.putNumber("Position Error " + this.moduleID, rotationController.getPositionError());
 
             twistMotor.set(ControlMode.PercentOutput, motorOutput);
         }

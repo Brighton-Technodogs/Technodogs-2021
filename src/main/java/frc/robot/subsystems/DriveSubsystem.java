@@ -16,26 +16,26 @@ public class DriveSubsystem extends SubsystemBase {
 
     private AnalogPotentiometer frontRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontRightEncoderPort, 360.0, 0.0);
     private VictorSPX frontRightTwistMotor = new VictorSPX(Constants.DriveSubsystem.kFrontRightTwistMotorPort);
-    private PIDController frontRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private PIDController frontRightTwistController = new PIDController(Constants.DriveSubsystem.kSwerveTwistPID_P, 0.0, 0.0);
     private TalonFX frontRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontRightDriveMotorCanID);
     private SwerveWheel frontRightWheel = new SwerveWheel(frontRightTwistController, frontRightEncoder, frontRightTwistMotor, frontRightDriveMotor, Constants.DriveSubsystem.kFrontRightEncoderOffset, "FrontRight");
 
     private AnalogPotentiometer frontLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontLeftEncoderPort, 360.0, 0.0);
     private VictorSPX frontLeftTwistMotor = new VictorSPX(Constants.DriveSubsystem.kFrontLeftTwistMotorPort);
-    private PIDController frontLeftTwistController = new PIDController(0.05, 0.0, 0.0);
+    private PIDController frontLeftTwistController = new PIDController(Constants.DriveSubsystem.kSwerveTwistPID_P, 0.0, 0.0);
     private TalonFX frontLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kFrontLeftDriveMotorCanID);
     private SwerveWheel frontLeftWheel = new SwerveWheel(frontLeftTwistController, frontLeftEncoder, frontLeftTwistMotor, frontLeftDriveMotor,Constants.DriveSubsystem.kFrontLeftEncoderOffset, "FrontLeft");
 
     private AnalogPotentiometer rearRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackRightEncoderPort, 360.0, 0.0);
     private VictorSPX rearRightTwistMotor = new VictorSPX(Constants.DriveSubsystem.kRearRightTwistMotorPort);
-    private PIDController rearRightTwistController = new PIDController(0.05, 0.0, 0.0);
+    private PIDController rearRightTwistController = new PIDController(Constants.DriveSubsystem.kSwerveTwistPID_P, 0.0, 0.0);
     private TalonFX rearRightDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearRightDriveMotorCanID);
     private SwerveWheel rearRightWheel = new SwerveWheel(rearRightTwistController, rearRightEncoder, rearRightTwistMotor, rearRightDriveMotor, Constants.DriveSubsystem.kRearRightEncoderOffset, "RearRight");
 
 
     private AnalogPotentiometer rearLeftEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kBackLeftEncoderPort, 360.0, 0.0);
     private VictorSPX rearLeftTwistMotor = new VictorSPX(Constants.DriveSubsystem.kRearLeftTwistMotorPort);
-    private PIDController rearLeftTwistController = new PIDController(0.05, 0.0, 0.0);
+    private PIDController rearLeftTwistController = new PIDController(Constants.DriveSubsystem.kSwerveTwistPID_P, 0.0, 0.0);
     private TalonFX rearLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearLeftDriveMotorCanID);
     private SwerveWheel rearLeftWheel = new SwerveWheel(rearLeftTwistController, rearLeftEncoder, rearLeftTwistMotor, rearLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset, "RearLeft");
     
@@ -53,6 +53,11 @@ public class DriveSubsystem extends SubsystemBase {
         frontLeftTwistController.enableContinuousInput(0.0, 360.0);
         rearLeftTwistController.enableContinuousInput(0.0, 360.0);
         rearRightTwistController.enableContinuousInput(0.0, 360.0);
+
+        frontRightTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
+        frontLeftTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
+        rearLeftTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
+        rearRightTwistController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
 
     }
 

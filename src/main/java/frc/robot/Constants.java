@@ -38,6 +38,12 @@ public final class Constants {
     }
 
     public final class DriveSubsystem {
+
+        public static final double kSwerveTwistPIDTolerance = 5;
+        public static final double kSwerveTwistPID_P = 0.05;
+        public static final double kSwerveTwistPID_I = 0;
+        public static final double kSwerveTwistPID_D = 0;
+
         public static final int kFrontLeftDriveMotorPort = 2;
         public static final int kRearLeftDriveMotorPort = 3;
         public static final int kFrontRightDriveMotorPort = 1;
