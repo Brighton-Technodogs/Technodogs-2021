@@ -18,6 +18,7 @@ import frc.robot.commands.intake.PulseIntake;
 import frc.robot.commands.intake.ReverseIntakeCommand;
 import frc.robot.commands.intake.RunIntakeWithSensorCommand;
 import frc.robot.commands.intake.RunStorageCommand;
+
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.AutoShootCommandGroup;
 import frc.robot.commands.shooter.LimelightTestingCommand;
@@ -97,7 +98,7 @@ public class RobotContainer {
 
     driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
-    shooterSubsystem.setDefaultCommand(autoShootCommand);
+    shooterSubsystem.setDefaultCommand(smartDashboardShootingCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeWithSensorCommand);
   }

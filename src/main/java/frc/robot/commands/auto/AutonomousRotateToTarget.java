@@ -10,6 +10,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -17,14 +18,19 @@ public class AutonomousRotateToTarget extends CommandBase {
   
   DriveSubsystem driveSubsystem;
 
+  //initialize the network table link
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
+  //variables for network table x coordinate to rotation
   NetworkTableEntry horizontalEntry;
   double horizontal;
   double rotation = 0.1;
 
+  Timer timer = new Timer();
+
   public AutonomousRotateToTarget(DriveSubsystem subsystem) 
   {
+    //grab our drive subsystem and add the requirement
     driveSubsystem = subsystem;
     addRequirements(driveSubsystem);
   }
@@ -38,34 +44,50 @@ public class AutonomousRotateToTarget extends CommandBase {
   @Override
   public void execute() 
   {
+    //test if the target can be seen, if no spin
     if (limelightTable.getEntry("tv").getDouble(0) == 0)
     {
-      driveSubsystem.CircleDrive(0.15);
+      driveSubsystem.CircleDrive(-0.15);
     }
+    //if it can see the target
     else
     {
-      driveSubsystem.CircleDrive(0);
+      //stop old spin
+      //driveSubsystem.CircleDrive(0);
 
+      //get position of target on camera
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
       rotation = horizontal / 23.0;
-      rotation = rotation - rotation * 0.35;
-      if (rotation > 0.15)
+      //rotation = rotation - rotation * 0.35;
+      System.out.println(rotation);
+      //set a max to the rotation
+      if (rotation > 0.1)
       {
-        rotation = 0.15;
+        rotation = 0.1;
       }
-      else if (rotation < -0.15)
+      else if (rotation < -0.1)
       {
-        rotation = -0.15;
+        rotation = -0.1;
       }
     
-      if (Math.abs(rotation) <= 0.1)
+      if (Math.abs(rotation) < 0.05)
       {
-        rotation = 0;
+        timer.start();
+        if (timer.get() > 0.5)
+        {
+          rotation = 0;
+        }
+      }
+      else
+      {
+        timer.stop();
+        timer.reset();
       }
 
       //System.out.println(rotation);
 
+      //spin according to rotation value
       driveSubsystem.CircleDrive(-rotation);
     }
 
@@ -76,13 +98,16 @@ public class AutonomousRotateToTarget extends CommandBase {
   public void end(boolean interrupted) 
   {
 
+    //stop spinning when command is over
     driveSubsystem.CircleDrive(0);
+    System.out.println("Im done");
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //finish when target is in the centered
     return rotation == 0;
   }
 }

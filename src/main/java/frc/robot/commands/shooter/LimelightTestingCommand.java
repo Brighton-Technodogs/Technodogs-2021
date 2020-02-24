@@ -34,6 +34,7 @@ public class LimelightTestingCommand extends CommandBase {
   @Override
   public void execute() {
 
+    //testing for the limelight on distance, reports to console
     System.out.println(shooterSubsystem.getDistance(shooterSubsystem.getArea()));
 
   }

@@ -17,7 +17,7 @@ public class ShootCommand extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
   
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatrorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   /**
    * Creates a new ShootCommand.
@@ -41,7 +41,7 @@ public class ShootCommand extends CommandBase {
 
     shooterSubsystem.shoot(speed, speed, speed);*/
 
-    double shootSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger);//driver input when Joey allows it
+    double shootSpeed = operatrorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger);//driver input when Joey allows it
     
     double testSpeed = 0.9;
 

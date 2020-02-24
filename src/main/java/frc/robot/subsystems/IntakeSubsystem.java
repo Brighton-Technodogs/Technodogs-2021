@@ -26,11 +26,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
+  //Run the storage motor at desired speed
   public void runStorage (double speed)
   {
     innerStorageMotor.set(ControlMode.PercentOutput, speed);
   }
   
+  //run the intake motor at desired speed
   public void runIntake (double speed)
   {
     intakeMotor.set(ControlMode.PercentOutput, -speed);

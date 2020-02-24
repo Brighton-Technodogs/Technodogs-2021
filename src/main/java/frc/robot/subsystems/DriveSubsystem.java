@@ -14,6 +14,8 @@ import frc.robot.swerve.SwerveWheel;
 
 public class DriveSubsystem extends SubsystemBase {
 
+    //Swerve Modules
+
     private AnalogPotentiometer frontRightEncoder = new AnalogPotentiometer(Constants.DriveSubsystem.kFrontRightEncoderPort, 360.0, 0.0);
     private VictorSPX frontRightTwistMotor = new VictorSPX(Constants.DriveSubsystem.kFrontRightTwistMotorPort);
     private PIDController frontRightTwistController = new PIDController(Constants.DriveSubsystem.kSwerveTwistPID_P, 0.0, 0.0);
@@ -39,16 +41,20 @@ public class DriveSubsystem extends SubsystemBase {
     private TalonFX rearLeftDriveMotor = new TalonFX(Constants.DriveSubsystem.kRearLeftDriveMotorCanID);
     private SwerveWheel rearLeftWheel = new SwerveWheel(rearLeftTwistController, rearLeftEncoder, rearLeftTwistMotor, rearLeftDriveMotor, Constants.DriveSubsystem.kRearLeftEncoderOffset, "RearLeft");
     
+    //end swerve modules
+
+    //swerve object using all swerve parts
     public SwerveDrive swerve = new SwerveDrive(frontRightWheel, frontLeftWheel, rearLeftWheel, rearRightWheel, null);
 
 
     public void init() {
         System.out.println("Initializing DriveSubsystem");
         setupEncoders();
-
     }
 
     private void setupEncoders() {
+
+        //set twist motors to continuous 360 movement
         frontRightTwistController.enableContinuousInput(0.0, 360.0);
         frontLeftTwistController.enableContinuousInput(0.0, 360.0);
         rearLeftTwistController.enableContinuousInput(0.0, 360.0);
@@ -66,9 +72,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     }
 
-    /**
-     * Enables motors. bcuz it werkz?
-     */
     public void enable() {
         System.out.println("Enabling DriveSubsystem");
         frontRightWheel.enableRotation();
@@ -77,9 +80,6 @@ public class DriveSubsystem extends SubsystemBase {
         rearLeftWheel.enableRotation();
     }
 
-    /**
-     * Disables motors. bcuz it werkz?
-     */
     public void disable() {
         System.out.println("Disabling DriveSubsystem");
         frontRightWheel.disableRotation();
@@ -103,11 +103,8 @@ public class DriveSubsystem extends SubsystemBase {
             boolean noPush) {
         swerve.drive(directionX, directionY, rotation, false, slowSpeed, noPush);
     }
-    public void driveSimple(int angle, double speed)
-    {
-        swerve.driveSimple(speed, angle);
-    }
 
+    //rotates the swerves to a circle and runs the motors at a desired speed
     public void CircleDrive(double speed)
     {
         swerve.CircleRotate(speed);

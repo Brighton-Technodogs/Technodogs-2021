@@ -31,7 +31,7 @@ public final class Constants {
         public static final int driverControllerRightTriggerAxis = 3;
     }
 
-    public final class XboxAxixMapping {
+    public final class OperatorControl {
         public static final int operatorControllerPort = 1;
         public static final int operatorRightTrigger = 3;
         public static final int operatorLeftTrigger = 2;

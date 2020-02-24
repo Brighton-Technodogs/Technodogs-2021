@@ -17,7 +17,7 @@ public class RunStorageCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   Timer timer = new Timer();
 
@@ -62,24 +62,29 @@ public class RunStorageCommand extends CommandBase {
     //   intakeSubsystem.runStorage(0);
     // }
 
-    if (timer.get() >= 0.15)
-      {
-        timer.reset();
-      }
-      else if (timer.get() >= 0.1)
-      {
-        intakeSubsystem.runStorage(0.75);
-      }
-      else
-      {
-        intakeSubsystem.runStorage(1);
-      }
+    intakeSubsystem.runStorage(0.75);
+
+    //this if, else if, else tree runs the storage at interval speeds to make balls not hit eachother
+
+    /*if (timer.get() >= 0.15)
+    {
+      timer.reset();
+    }
+    else if (timer.get() >= 0.5)
+    {
+      intakeSubsystem.runStorage(0.25);
+    }
+    else
+    {
+      intakeSubsystem.runStorage(1);
+    }*/
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
+    //when over resest motor to 0
     intakeSubsystem.runStorage(0);
 
   }

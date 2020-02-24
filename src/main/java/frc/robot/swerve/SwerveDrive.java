@@ -188,6 +188,7 @@ public class SwerveDrive {
         this.rightBackWheel.drive(speed, angle);
     }
 
+    //set the wheels so they are pointing forward clockwise. When passed a speed they spin in unison
     public void CircleRotate (double speed)
     {
         this.rightFrontWheel.drive(speed, 45);

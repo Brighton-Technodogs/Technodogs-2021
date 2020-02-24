@@ -18,13 +18,13 @@ public class RunIntakeWithSensorCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatrorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   private final DigitalInput intakeContrastSensor = new DigitalInput(Constants.Sensors.intakeContrastSensorDIO);
 
   private Timer timer = new Timer();
   private boolean firstContact = true;
-  private double stopTime = 1.25;
+  private double stopTime = 0.75;
 
   public RunIntakeWithSensorCommand(IntakeSubsystem subsystem) 
   {
@@ -46,11 +46,15 @@ public class RunIntakeWithSensorCommand extends CommandBase {
   @Override
   public void execute() 
   {
+
+    //get contrast sensor value, false == seen, true == not seen. the ! flips this value for easier use
     boolean currentContrast = !intakeContrastSensor.get();
 
     //System.out.println(currentContrast);
 
-    double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
+    //run the intake at controller set speed
+
+    double intakeSpeed = operatrorController.getRawAxis(Constants.OperatorControl.operatorLeftTrigger);
 
     intakeSubsystem.runIntake(intakeSpeed);
 
@@ -58,21 +62,24 @@ public class RunIntakeWithSensorCommand extends CommandBase {
     {
       if (firstContact)
       {
+        //first contact resets the timer
         timer.reset();
         timer.start();
         firstContact = false;
       }
       else if (timer.get() >= stopTime)
       {
+        //if seeing the same objet for too long stops the motor
         intakeSubsystem.runStorage(0);
       }
       else
       {
-        intakeSubsystem.runStorage(1);
+        intakeSubsystem.runStorage(0.5);
       }
     }
     else
     {
+      //resets all information when not seeing, and sets storage motor to 0
       firstContact = true;
       intakeSubsystem.runStorage(0);
       timer.stop();

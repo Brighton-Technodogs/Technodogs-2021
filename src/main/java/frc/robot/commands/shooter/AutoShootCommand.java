@@ -17,7 +17,7 @@ public class AutoShootCommand extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
 
-  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   public AutoShootCommand(ShooterSubsystem subsystem) 
   {
@@ -38,27 +38,33 @@ public class AutoShootCommand extends CommandBase {
   @Override
   public void execute() 
   {
+    //get index of seen area
     int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getArea());
 
+    //report index to the screen
     SmartDashboard.putNumber("Array Index", index);
     
     double autoShooterSpeed = 0;
     
     if (index < shooterSubsystem.speeds.length - 1)
     {
+      //if index is inside the size of speeds array set speed to set speed
       autoShooterSpeed = shooterSubsystem.speeds[index];
     }
     else
     {
+      //if not in array size set to standard speed
       autoShooterSpeed = 0.65;
     }
 
-    if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger) > 0.2)
+    if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
     {
+      //if trigger is held shoot at desired speed
       shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed, autoShooterSpeed);
     }
     else
     {
+      //else reset to 0 motor speed
       shooterSubsystem.shoot(0, 0, 0);
     }
 

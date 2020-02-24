@@ -30,6 +30,8 @@ public class ReverseIntakeCommand extends CommandBase {
   public void execute() 
   {
 
+    //Run intake at reverse speed
+
     intakeSubsystem.runIntake(-0.5);
 
   }
@@ -38,7 +40,7 @@ public class ReverseIntakeCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) 
   {
-
+    //set speed to 0 when not pressed
     intakeSubsystem.runIntake(0);
 
   }

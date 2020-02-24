@@ -22,6 +22,6 @@ public class AutonomousSequentialCommandGroup extends SequentialCommandGroup {
   public AutonomousSequentialCommandGroup(DriveSubsystem rotate, ShooterSubsystem shoot, IntakeSubsystem intake) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutonomousRotateToTarget(rotate), new AutonomousShootTarget(shoot, intake));
+    super(new AutonomousRotateToTarget(rotate));
   }
 }

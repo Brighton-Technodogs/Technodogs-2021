@@ -17,7 +17,7 @@ public class SmartDashboardShootingCommand extends CommandBase {
 
   ShooterSubsystem shooterSubsystem;
 
-  private final XboxController operatorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   public SmartDashboardShootingCommand(ShooterSubsystem subsystem) 
   {
@@ -44,9 +44,9 @@ public class SmartDashboardShootingCommand extends CommandBase {
 
     double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
 
-    if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorRightTrigger) > 0.2)
+    if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
     {
-      shooterSubsystem.SpinToSpeed(shootSpeed);
+      shooterSubsystem.shoot(shootSpeed, shootSpeed, shootSpeed);
     }
 
   }

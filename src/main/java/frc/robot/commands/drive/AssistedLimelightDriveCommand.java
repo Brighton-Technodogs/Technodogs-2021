@@ -22,6 +22,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
   XboxController driverController = new XboxController(Constants.DriverControl.driverControllerPort);
 
+  //initialize link to limelight network table
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
   NetworkTableEntry horizontalEntry;
@@ -37,7 +38,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
   @Override
   public void initialize() 
   {
-
+    //run the init method on drive subsystem......should not have to do this......
     this.driveSubsystem.init();
     this.driveSubsystem.enable();
 
@@ -51,8 +52,10 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     double directionY = driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
     double rotation = 0;
     
+    //if pressing the B - Button
     if (driverController.getBButton())
     {
+      //find the center of target
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
       rotation = horizontal / 23.0;
@@ -71,16 +74,19 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         rotation = 0;
       }
 
+      //spin to center on target
+      
       driveSubsystem.CircleDrive(-rotation);
     }
     else
     {
       rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
       
-      SmartDashboard.putNumber("X Box X-Axis", directionX);
-      SmartDashboard.putNumber("X Box Y-Axis", directionY);
-      SmartDashboard.putNumber("X Box Rotation", rotation);
+      // SmartDashboard.putNumber("X Box X-Axis", directionX);
+      // SmartDashboard.putNumber("X Box Y-Axis", directionY);
+      // SmartDashboard.putNumber("X Box Rotation", rotation);
 
+      //drive normally with joysticks
       this.driveSubsystem.drive(directionX, directionY, rotation, false, true, false);
     }
 

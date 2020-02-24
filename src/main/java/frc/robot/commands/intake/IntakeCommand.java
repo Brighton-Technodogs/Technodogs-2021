@@ -20,7 +20,7 @@ public class IntakeCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  private final XboxController operatrorController = new XboxController(Constants.XboxAxixMapping.operatorControllerPort);
+  private final XboxController operatrorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
   
   /**
    * Creates a new IntakeCommand.
@@ -44,7 +44,9 @@ public class IntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    double intakeSpeed = operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger);
+    //Run the intake at the joystick value speed
+
+    double intakeSpeed = operatrorController.getRawAxis(Constants.OperatorControl.operatorLeftTrigger);
 
     intakeSubsystem.runIntake(intakeSpeed);
   }

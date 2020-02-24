@@ -31,6 +31,7 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
+    //quick fire launcher at half speed
     shooterSubsystem.shoot(0.5, 0.5, 0.5);
 
   }
@@ -39,7 +40,7 @@ public class QuickFireCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) 
   {
-
+    //resets to 0 on end
     shooterSubsystem.shoot(0, 0, 0);
 
   }

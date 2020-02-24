@@ -37,6 +37,8 @@ public class PulseIntake extends CommandBase {
   @Override
   public void execute() 
   {
+
+    //Run intake for short burst to help load a single ball
   
     intakeSubsystem.runStorage(0.5);
   

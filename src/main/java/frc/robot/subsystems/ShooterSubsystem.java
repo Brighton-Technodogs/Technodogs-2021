@@ -21,15 +21,18 @@ import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
   
-  private TalonFX bottomShooter = new TalonFX(21);
-  private TalonFX rightShooter = new TalonFX(23);
-  private TalonFX leftShooter = new TalonFX(22);
+  //create the shooter objects from constants can ID
+  private TalonFX bottomShooter = new TalonFX(Constants.ShooterSubsystem.bottomShooterFalconCan);
+  private TalonFX rightShooter = new TalonFX(Constants.ShooterSubsystem.rightShooterFalconCan);
+  private TalonFX leftShooter = new TalonFX(Constants.ShooterSubsystem.leftShooterFalconCan);
   
+  //create objects of sensor information for each shooter
   public final TalonFXSensorCollection bottomShooterSensor;
   public final TalonFXSensorCollection rightShooterSensor;
   public final TalonFXSensorCollection leftShooterSensor;
   //TalonFXConfiguration fxC = new TalonFXConfiguration();
 
+  //hard set PID values
   double pValue = 1;
   double iValue = 0.002;
   double dValue = 50;
@@ -40,6 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() 
   {
     // right motor is reversed
+    //set right sensor to it's motor and set values
     rightShooterSensor = rightShooter.getSensorCollection();
     rightShooter.configPeakOutputForward(0);
     rightShooter.configPeakOutputReverse(-1);
@@ -49,6 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rightShooter.config_kF(0, 0.1);
 
     // bottom motor is reversed
+    //set bottom sensor to it's motor and set values
     bottomShooterSensor = bottomShooter.getSensorCollection();
     bottomShooter.configPeakOutputForward(0);
     bottomShooter.configPeakOutputReverse(-1);
@@ -58,6 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooter.config_kF(0, 0.1);
 
     // left motor is not reversed
+    //set left sensor to it's motor and set values
     leftShooterSensor = leftShooter.getSensorCollection();
     leftShooter.configPeakOutputForward(1);
     leftShooter.configPeakOutputReverse(0);
@@ -67,6 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.config_kF(0, 0.1);
   }
 
+  //set each motor to desired speed using percent
   public void shoot (double bottomSpeed, double rightSpeed, double leftSpeed)
   {
     bottomShooter.set(ControlMode.PercentOutput, -1*bottomSpeed);
@@ -74,8 +81,10 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, leftSpeed);
   }
 
+  //unused
   int distanceOffset = 5;
 
+  //array for each area taken everyfoot starting at 5 feet
   int[] areas = 
   {
     4830,
@@ -99,6 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
     595
   };
 
+  //coordinating speed for each area index
   public final double[] speeds = 
   {
       1, //0
@@ -118,6 +128,7 @@ public class ShooterSubsystem extends SubsystemBase {
       0.46 //14
   };
 
+  //report index of inputed area
   public double getDistance (double area)
   {
       if (area == 0)
@@ -131,6 +142,7 @@ public class ShooterSubsystem extends SubsystemBase {
       return getDistance(area, 0, areas.length);
   }
 
+  //recursive search for the desired area
   public double getDistance (double area, int start, int end) throws ArrayIndexOutOfBoundsException
   {
     if (Math.abs(start - end) == 1)
@@ -152,29 +164,36 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  //create limelight network table object
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
+  //get the X Coordinate of target
   public double getXCoord ()
   {
       return limelightTable.getEntry("tx").getDouble(0);
   }
+  //get the Y Coordinate of target
   public double getYCoord ()
   {
       return limelightTable.getEntry("ty").getDouble(0);
   }
+  //get the Horizontal length of target
   public double getHorizontal ()
   {
       return limelightTable.getEntry("thor").getDouble(0);
   }
+  //get the Vertical Height of target
   public double getVertical ()
   {
       return limelightTable.getEntry("tvert").getDouble(0);
   }
+  //get the area of the target
   public double getArea ()
   {
       return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
   }
 
+  //set the shooter motors to desired speed using velocity
   public void SpinToSpeed (double spinSpeed)
   {
     rightShooter.set(ControlMode.Velocity, -1 * spinSpeed); // encoder ticks per 100ms
