@@ -5,32 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.storage;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
-public class PulseIntake extends CommandBase {
+public class RunStorageCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  StorageSubsystem storageSubsystem;
 
-  Timer timer = new Timer();
+  double storageSpeed = 0.85;
 
-  public PulseIntake(IntakeSubsystem subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
-
-    intakeSubsystem = subsystem;
+  public RunStorageCommand(StorageSubsystem subsystem)
+  {
+    storageSubsystem = subsystem;
     
-    addRequirements(intakeSubsystem);
+    addRequirements(storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    timer.start();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,20 +33,22 @@ public class PulseIntake extends CommandBase {
   public void execute() 
   {
 
-    //Run intake for short burst to help load a single ball
-  
-    intakeSubsystem.runStorage(0.5);
-  
+    storageSubsystem.runStorage(storageSpeed);
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    storageSubsystem.runStorage(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() >= 0.15;
+    return false;
   }
 }

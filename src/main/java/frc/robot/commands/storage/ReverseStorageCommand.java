@@ -5,30 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.storage;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
-public class ReverseShooterCommand extends CommandBase {
+public class ReverseStorageCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  StorageSubsystem storageSubsystem;
 
-  Timer timer = new Timer();
+  double storageSpeed = -0.5;
 
-  public ReverseShooterCommand(IntakeSubsystem subsystem) {
-    
-    intakeSubsystem = subsystem;
+  public ReverseStorageCommand(StorageSubsystem subsystem) 
+  {
+    storageSubsystem = subsystem;
 
+    addRequirements(storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {
-    timer.start();
+  public void initialize() {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,18 +33,22 @@ public class ReverseShooterCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.runStorage(-0.25);
+    storageSubsystem.runStorage(storageSpeed);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    storageSubsystem.runStorage(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 0.25;
+    return false;
   }
 }

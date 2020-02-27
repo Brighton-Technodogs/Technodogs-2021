@@ -11,20 +11,23 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
 public class AutonomousShootTarget extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
   IntakeSubsystem intakeSubsystem;
+  StorageSubsystem storageSubsystem;
 
   //creates a new timer for intake
   Timer timer = new Timer();
 
-  public AutonomousShootTarget(ShooterSubsystem subsystem, IntakeSubsystem intakeSubsystem) 
+  public AutonomousShootTarget(ShooterSubsystem subsystem, IntakeSubsystem intakeSubsystem, StorageSubsystem storageSubsystem) 
   {
     shooterSubsystem = subsystem;
     this.intakeSubsystem = intakeSubsystem;
-    addRequirements(shooterSubsystem);
+    this.storageSubsystem = storageSubsystem;
+    addRequirements(shooterSubsystem, intakeSubsystem, storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -74,7 +77,7 @@ public class AutonomousShootTarget extends CommandBase {
   {
 
     //when over set shooter and storage to 0
-    intakeSubsystem.runStorage(0);
+    storageSubsystem.runStorage(0);
     shooterSubsystem.shoot(0, 0, 0);
 
   }
