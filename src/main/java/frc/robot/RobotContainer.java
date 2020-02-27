@@ -14,18 +14,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
-import frc.robot.commands.shooter.SmartDashboardShootingCommand;
+import frc.robot.commands.storage.ReverseStorageCommand;
+import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
-
-// import frc.robot.commands.drive.EnableRearLeftRotationCommand;
-// import frc.robot.commands.drive.EnableRearRightRotationCommand;
-// import frc.robot.commands.drive.EnableFrontLeftRotationCommand;
-// import frc.robot.commands.drive.EnableFrontRightRotationCommand;
 
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,24 +37,31 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final StorageSubsystem storageSubsystem = new StorageSubsystem();
 
   //Drive Commands
   private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
   //Shooter Commands
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
-  private final SmartDashboardShootingCommand smartDashboardShootingCommand = new SmartDashboardShootingCommand(shooterSubsystem);
   private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
+
+  //Storage Commands
+  private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
+  private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
 
   //Auto Commands
   private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
 
+  //Operator Contoller and Buttons
   private final XboxController operatrorController = new XboxController(1);
   private final JoystickButton operatorBButton = new JoystickButton(operatrorController, XboxController.Button.kB.value);
-  
+  private final JoystickButton operatorAButton = new JoystickButton(operatrorController, XboxController.Button.kA.value);
+  private final JoystickButton operatorXButton = new JoystickButton(operatrorController, XboxController.Button.kX.value);
 
   
-  public RobotContainer() {
+  public RobotContainer() 
+  {
     configureButtonBindings();
 
     driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
@@ -75,6 +79,10 @@ public class RobotContainer {
     System.out.println("Configuring Button Bindings");
 
     operatorBButton.whenHeld(quickFireCommand);
+
+    operatorAButton.whenHeld(runStorageCommand);
+
+    operatorXButton.whenHeld(reverseStorageCommand);
   }
 
   //get the auto command
