@@ -98,7 +98,7 @@ public class RobotContainer {
 
     driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
-    shooterSubsystem.setDefaultCommand(smartDashboardShootingCommand);
+    shooterSubsystem.setDefaultCommand(autoShootCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeWithSensorCommand);
   }

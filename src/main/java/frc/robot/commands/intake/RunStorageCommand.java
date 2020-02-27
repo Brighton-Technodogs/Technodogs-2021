@@ -62,21 +62,23 @@ public class RunStorageCommand extends CommandBase {
     //   intakeSubsystem.runStorage(0);
     // }
 
-    intakeSubsystem.runStorage(0.75);
+    //intakeSubsystem.runStorage(0.75);
 
     //this if, else if, else tree runs the storage at interval speeds to make balls not hit eachother
+
+      intakeSubsystem.runStorage(1);
 
     /*if (timer.get() >= 0.15)
     {
       timer.reset();
     }
-    else if (timer.get() >= 0.5)
+    else if (timer.get() >= 0.05)
     {
-      intakeSubsystem.runStorage(0.25);
+      intakeSubsystem.runStorage(0.5);
     }
     else
     {
-      intakeSubsystem.runStorage(1);
+      intakeSubsystem.runStorage(0.75);
     }*/
   }
 

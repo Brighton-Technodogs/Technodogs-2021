@@ -81,6 +81,13 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, leftSpeed);
   }
 
+  public void displayEncoders()
+  {
+    SmartDashboard.putNumber("Bottom Shooter Encoder", bottomShooterSensor.getIntegratedSensorVelocity());
+    SmartDashboard.putNumber("Right Shooter Encoder", rightShooterSensor.getIntegratedSensorVelocity());
+    SmartDashboard.putNumber("Left Shooter Encoder", leftShooterSensor.getIntegratedSensorVelocity());
+  }
+
   //unused
   int distanceOffset = 5;
 
@@ -114,18 +121,26 @@ public class ShooterSubsystem extends SubsystemBase {
       1, //0
       1, //1
       1, //2
-      0.5, //3
-      0.43, //4
-      0.43, //5
-      0.43, //6
-      0.43, //7
-      0.43, //8
-      0.43, //9
-      0.435, //10
+      0.28, //3
+      0.28, //4
+      0.28, //5
+      0.28, //6
+      0.28, //7
+      0.28, //8
+      0.29, //9
+      0.29, //10
       0.435, //11
       0.44, //12
       0.46, //13
-      0.46 //14
+      0.46, //14
+      0, //15
+      0, //16
+      0, //17
+      0, //18
+      0, //19
+      0, //20
+      0, //21
+      0 //22
   };
 
   //report index of inputed area

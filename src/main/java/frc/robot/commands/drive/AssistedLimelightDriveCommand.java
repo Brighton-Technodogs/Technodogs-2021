@@ -53,7 +53,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     double rotation = 0;
     
     //if pressing the B - Button
-    if (driverController.getBButton())
+    if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2)
     {
       //find the center of target
       horizontalEntry = limelightTable.getEntry("tx");
