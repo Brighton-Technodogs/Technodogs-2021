@@ -70,7 +70,7 @@ public class AutoShootCommand extends CommandBase {
 
     double subtractedValue = (1 / shooterSubsystem.getHorizontal());
 
-    System.out.println(subtractedValue);
+    //System.out.println(subtractedValue);
 
     autoShooterSpeed = autoShooterSpeed - subtractedValue;
 
@@ -79,7 +79,8 @@ public class AutoShootCommand extends CommandBase {
     if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
     {
       //if trigger is held shoot at desired speed
-      shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.755);
+      //shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.755);
+      shooterSubsystem.SpinToSpeed(autoShooterSpeed);
     }
     else
     {
@@ -89,7 +90,7 @@ public class AutoShootCommand extends CommandBase {
 
     /*SmartDashboard.putNumber("Array Index", autoShooterSpeed);
     
-    if (operatrorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger) > 0.2)
+    if (operatorController.getRawAxis(Constants.XboxAxixMapping.operatorLeftTrigger) > 0.2)
     {
       double shootSpeed = SmartDashboard.getNumber("Shooting Speed", 0);
       shooterSubsystem.shoot(shootSpeed, shootSpeed, shootSpeed);

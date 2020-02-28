@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.shooter.AutoShootCommand;
+import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
@@ -45,6 +46,7 @@ public class RobotContainer {
   //Shooter Commands
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
   private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
+  private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
 
   //Storage Commands
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
@@ -54,10 +56,11 @@ public class RobotContainer {
   private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
 
   //Operator Contoller and Buttons
-  private final XboxController operatrorController = new XboxController(1);
-  private final JoystickButton operatorBButton = new JoystickButton(operatrorController, XboxController.Button.kB.value);
-  private final JoystickButton operatorAButton = new JoystickButton(operatrorController, XboxController.Button.kA.value);
-  private final JoystickButton operatorXButton = new JoystickButton(operatrorController, XboxController.Button.kX.value);
+  private final XboxController operatorController = new XboxController(1);
+  private final JoystickButton operatorBButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+  private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+  private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
+  private final JoystickButton operatorYButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
 
   
   public RobotContainer() 
@@ -83,6 +86,8 @@ public class RobotContainer {
     operatorAButton.whenHeld(runStorageCommand);
 
     operatorXButton.whenHeld(reverseStorageCommand);
+
+    operatorYButton.whenPressed(changeConfigCommand);
   }
 
   //get the auto command

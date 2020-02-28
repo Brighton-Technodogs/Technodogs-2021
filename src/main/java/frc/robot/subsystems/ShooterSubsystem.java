@@ -31,9 +31,13 @@ public class ShooterSubsystem extends SubsystemBase {
   //TalonFXConfiguration fxC = new TalonFXConfiguration();
 
   //hard set PID values
-  double pValue = 1;
-  double iValue = 0.002;
-  double dValue = 50;
+  double pValue = 0.06;
+  double iValue = 0.02;
+  double dValue = 0.8;
+  double fValue = 0.05;
+  int allowableError = 150;
+  int PIDLoopRate = 10; //In ms
+  int maxIntegralAccumulator = 1000;
 
   /**
    * Creates a new ShooterSubsystem.
@@ -48,6 +52,11 @@ public class ShooterSubsystem extends SubsystemBase {
     {
       SmartDashboard.putNumber("Array Index", 0);
     }
+    
+    SmartDashboard.putNumber("P Value Right", 0);
+    SmartDashboard.putNumber("I Value Right", 0.02);
+    SmartDashboard.putNumber("D Value Right", 0);
+    SmartDashboard.putNumber("F Value Right", 0.05);
 
     // right motor is reversed
     //set right sensor to it's motor and set values
@@ -57,7 +66,10 @@ public class ShooterSubsystem extends SubsystemBase {
     rightShooter.config_kP(0, pValue);
     rightShooter.config_kI(0, iValue);
     rightShooter.config_kD(0, dValue);
-    rightShooter.config_kF(0, 0.1);
+    rightShooter.config_kF(0, fValue);
+    rightShooter.configAllowableClosedloopError(0, 0);
+    rightShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    rightShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // bottom motor is reversed
     //set bottom sensor to it's motor and set values
@@ -67,7 +79,10 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooter.config_kP(0, pValue);
     bottomShooter.config_kI(0, iValue);
     bottomShooter.config_kD(0, dValue);
-    bottomShooter.config_kF(0, 0.1);
+    bottomShooter.config_kF(0, fValue);
+    bottomShooter.configAllowableClosedloopError(0, 0);
+    bottomShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    bottomShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // left motor is not reversed
     //set left sensor to it's motor and set values
@@ -77,7 +92,10 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.config_kP(0, pValue);
     leftShooter.config_kI(0, iValue);
     leftShooter.config_kD(0, dValue);
-    leftShooter.config_kF(0, 0.1);
+    leftShooter.config_kF(0, fValue);
+    leftShooter.configAllowableClosedloopError(0, 0);
+    leftShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    leftShooter.configClosedLoopPeriod(0, PIDLoopRate);
   }
 
   //set each motor to desired speed using percent
@@ -219,11 +237,29 @@ public class ShooterSubsystem extends SubsystemBase {
     rightShooter.set(ControlMode.Velocity, -1 * spinSpeed); // encoder ticks per 100ms
     bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed);
     leftShooter.set(ControlMode.Velocity, spinSpeed);
-    SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
+    // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
-    SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
-    SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
-    SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
+  }
+
+  public void changeConfig()
+  {
+    rightShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    rightShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    rightShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    rightShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+
+    leftShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    leftShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    leftShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    leftShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+
+    bottomShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    bottomShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    bottomShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    bottomShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
   }
 
   @Override
