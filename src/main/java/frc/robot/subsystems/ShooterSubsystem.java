@@ -8,10 +8,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -42,6 +40,15 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public ShooterSubsystem() 
   {
+    try
+    {
+      SmartDashboard.getNumber("Array Index", 0);
+    }
+    catch (Exception e)
+    {
+      SmartDashboard.putNumber("Array Index", 0);
+    }
+
     // right motor is reversed
     //set right sensor to it's motor and set values
     rightShooterSensor = rightShooter.getSensorCollection();
@@ -91,56 +98,54 @@ public class ShooterSubsystem extends SubsystemBase {
   //unused
   int distanceOffset = 5;
 
-  //array for each area taken everyfoot starting at 5 feet
-  int[] areas = 
+  //array for each heights taken everyfoot starting at 5 feet
+  int[] heights = 
   {
-    4830,
-    4141,
-    3496,
-    2890,
-    2508,
-    2270,
-    1820,
-    1708,
-    1482,
-    1320,
-    1248,
-    1200,
-    1012,
-    924,
-    840,
-    760,
-    780,
-    760,
-    595
+    46,
+    42,
+    40,
+    36,
+    34,
+    32,
+    30,
+    28,
+    26,
+    25,
+    24,
+    23,
+    22,
+    21,
+    20,
+    19,
+    18
   };
 
   //coordinating speed for each area index
   public final double[] speeds = 
   {
-      1, //0
-      1, //1
-      1, //2
-      0.28, //3
-      0.28, //4
-      0.28, //5
-      0.28, //6
-      0.28, //7
-      0.28, //8
-      0.29, //9
-      0.29, //10
-      0.435, //11
-      0.44, //12
-      0.46, //13
-      0.46, //14
-      0, //15
-      0, //16
-      0, //17
-      0, //18
-      0, //19
-      0, //20
-      0, //21
-      0 //22
+      0.4, //0
+      0.4, //1
+      0.4, //2
+      0.4, //3
+      0.3, //4
+      0.30, //5
+      0.35, //6
+      0.275, //7
+      0.275, //8
+      0.2675, //9
+      0.3, //10
+      0.3, //11
+      0.31, //12
+      0.32, //13
+      0.32, //14
+      0.33, //15
+      0.40, //16
+      0.42, //17
+      0.42, //18
+      0.42, //19
+      0.42, //20
+      0.42, //21
+      0.42 //22
   };
 
   //report index of inputed area
@@ -150,11 +155,11 @@ public class ShooterSubsystem extends SubsystemBase {
       {
         return 0;
       }
-      else if (area < areas[areas.length - 1])
+      else if (area < heights[heights.length - 1])
       {
-        return areas.length;
+        return heights.length;
       }
-      return getDistance(area, 0, areas.length);
+      return getDistance(area, 0, heights.length);
   }
 
   //recursive search for the desired area
@@ -165,11 +170,11 @@ public class ShooterSubsystem extends SubsystemBase {
         return (end + start) / 2;
     }
 
-    if (areas[(end + start) / 2] == area || (areas[(end + start) / 2] > area && areas[(end + start) / 2 + 1] < area))
+    if (heights[(end + start) / 2] == area || (heights[(end + start) / 2] > area && heights[(end + start) / 2 + 1] < area))
     {
         return (end + start) / 2;
     }
-    else if (areas[(end + start) / 2] < area)
+    else if (heights[(end + start) / 2] < area)
     {
         return getDistance(area, start, (end + start) / 2);
     }
@@ -222,7 +227,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void periodic() 
+  {
+    
   }
 }

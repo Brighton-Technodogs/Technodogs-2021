@@ -13,29 +13,22 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-
-public class IntakeSubsystem extends SubsystemBase {
+public class StorageSubsystem extends SubsystemBase {
   
-  private VictorSPX intakeMotor = new VictorSPX(Constants.IntakeSubsystem.outerIntakeVictorCan);
+  private VictorSPX innerStorageMotor = new VictorSPX(Constants.IntakeSubsystem.innerStorageVictorCan);
 
-  /**
-   * Creates a new IntakeSubsystem.
-   */
-  public IntakeSubsystem() {
+  public StorageSubsystem() {
 
   }
-  
-  //run the intake motor at desired speed
-  public void runIntake (double speed)
+
+  //Run the storage motor at desired speed
+  public void runStorage (double speed)
   {
-    intakeMotor.set(ControlMode.PercentOutput, -speed);
+    innerStorageMotor.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
-
-public static void setDefaultCommand(String intakecommand) {
-}
 }

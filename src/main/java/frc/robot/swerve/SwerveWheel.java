@@ -3,13 +3,10 @@ package frc.robot.swerve;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.SpeedController;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-
-import frc.robot.Constants;
 
 public class SwerveWheel {
     private PIDController rotationController;
@@ -18,7 +15,6 @@ public class SwerveWheel {
     private VictorSPX twistMotor;
     private double offset;
     private boolean enabled = true;
-    private double currentAngle;
     private String moduleID;
 
     public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, VictorSPX twistMotor, BaseMotorController driveMotor, double offset, String moudleId) {

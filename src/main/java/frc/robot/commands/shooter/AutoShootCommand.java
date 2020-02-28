@@ -30,16 +30,16 @@ public class AutoShootCommand extends CommandBase {
   public void initialize() 
   {
 
-    //SmartDashboard.putNumber("Shooting Speed", 0);
+    SmartDashboard.putNumber("Shooting Speed", 0);
 
-    try
+    /*try
     {
       SmartDashboard.getNumber("Shooting Speed", 0.28);
     }
     catch (Exception e)
     {
       SmartDashboard.putNumber("Shooting Speed", 0);
-    }
+    }*/
 
   }
 
@@ -48,7 +48,7 @@ public class AutoShootCommand extends CommandBase {
   public void execute() 
   {
     //get index of seen area
-    int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getArea());
+    int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getVertical());
 
     //report index to the screen
     SmartDashboard.putNumber("Array Index", index);
@@ -68,12 +68,18 @@ public class AutoShootCommand extends CommandBase {
 
     autoShooterSpeed = SmartDashboard.getNumber("Shooting Speed", 0.4);
 
+    double subtractedValue = (1 / shooterSubsystem.getHorizontal());
+
+    System.out.println(subtractedValue);
+
+    autoShooterSpeed = autoShooterSpeed - subtractedValue;
+
     shooterSubsystem.displayEncoders();
 
     if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
     {
       //if trigger is held shoot at desired speed
-      shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.75);
+      shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.755);
     }
     else
     {
