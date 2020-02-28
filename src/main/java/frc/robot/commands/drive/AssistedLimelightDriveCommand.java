@@ -58,24 +58,26 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
       rotation = horizontal / 23.0;
-      rotation = rotation - rotation * 0.35;
-      if (rotation > 0.15)
+      rotation = rotation - rotation * 0.55;
+      if (rotation > 0.2)
       {
-        rotation = 0.15;
+        rotation = 0.2;
       }
-      else if (rotation < -0.15)
+      else if (rotation < -0.2)
       {
-        rotation = -0.15;
+        rotation = -0.2;
       }
       
-      if (Math.abs(rotation) <= 0.1)
+      if (Math.abs(rotation) <= 0.015)
       {
         rotation = 0;
       }
 
+      double controllerAssist = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis) / 5;
+
       //spin to center on target
       
-      driveSubsystem.CircleDrive(-rotation);
+      driveSubsystem.CircleDrive(-rotation - controllerAssist);
     }
     else
     {
