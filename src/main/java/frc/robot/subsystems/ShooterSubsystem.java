@@ -13,6 +13,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -40,6 +42,8 @@ public class ShooterSubsystem extends SubsystemBase {
   int maxIntegralAccumulator = 1000;
 
   double topSpin = 1.25;
+
+  private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Shooter Subsystem");
 
   /**
    * Creates a new ShooterSubsystem.
@@ -271,35 +275,54 @@ public class ShooterSubsystem extends SubsystemBase {
   //get the X Coordinate of target
   public double getXCoord ()
   {
-      return limelightTable.getEntry("tx").getDouble(0);
+    double x = limelightTable.getEntry("tx").getDouble(0);
+    subsystemShuffleboardTab.add("LL Y Coord.", x);
+    return x;
   }
   //get the Y Coordinate of target
   public double getYCoord ()
   {
-      return limelightTable.getEntry("ty").getDouble(0);
+    double y = limelightTable.getEntry("ty").getDouble(0);
+    subsystemShuffleboardTab.add("LL Y Coord.", y);
+    return y;
   }
   //get the Horizontal length of target
   public double getHorizontal ()
   {
-      return limelightTable.getEntry("thor").getDouble(0);
+    double horizontal = limelightTable.getEntry("thor").getDouble(0);
+    subsystemShuffleboardTab.add("LL Horiz.", horizontal);
+    return horizontal;
   }
   //get the Vertical Height of target
   public double getVertical ()
   {
-      return limelightTable.getEntry("tvert").getDouble(0);
+    double vertical = limelightTable.getEntry("tvert").getDouble(0);
+    subsystemShuffleboardTab.add("LL Vert.", vertical);
+    return vertical;
   }
   //get the area of the target
   public double getArea ()
   {
-      return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
+    double area = limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
+    subsystemShuffleboardTab.add("LL Area", area);
+    return area;
   }
 
   //set the shooter motors to desired speed using velocity
   public void spinToSpeed (double spinSpeed)
   {
-    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed * topSpin); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed );
-    leftShooter.set(ControlMode.Velocity, spinSpeed * topSpin);
+
+    double rightVelocity = spinSpeed * topSpin;
+    double bottomVelocity = spinSpeed;
+    double leftVelocity = spinSpeed * topSpin;
+
+    subsystemShuffleboardTab.add("Right Shooter Set Speed", rightVelocity);
+    subsystemShuffleboardTab.add("Bottom Shooter Set Speed", bottomVelocity);
+    subsystemShuffleboardTab.add("Left Shooter Set Speed", leftVelocity);
+
+    rightShooter.set(ControlMode.Velocity, -1 * rightVelocity); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.Velocity, -1 * bottomVelocity);
+    leftShooter.set(ControlMode.Velocity, leftVelocity);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
