@@ -19,6 +19,7 @@ import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.intake.RunIntakeCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
 
 import frc.robot.subsystems.DriveSubsystem;
@@ -54,8 +55,11 @@ public class RobotContainer {
   private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
   private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
 
+  //Intake Commands
+  private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
+
   //Auto Commands
-  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
+  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem);
 
   //Operator Contoller and Buttons
   private final XboxController operatorController = new XboxController(1);
@@ -72,6 +76,8 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
     shooterSubsystem.setDefaultCommand(autoShootCommand);
+
+    intakeSubsystem.setDefaultCommand(runIntakeCommand);
   }
 
   /**

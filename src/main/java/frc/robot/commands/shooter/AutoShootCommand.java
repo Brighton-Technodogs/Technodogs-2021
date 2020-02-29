@@ -57,8 +57,6 @@ public class AutoShootCommand extends CommandBase {
     //report index to the screen
     SmartDashboard.putNumber("Array Index", index);
     
-    double autoShooterSpeed = 0;
-    
     // if (index < shooterSubsystem.speeds.length - 1)
     // {
     //   //if index is inside the size of speeds array set speed to set speed

@@ -5,25 +5,33 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class AutonomousMoveForward extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  DriveSubsystem driveSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  Timer timer = new Timer();
+
+  public AutonomousMoveForward(DriveSubsystem drive) 
   {
-    shooterSubsystem = subsystem;
-
-    addRequirements(shooterSubsystem);
+    driveSubsystem = drive;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    driveSubsystem.init();
+    driveSubsystem.enable();
+
+    timer.start();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,8 +39,14 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    if (timer.get() > 1)
+    {
+      driveSubsystem.driveSimple(0.35, 0);
+    }
+    else
+    {
+      driveSubsystem.driveSimple(0, 2);
+    }
 
   }
 
@@ -40,14 +54,14 @@ public class QuickFireCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) 
   {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
+
+    driveSubsystem.driveSimple(0, 0);
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.get() > 1.5;
   }
 }

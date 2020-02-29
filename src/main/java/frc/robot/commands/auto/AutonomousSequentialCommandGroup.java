@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,9 +20,9 @@ public class AutonomousSequentialCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new AutonomousSequentialCommandGroup.
    */
-  public AutonomousSequentialCommandGroup(DriveSubsystem rotate, ShooterSubsystem shoot, IntakeSubsystem intake) {
+  public AutonomousSequentialCommandGroup(DriveSubsystem drive, ShooterSubsystem shoot, StorageSubsystem storage) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutonomousRotateToTarget(rotate));
+    super(new AutonomousRotateToTarget(drive), new AutonomousShootTarget(shoot, storage), new AutonomousMoveForward(drive));
   }
 }

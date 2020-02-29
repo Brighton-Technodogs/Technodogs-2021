@@ -71,18 +71,9 @@ public class AutonomousRotateToTarget extends CommandBase {
         rotation = -0.1;
       }
     
-      if (Math.abs(rotation) < 0.05)
+      if (Math.abs(rotation) < 0.07)
       {
-        timer.start();
-        if (timer.get() > 0.5)
-        {
-          rotation = 0;
-        }
-      }
-      else
-      {
-        timer.stop();
-        timer.reset();
+        rotation = 0;
       }
 
       //System.out.println(rotation);
@@ -99,7 +90,7 @@ public class AutonomousRotateToTarget extends CommandBase {
   {
 
     //stop spinning when command is over
-    driveSubsystem.CircleDrive(0);
+    //driveSubsystem.CircleDrive(0);
     System.out.println("Im done");
 
   }

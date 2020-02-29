@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
   int PIDLoopRate = 10; //In ms
   int maxIntegralAccumulator = 1000;
 
-  double topSpin = 1.25;
+  double bottomSpin = 4; //1,25
 
   /**
    * Creates a new ShooterSubsystem.
@@ -221,7 +221,9 @@ public class ShooterSubsystem extends SubsystemBase {
       System.out.println("Shooting Far");
     }
 
-    velocity = velocity + getAngledSpeedIncrease();
+    velocity = getShootVelocityMid();
+
+    velocity = velocity + getAngledSpeedDecrease();
 
     spinToSpeed(velocity);
   }
@@ -234,9 +236,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // double velocity = 30 * Math.pow((height - 20), 2);
     // velocity = velocity + 9000;
 
-    double velocity = 10 * Math.pow((height - 26), 2);
+    double velocity = 8 * Math.pow((height - 30), 2);
     velocity = velocity + Math.abs(height * 10);
-    velocity = velocity + 6400;
+    velocity = velocity + 3800;
 
     //double velocity = 6350;
 
@@ -258,11 +260,11 @@ public class ShooterSubsystem extends SubsystemBase {
     return velocity;
   }
 
-  public double getAngledSpeedIncrease ()
+  public double getAngledSpeedDecrease ()
   {
-    double offset = 10000 / getHorizontal();
+    double offset = 14000 / getHorizontal();
 
-    return offset;
+    return -offset;
   }
 
   //create limelight network table object
@@ -297,9 +299,9 @@ public class ShooterSubsystem extends SubsystemBase {
   //set the shooter motors to desired speed using velocity
   public void spinToSpeed (double spinSpeed)
   {
-    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed * topSpin); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed );
-    leftShooter.set(ControlMode.Velocity, spinSpeed * topSpin);
+    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed * 1); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed * bottomSpin);
+    leftShooter.set(ControlMode.Velocity, spinSpeed *  1);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());

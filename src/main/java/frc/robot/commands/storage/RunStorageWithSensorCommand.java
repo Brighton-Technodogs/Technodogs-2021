@@ -7,11 +7,7 @@
 
 package frc.robot.commands.storage;
 
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers.TimestampDeserializer;
-
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.StorageSubsystem;
@@ -43,8 +39,8 @@ public class RunStorageWithSensorCommand extends CommandBase {
 
     boolean canSee = !contrastSensor.get();
 
-    storageSubsystem.runStorage(canSee ? 0.725 : 0.90);
-    // storageSubsystem.runStorage(1);
+    // storageSubsystem.runStorage(canSee ? 0.45 : 0.65);
+    storageSubsystem.runStorage(0.4);
 
   }
 

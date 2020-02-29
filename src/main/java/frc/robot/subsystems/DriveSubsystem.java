@@ -110,6 +110,11 @@ public class DriveSubsystem extends SubsystemBase {
         swerve.CircleRotate(speed);
     }
 
+    public void driveSimple(double speed, double angle)
+    {
+        swerve.driveSimple(speed, angle);
+    }
+
     /**
      * The function which executes periodically to run the DriveTrain subsystem
      */

@@ -16,18 +16,16 @@ import frc.robot.subsystems.StorageSubsystem;
 public class AutonomousShootTarget extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
-  IntakeSubsystem intakeSubsystem;
   StorageSubsystem storageSubsystem;
 
   //creates a new timer for intake
   Timer timer = new Timer();
 
-  public AutonomousShootTarget(ShooterSubsystem subsystem, IntakeSubsystem intakeSubsystem, StorageSubsystem storageSubsystem) 
+  public AutonomousShootTarget(ShooterSubsystem subsystem, StorageSubsystem storageSubsystem) 
   {
     shooterSubsystem = subsystem;
-    this.intakeSubsystem = intakeSubsystem;
     this.storageSubsystem = storageSubsystem;
-    addRequirements(shooterSubsystem, intakeSubsystem, storageSubsystem);
+    addRequirements(shooterSubsystem, storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -37,37 +35,20 @@ public class AutonomousShootTarget extends CommandBase {
     //starts the timer
     timer.start();
 
+    shooterSubsystem.shootAtVelocity();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() 
   {
-    //array index of distance to target based on area
-    int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getArea());
-    
-    //set speed to 0
-    double autoShooterSpeed = 0;
-    
-    if (index < shooterSubsystem.speeds.length - 1)
-    {
-      //if index is in speeds array length set correct speed
-      autoShooterSpeed = shooterSubsystem.speeds[index];
-    }
-    else
-    {
-      //if not in length then set to 0.65 | will be changed at later date
-      autoShooterSpeed = 0.65;
-    }
 
-    //shoot the shooter at required speed
-    shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed, autoShooterSpeed);
-
-    /*if (timer.get() > 0.5)
+    if (timer.get() > 0.5)
     {
       //if timer reads half a second run the storage system
-      intakeSubsystem.runStorage(0.5);
-    }*/
+      storageSubsystem.runStorage(0.4);
+    }
 
   }
 
@@ -86,6 +67,6 @@ public class AutonomousShootTarget extends CommandBase {
   @Override
   public boolean isFinished() {
     //finish early if the timer hits 10 seconds
-    return timer.get() > 10;
+    return timer.get() > 4;
   }
 }
