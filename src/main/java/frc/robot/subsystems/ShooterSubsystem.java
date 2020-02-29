@@ -39,6 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
   int PIDLoopRate = 10; //In ms
   int maxIntegralAccumulator = 1000;
 
+  double topSpin = 1.25;
+
   /**
    * Creates a new ShooterSubsystem.
    */
@@ -202,6 +204,67 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public void shootAtVelocity()
+  {
+    double height = getVertical();
+
+    double velocity = 0;
+
+    if (height > 21)
+    {
+      velocity = getShootVelocityMid();
+      System.out.println("Shooting Mid");
+    }
+    else
+    {
+      velocity = getShootVelocityFar();
+      System.out.println("Shooting Far");
+    }
+
+    velocity = velocity + getAngledSpeedIncrease();
+
+    spinToSpeed(velocity);
+  }
+
+  //formula for shooting speed with velocity and height
+  public double getShootVelocityMid ()
+  {
+    double height = getVertical();
+
+    // double velocity = 30 * Math.pow((height - 20), 2);
+    // velocity = velocity + 9000;
+
+    double velocity = 10 * Math.pow((height - 26), 2);
+    velocity = velocity + Math.abs(height * 10);
+    velocity = velocity + 6400;
+
+    //double velocity = 6350;
+
+    // System.out.println(velocity);
+
+    // velocity = 17500;
+
+    return velocity;
+  }
+
+  public double getShootVelocityFar ()
+  {
+    double height = getVertical();
+
+    double velocity = 15 * Math.pow((height - 18), 2);
+    velocity = velocity + Math.abs(height * 15);
+    velocity = velocity + 7650;
+
+    return velocity;
+  }
+
+  public double getAngledSpeedIncrease ()
+  {
+    double offset = 10000 / getHorizontal();
+
+    return offset;
+  }
+
   //create limelight network table object
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -232,11 +295,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   //set the shooter motors to desired speed using velocity
-  public void SpinToSpeed (double spinSpeed)
+  public void spinToSpeed (double spinSpeed)
   {
-    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed);
-    leftShooter.set(ControlMode.Velocity, spinSpeed);
+    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed * topSpin); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed );
+    leftShooter.set(ControlMode.Velocity, spinSpeed * topSpin);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());

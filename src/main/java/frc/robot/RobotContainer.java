@@ -17,6 +17,7 @@ import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
+import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
 
@@ -51,6 +52,7 @@ public class RobotContainer {
   //Storage Commands
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
   private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
+  private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
 
   //Auto Commands
   private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
@@ -83,7 +85,7 @@ public class RobotContainer {
 
     operatorBButton.whenHeld(quickFireCommand);
 
-    operatorAButton.whenHeld(runStorageCommand);
+    operatorAButton.whenHeld(runStorageWithSensorCommand);
 
     operatorXButton.whenHeld(reverseStorageCommand);
 

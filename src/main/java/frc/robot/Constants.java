@@ -83,6 +83,6 @@ public final class Constants {
 
     public final class Sensors
     {
-        public static final int intakeContrastSensorDIO = 0;
+        public static final int storageContrastSensorDIO = 0;
     }
 }

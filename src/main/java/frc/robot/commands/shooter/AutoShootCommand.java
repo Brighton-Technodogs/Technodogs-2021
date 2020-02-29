@@ -19,6 +19,8 @@ public class AutoShootCommand extends CommandBase {
 
   private final XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
+  boolean firstShot = true;
+
   public AutoShootCommand(ShooterSubsystem subsystem) 
   {
     shooterSubsystem = subsystem;
@@ -30,7 +32,9 @@ public class AutoShootCommand extends CommandBase {
   public void initialize() 
   {
 
-    SmartDashboard.putNumber("Shooting Speed", 0);
+    SmartDashboard.putNumber("Shooting Speed", 12000);
+
+    firstShot = true;
 
     /*try
     {
@@ -55,24 +59,26 @@ public class AutoShootCommand extends CommandBase {
     
     double autoShooterSpeed = 0;
     
-    if (index < shooterSubsystem.speeds.length - 1)
-    {
-      //if index is inside the size of speeds array set speed to set speed
-      autoShooterSpeed = shooterSubsystem.speeds[index];
-    }
-    else
-    {
-      //if not in array size set to standard speed
-      autoShooterSpeed = 0.65;
-    }
+    // if (index < shooterSubsystem.speeds.length - 1)
+    // {
+    //   //if index is inside the size of speeds array set speed to set speed
+    //   autoShooterSpeed = shooterSubsystem.speeds[index];
+    // }
+    // else
+    // {
+    //   //if not in array size set to standard speed
+    //   autoShooterSpeed = 0.65;
+    // }
 
-    autoShooterSpeed = SmartDashboard.getNumber("Shooting Speed", 0.4);
+    // autoShooterSpeed = SmartDashboard.getNumber("Shooting Speed", 12000);
 
-    double subtractedValue = (1 / shooterSubsystem.getHorizontal());
+    // double subtractedValue = (1 / shooterSubsystem.getHorizontal());
 
-    //System.out.println(subtractedValue);
+    // //System.out.println(subtractedValue);
 
-    autoShooterSpeed = autoShooterSpeed - subtractedValue;
+    // autoShooterSpeed = autoShooterSpeed - subtractedValue;
+
+    // autoShooterSpeed = shooterSubsystem.getShootVelocity();
 
     shooterSubsystem.displayEncoders();
 
@@ -80,12 +86,19 @@ public class AutoShootCommand extends CommandBase {
     {
       //if trigger is held shoot at desired speed
       //shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.755);
-      shooterSubsystem.SpinToSpeed(autoShooterSpeed);
+      // shooterSubsystem.SpinToSpeed(autoShooterSpeed);
+
+      if (firstShot)
+      {
+        shooterSubsystem.shootAtVelocity();
+        firstShot = false;
+      }
     }
     else
     {
       //else reset to 0 motor speed
       shooterSubsystem.shoot(0, 0, 0);
+      firstShot = true;
     }
 
     /*SmartDashboard.putNumber("Array Index", autoShooterSpeed);
@@ -104,7 +117,12 @@ public class AutoShootCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    shooterSubsystem.shoot(0, 0, 0);
+    firstShot = true;
+
   }
 
   // Returns true when the command should end.
