@@ -45,7 +45,7 @@ public final class Constants {
         public static final double kSwerveDrivePID_P = 0;
         public static final double kSwerveDrivePID_I = 0;
         public static final double kSwerveDrivePID_D = 0;
-        public static final double kSwerveDrivePID_F = 0.1;
+        public static final double kSwerveDrivePID_F = 0.052;
 
         public static final double kMaxTwistAngularVelocity = 360; // deg/s
         public static final double kMaxTwistAngularAcceleration = 360; // deg/s^2
@@ -60,7 +60,7 @@ public final class Constants {
         public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
         public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
 
-        public static final double kMaxSpeedMetersPerSecond = 5;
+        public static final double kMaxSpeedMetersPerSecond = 7;
 
         public static final int kFrontLeftDriveMotorCanID = 2;
         public static final int kRearLeftDriveMotorCanID = 1;
@@ -77,10 +77,10 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 2;
         public static final int kRearRightEncoderPort = 3;
 
-        public static final double kFrontLeftEncoderOffset = 352; //60
-        public static final double kRearLeftEncoderOffset = 191; //11
-        public static final double kFrontRightEncoderOffset = 4; //28
-        public static final double kRearRightEncoderOffset = 251; //18
+        public static final double kFrontLeftEncoderOffset = 160; //352; //60
+        public static final double kFrontRightEncoderOffset = 175;// 4; //28
+        public static final double kRearLeftEncoderOffset = 14; // 191; //11
+        public static final double kRearRightEncoderOffset = 76; //251; //18
     }
 
     public final class ShooterSubsystem
