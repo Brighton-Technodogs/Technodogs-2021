@@ -38,8 +38,8 @@ public class AssistedLimelightDriveCommand extends CommandBase {
   public void initialize() 
   {
     //run the init method on drive subsystem......should not have to do this......
-    this.driveSubsystem.init();
-    this.driveSubsystem.enable();
+    // this.driveSubsystem.init();
+    // this.driveSubsystem.enable();
 
   }
 
@@ -77,7 +77,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
       //spin to center on target
       
-      driveSubsystem.CircleDrive(-rotation - controllerAssist);
+      // driveSubsystem.CircleDrive(-rotation - controllerAssist);
     }
     else
     {
@@ -88,7 +88,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       // SmartDashboard.putNumber("X Box Rotation", rotation);
 
       //drive normally with joysticks
-      this.driveSubsystem.drive(directionX, directionY, rotation, false, true, false);
+      this.driveSubsystem.drive(directionX, directionY, rotation, false);
     }
 
 
