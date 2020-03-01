@@ -17,9 +17,10 @@ import frc.robot.Constants;
 import frc.robot.subsystems.StorageSubsystem;
 
 public class RunStorageWithSensorCommand extends CommandBase {
-  
-  StorageSubsystem storageSubsystem = new StorageSubsystem();
 
+  StorageSubsystem storageSubsystem;
+  ;
+  
   private final DigitalInput contrastSensor = new DigitalInput(Constants.Sensors.storageContrastSensorDIO);
 
   public RunStorageWithSensorCommand(StorageSubsystem subsystem)
