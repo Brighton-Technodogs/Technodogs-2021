@@ -59,7 +59,20 @@ public class DriveCommand extends CommandBase {
 
         SmartDashboard.putNumber("driver command rotation", rotation);
 
-        this.mDriveSubsystem.drive(directionX, directionY, rotation, false);
+        if (directionX < 0.2 && directionX > -0.2){
+            directionX = 0;
+        }
+
+        if (directionY < 0.2 && directionY > -0.2){
+            
+            directionY = 0;
+        }
+
+        if (rotation < 0.2 && rotation > -0.2){
+            rotation = 0;
+        }
+
+        this.mDriveSubsystem.drive(directionY, directionX, rotation, false);
 
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
         //             -Robot.oi.driverController.getRightStickXValue(), false,
