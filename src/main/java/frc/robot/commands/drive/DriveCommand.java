@@ -10,7 +10,10 @@
 
 package frc.robot.commands.drive;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants;
@@ -36,8 +39,8 @@ public class DriveCommand extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Initializing DriveCommand");
-        this.mDriveSubsystem.init();
-        this.mDriveSubsystem.enable();
+        // this.mDriveSubsystem.init();
+        // this.mDriveSubsystem.enable();
     }
 
     // Lidar lidarCrab = new Lidar(new DigitalInput(10));
@@ -50,7 +53,13 @@ public class DriveCommand extends CommandBase {
         double directionY = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
         double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
 
-        this.mDriveSubsystem.drive(directionX, directionY, rotation, false, true, false);
+        SmartDashboard.putNumber("driver command X", directionX);
+
+        SmartDashboard.putNumber("driver command Y", directionY);
+
+        SmartDashboard.putNumber("driver command rotation", rotation);
+
+        this.mDriveSubsystem.drive(directionX, directionY, rotation, false);
 
         // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(), -Robot.oi.driverController.getLeftStickYValue(),
         //             -Robot.oi.driverController.getRightStickXValue(), false,
