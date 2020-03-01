@@ -41,25 +41,41 @@ public final class Constants {
         public static final double kSwerveTwistPID_I = 0;
         public static final double kSwerveTwistPID_D = 0;
 
-        public static final int kFrontLeftDriveMotorPort = 2;
-        public static final int kRearLeftDriveMotorPort = 3;
-        public static final int kFrontRightDriveMotorPort = 1;
-        public static final int kRearRightDriveMotorPort = 0;
+        public static final double kSwerveDrivePIDTolerance = 10;
+        public static final double kSwerveDrivePID_P = 0;
+        public static final double kSwerveDrivePID_I = 0;
+        public static final double kSwerveDrivePID_D = 0;
+        public static final double kSwerveDrivePID_F = 0.1;
+
+        public static final double kMaxTwistAngularVelocity = 360; // deg/s
+        public static final double kMaxTwistAngularAcceleration = 360; // deg/s^2
+
+        public static final double kGearRatioMotorToWheel = 6.64; // 6.64 motor rotations = 1 wheel rotation
+        public static final double kWheelDiameter = 0.1524; // in meters
+        public static final double kMotorEncoderTicksPerRev = 2048;
+        public static final double kMotorEncoderTimeUnit = 0.100; // 100ms
+
+        public static final boolean kGyroReversed = true;
+
+        public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
+        public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
+
+        public static final double kMaxSpeedMetersPerSecond = 5;
 
         public static final int kFrontLeftDriveMotorCanID = 2;
         public static final int kRearLeftDriveMotorCanID = 1;
         public static final int kFrontRightDriveMotorCanID = 3;
         public static final int kRearRightDriveMotorCanID = 4;
 
-        public static final int kFrontLeftTwistMotorPort = 12;
-        public static final int kRearLeftTwistMotorPort = 11;
-        public static final int kFrontRightTwistMotorPort = 13;
-        public static final int kRearRightTwistMotorPort = 14;
+        public static final int kFrontLeftTwistMotorCanID = 12;
+        public static final int kRearLeftTwistMotorCanID = 11;
+        public static final int kFrontRightTwistMotorCanID = 13;
+        public static final int kRearRightTwistMotorCanID = 14;
 
         public static final int kFrontLeftEncoderPort = 1;
-        public static final int kBackLeftEncoderPort = 0;
+        public static final int kRearLeftEncoderPort = 0;
         public static final int kFrontRightEncoderPort = 2;
-        public static final int kBackRightEncoderPort = 3;
+        public static final int kRearRightEncoderPort = 3;
 
         public static final double kFrontLeftEncoderOffset = 352; //60
         public static final double kRearLeftEncoderOffset = 191; //11
