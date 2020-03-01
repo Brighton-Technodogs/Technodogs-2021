@@ -52,12 +52,12 @@ public class DriveSubsystem extends SubsystemBase {
   private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Drive Subsystem");
 
     // Shuffleboard 
-    private NetworkTableEntry sbdirectionX = subsystemShuffleboardTab.add("direction X", 0)
+    private NetworkTableEntry sbFowardInput = subsystemShuffleboardTab.add("Forward Input", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
 
-    private NetworkTableEntry sbdirectionY = subsystemShuffleboardTab.add("direction Y", 0)
+    private NetworkTableEntry sbSidewaysInput = subsystemShuffleboardTab.add("Sideways Input", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
@@ -67,12 +67,38 @@ public class DriveSubsystem extends SubsystemBase {
     .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
 
+    private NetworkTableEntry sbPoseX = subsystemShuffleboardTab.add("pose x", 0).getEntry();
+
+    private NetworkTableEntry sbPoseY = subsystemShuffleboardTab.add("pose y", 0).getEntry();
+
+    private NetworkTableEntry sbPoseRotation = subsystemShuffleboardTab.add("pose rotation", 0).getEntry();
+
     // private NetworkTableEntry sbDriveGyro = subsystemShuffleboardTab.add((Sendable) m_gyro)
     // .withWidget(BuiltInWidgets.kGyro)
     // .getEntry();
 
     private NetworkTableEntry sFieldRelative = subsystemShuffleboardTab.add("fieldOriented", false)
     .withWidget(BuiltInWidgets.kBooleanBox)
+    .getEntry();
+
+    private NetworkTableEntry sbFLEncoderRaw = subsystemShuffleboardTab.add("FLEncoder Raw", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+
+    private NetworkTableEntry sbFREncoderRaw = subsystemShuffleboardTab.add("FREncoder Raw", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+
+    private NetworkTableEntry sbRLEncoderRaw = subsystemShuffleboardTab.add("RLEncoder Raw", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+
+    private NetworkTableEntry sbRREncoderRaw = subsystemShuffleboardTab.add("RREncoder Raw", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
 
   /**
@@ -85,24 +111,28 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontLeft = new SwerveModule(Constants.DriveSubsystem.kFrontLeftDriveMotorCanID,
                                     Constants.DriveSubsystem.kFrontLeftTwistMotorCanID,
                                     Constants.DriveSubsystem.kFrontLeftEncoderPort,
+                                    Constants.DriveSubsystem.kFrontLeftEncoderOffset,
                                     subsystemShuffleboardTab,
                                     "FL");
 
     m_rearLeft = new SwerveModule(Constants.DriveSubsystem.kRearLeftDriveMotorCanID,
                                     Constants.DriveSubsystem.kRearLeftTwistMotorCanID,
                                     Constants.DriveSubsystem.kRearLeftEncoderPort,
+                                    Constants.DriveSubsystem.kRearLeftEncoderOffset,
                                     subsystemShuffleboardTab,
                                     "RL");
     
     m_frontRight = new SwerveModule(Constants.DriveSubsystem.kFrontRightDriveMotorCanID,
                                     Constants.DriveSubsystem.kFrontRightTwistMotorCanID,
                                     Constants.DriveSubsystem.kFrontRightEncoderPort,
+                                    Constants.DriveSubsystem.kFrontRightEncoderOffset,
                                     subsystemShuffleboardTab,
                                     "FR");
 
     m_rearRight = new SwerveModule(Constants.DriveSubsystem.kRearRightDriveMotorCanID,
                                     Constants.DriveSubsystem.kRearRightTwistMotorCanID,
                                     Constants.DriveSubsystem.kRearRightEncoderPort,
+                                    Constants.DriveSubsystem.kRearRightEncoderOffset,
                                     subsystemShuffleboardTab,
                                     "RR");
   }
@@ -119,10 +149,22 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
+    sbFLEncoderRaw.setDouble(m_frontLeft.getRawAngle());
+    sbFREncoderRaw.setDouble(m_frontRight.getRawAngle());
+    sbRLEncoderRaw.setDouble(m_rearLeft.getRawAngle());
+    sbRREncoderRaw.setDouble(m_rearRight.getRawAngle());
+
+
+    sbPoseX.setDouble(m_odometry.getPoseMeters().getTranslation().getX());
+    sbPoseY.setDouble(m_odometry.getPoseMeters().getTranslation().getY());
+    sbPoseRotation.setDouble(m_odometry.getPoseMeters().getRotation().getDegrees());
     // sbDriveGyro.setValue(m_gyro.getAngle());
     // Update the odometry in the periodic block
     m_odometry.update(new Rotation2d(getHeading()), m_frontLeft.getState(), m_rearLeft.getState(),
         m_frontRight.getState(), m_rearRight.getState());
+
+        super.periodic();
   }
 
   /**
@@ -153,17 +195,23 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    */
   @SuppressWarnings("ParameterName")
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double forwardInput, double sidewaysInput, double rot, boolean fieldRelative) {
 
-    sbdirectionX.setDouble(xSpeed);
-    sbdirectionY.setDouble(ySpeed);
+    sbFowardInput.setDouble(forwardInput);
+    sbSidewaysInput.setDouble(sidewaysInput);
     sbrotation.setDouble(rot);
     sFieldRelative.setBoolean(fieldRelative);
 
+    forwardInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
+    sidewaysInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
+
     var swerveModuleStates = mDriveKinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
+            : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
+
+    System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
+    System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -207,7 +255,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from 180 to 180
    */
   public double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (Constants.DriveSubsystem.kGyroReversed ? -1.0 : 1.0);
+    return 0;
+    //return Math.IEEEremainder(m_gyro.getAngle(), 360) * (Constants.DriveSubsystem.kGyroReversed ? -1.0 : 1.0);
   }
 
   /**
