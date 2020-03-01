@@ -19,6 +19,7 @@ import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
 
 import frc.robot.subsystems.DriveSubsystem;
@@ -36,26 +37,27 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   //Subsystems
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final StorageSubsystem storageSubsystem = new StorageSubsystem();
+  // private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  // private final StorageSubsystem storageSubsystem = new StorageSubsystem();
 
   //Drive Commands
   private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   //Shooter Commands
-  private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
-  private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
-  private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
+  // private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
+  // private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
+  // private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
 
   //Storage Commands
-  private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
-  private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
-  private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
+  // private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
+  // private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
+  // private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
 
   //Auto Commands
-  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
+  // private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, intakeSubsystem);
 
   //Operator Contoller and Buttons
   private final XboxController operatorController = new XboxController(1);
@@ -69,9 +71,9 @@ public class RobotContainer {
   {
     configureButtonBindings();
 
-    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
+    driveSubsystem.setDefaultCommand(driveCommand);
 
-    shooterSubsystem.setDefaultCommand(autoShootCommand);
+    // shooterSubsystem.setDefaultCommand(autoShootCommand);
   }
 
   /**
@@ -83,18 +85,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
 
-    operatorBButton.whenHeld(quickFireCommand);
+    // operatorBButton.whenHeld(quickFireCommand);
 
-    operatorAButton.whenHeld(runStorageWithSensorCommand);
+    // operatorAButton.whenHeld(runStorageWithSensorCommand);
 
-    operatorXButton.whenHeld(reverseStorageCommand);
+    // operatorXButton.whenHeld(reverseStorageCommand);
 
-    operatorYButton.whenPressed(changeConfigCommand);
+    // operatorYButton.whenPressed(changeConfigCommand);
   }
 
   //get the auto command
   public Command getAutoCommand ()
   {
-    return autonomousSequentialCommandGroup;
+    return null;
+    // return autonomousSequentialCommandGroup;
   }
 }
