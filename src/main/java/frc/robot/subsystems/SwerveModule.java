@@ -38,6 +38,8 @@ public class SwerveModule {
   private final TalonFXSensorCollection m_driveMotorSensors;
   private final AnalogPotentiometer m_twistEncoder;
 
+  private double offset;
+
   private ShuffleboardTab subsystemShuffleboardTab;
 
   private NetworkTableEntry sbSwerveModuleAngleCommand;
@@ -46,20 +48,24 @@ public class SwerveModule {
   private NetworkTableEntry sbSwerveModuleSpeedCommand;
   private NetworkTableEntry sbSwerveModuleSpeedActual;
 
+  private NetworkTableEntry sbSwerveModuleSpeedRawCommand;
+  private NetworkTableEntry sbSwerveModuleSpeedRawActual;
+
+  private NetworkTableEntry sbSwerveModuleTurnMotorOutput;
+
+
+
   private final PIDController m_drivePIDController =
       new PIDController(Constants.DriveSubsystem.kSwerveDrivePID_P, 
                         Constants.DriveSubsystem.kSwerveDrivePID_I,
                         Constants.DriveSubsystem.kSwerveDrivePID_D);
 
   //Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController m_twistPIDController
-      = new ProfiledPIDController(
+  private final PIDController m_twistPIDController
+      = new PIDController(
         Constants.DriveSubsystem.kSwerveTwistPID_P,
         Constants.DriveSubsystem.kSwerveTwistPID_I,
-        Constants.DriveSubsystem.kSwerveTwistPID_D,
-          new TrapezoidProfile.Constraints(
-            Constants.DriveSubsystem.kMaxTwistAngularVelocity,
-            Constants.DriveSubsystem.kMaxTwistAngularAcceleration));
+        Constants.DriveSubsystem.kSwerveTwistPID_D);
 
   /**
    * Constructs a SwerveModule.
@@ -70,6 +76,7 @@ public class SwerveModule {
   public SwerveModule(int driveMotorCanID,
                       int twistMotorCanID,
                       int twistEncoderPort,
+                      double offset,
                       ShuffleboardTab tab,
                       String moduleIdentifier) {
 
@@ -77,7 +84,12 @@ public class SwerveModule {
 
     System.out.println("Initializing Swerve: " + moduleIdentifier + ". Driver motor = " + driveMotorCanID + ". Turning motor = " + twistMotorCanID);
 
-    subsystemShuffleboardTab = tab;
+
+    // use this to put to individual module dashboard.
+    subsystemShuffleboardTab = Shuffleboard.getTab(moduleIdentifier);
+
+    // use this to put to main subsystem dashboard.
+    // subsystemShuffleboardTab = tab;
 
 
     sbSwerveModuleAngleCommand = subsystemShuffleboardTab.add(moduleIdentifier + "_degC", 0)
@@ -96,14 +108,29 @@ public class SwerveModule {
     .withProperties(Map.of("min", -10, "max", 10))
     .getEntry();
 
-    sbSwerveModuleSpeedActual = subsystemShuffleboardTab.add(moduleIdentifier + "Va", 0)
+    sbSwerveModuleSpeedActual = subsystemShuffleboardTab.add(moduleIdentifier + "_Va", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -10, "max", 10))
     .getEntry();
 
+    sbSwerveModuleSpeedRawCommand = subsystemShuffleboardTab.add(moduleIdentifier + "_R_Vc", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -22000, "max", 22000))
+    .getEntry();
+
+    sbSwerveModuleSpeedRawActual = subsystemShuffleboardTab.add(moduleIdentifier + "_R_Va", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -22000, "max", 22000))
+    .getEntry();
+
+    sbSwerveModuleTurnMotorOutput = subsystemShuffleboardTab.add(moduleIdentifier + "twistOut", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+
     m_driveMotor = new TalonFX(driveMotorCanID);
     m_twistMotor = new VictorSPX(twistMotorCanID);
-
+    this.offset = offset;
     this.moduleIdentifier = moduleIdentifier;
 
     this.m_driveMotorSensors = m_driveMotor.getSensorCollection(); //new Encoder(driveEncoderPorts[0], driveEncoderPorts[1]);
@@ -144,32 +171,53 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState state) {
     // Calculate the drive output from the drive PID controller.
 
-    double setpoint;
+    double setpoint, setpoint_scaled;
 
-    if (state.angle.getDegrees() < 0) {
-      setpoint =  360 - (state.angle.getDegrees() * -1);
-    } else if (state.angle.getDegrees() > 360) {
-        setpoint = state.angle.getDegrees() - 360;
+    setpoint = state.angle.getDegrees() + this.offset;
+
+    if (setpoint < 0) {
+      setpoint_scaled =  360 - (setpoint * -1);
+    } else if (setpoint > 360) {
+      setpoint_scaled = setpoint - 360;
     } else {
-        setpoint = state.angle.getDegrees();
+      setpoint_scaled = setpoint;
     }
 
-    sbSwerveModuleAngleCommand.setDouble(setpoint);
-    sbSwerveModuleAngleActual.setDouble(m_twistEncoder.get());
+    sbSwerveModuleAngleCommand.setDouble(setpoint_scaled);
+
+    double currentAngle = m_twistEncoder.get();
+    double currentAngle_scaled;
+
+    currentAngle -= this.offset;
+
+    if (currentAngle < 0) {
+      currentAngle_scaled =  360 - (currentAngle * -1);
+    } else if (currentAngle > 360) {
+      currentAngle_scaled = currentAngle - 360;
+    } else {
+      currentAngle_scaled = currentAngle;
+    }
+
+    sbSwerveModuleAngleActual.setDouble(currentAngle_scaled);
 
     sbSwerveModuleSpeedCommand.setDouble(state.speedMetersPerSecond);
     sbSwerveModuleSpeedActual.setDouble(convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()));
 
         // Calculate the turning motor output from the turning PID controller.
     final var turnOutput = m_twistPIDController.calculate(
-          m_twistEncoder.get(), setpoint
+          m_twistEncoder.get(), setpoint_scaled
       );
+
+      sbSwerveModuleTurnMotorOutput.setDouble(turnOutput);
 
     // System.out.println("Setting State. Drive Motor Output  = " + driveOutput + ". Turning motor output = " + turnOutput);
 
     // Convert the motor output command to ticks/100ms
     // TODO: Check that this works.
     double driveOutput = convertMetersPerSecondToTicksPerTimeUnit(state.speedMetersPerSecond);
+
+    sbSwerveModuleSpeedRawCommand.setDouble(driveOutput);
+    sbSwerveModuleSpeedRawActual.setDouble(m_driveMotorSensors.getIntegratedSensorVelocity());
     m_driveMotor.set(ControlMode.Velocity, driveOutput);
     m_twistMotor.set(ControlMode.PercentOutput, turnOutput);
   }
@@ -186,18 +234,19 @@ public class SwerveModule {
   private double convertMetersToTicks(double meters){
 
     double wheelCircumference = Constants.DriveSubsystem.kWheelDiameter * Math.PI;
-    double distancePerMotorRevolution = wheelCircumference / Constants.DriveSubsystem.kGearRatioMotorToWheel;
-    double finalRatio = Constants.DriveSubsystem.kMotorEncoderTicksPerRev * distancePerMotorRevolution;
+    double motorRevolutionsPerDistance = Constants.DriveSubsystem.kGearRatioMotorToWheel/wheelCircumference;
+    double finalRatio = Constants.DriveSubsystem.kMotorEncoderTicksPerRev * motorRevolutionsPerDistance;
+
     return meters * finalRatio;
   
   }
 
   private double convertTicksPerTimeUnitToMetersPerSecond(double ticksPer100ms){
-    return convertTicksToMeters(ticksPer100ms) * Constants.DriveSubsystem.kMotorEncoderTimeUnit;
+    return convertTicksToMeters(ticksPer100ms) / Constants.DriveSubsystem.kMotorEncoderTimeUnit;
   }
 
   private double convertMetersPerSecondToTicksPerTimeUnit(double metersPerSec){
-    return convertMetersToTicks(metersPerSec) / Constants.DriveSubsystem.kMotorEncoderTimeUnit;
+    return convertMetersToTicks(metersPerSec) * Constants.DriveSubsystem.kMotorEncoderTimeUnit;
   }
 
   /**
@@ -205,6 +254,10 @@ public class SwerveModule {
    */
 
   public void resetEncoders() {
+  }
+
+  public double getRawAngle() {
+    return this.m_twistEncoder.get();
   }
 
   // public void enableRotation(){
