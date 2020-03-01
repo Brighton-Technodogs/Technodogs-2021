@@ -39,15 +39,8 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
 
-  SwerveDriveKinematics mDriveKinematics =
-  new SwerveDriveKinematics(
-    new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
-    new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2),
-    new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
-    new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2));
-
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(mDriveKinematics, getAngle());
+  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.DriveSubsystem.kDriveKinematics, getAngle());
 
   private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Drive Subsystem");
 
@@ -205,7 +198,7 @@ public class DriveSubsystem extends SubsystemBase {
     forwardInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
     sidewaysInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
 
-    var swerveModuleStates = mDriveKinematics
+    var swerveModuleStates = Constants.DriveSubsystem.kDriveKinematics
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
             : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
 

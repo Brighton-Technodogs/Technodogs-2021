@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -34,7 +37,7 @@ public final class Constants {
         public static final int operatorLeftTrigger = 2;
     }
 
-    public final class DriveSubsystem {
+    public static final class DriveSubsystem {
 
         public static final double kSwerveTwistPIDTolerance = 10;
         public static final double kSwerveTwistPID_P = 0.05;
@@ -55,12 +58,23 @@ public final class Constants {
         public static final double kMotorEncoderTicksPerRev = 2048;
         public static final double kMotorEncoderTimeUnit = 0.100; // 100ms
 
+        //kPXController
+
         public static final boolean kGyroReversed = true;
 
         public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
         public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
 
         public static final double kMaxSpeedMetersPerSecond = 7;
+
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1; // yeet
+
+        public static final SwerveDriveKinematics kDriveKinematics =
+        new SwerveDriveKinematics(
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2));
 
         public static final int kFrontLeftDriveMotorCanID = 2;
         public static final int kRearLeftDriveMotorCanID = 1;
