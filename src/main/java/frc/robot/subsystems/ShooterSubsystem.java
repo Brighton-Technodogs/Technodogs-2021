@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
   double fValue = 0.05;
   int allowableError = 150;
   int PIDLoopRate = 10; // In ms
-  int maxIntegralAccumulator = 1000;
+  double maxIntegralAccumulator = 1000;
   double topSpin = 1.25;
 
 
@@ -115,15 +115,15 @@ private NetworkTableEntry shooterLS = subsystemShuffleboardTab.add("Left Shooter
             .withProperties(Map.of("min", -1, "max", 1)) 
             .getEntry();
 
-private NetworkTableEntry gshooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed", 0)
+private NetworkTableEntry gshooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed Graph", 0)
             .withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("min", -1, "max", 1)) 
             .getEntry();
-private NetworkTableEntry gshooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed", 0)
+private NetworkTableEntry gshooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed Graph", 0)
             .withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("min", -1, "max", 1)) 
             .getEntry();
-private NetworkTableEntry gshooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed", 0)
+private NetworkTableEntry gshooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed Graph", 0)
             .withWidget(BuiltInWidgets.kGraph)
             .withProperties(Map.of("min", -1, "max", 1)) 
             .getEntry();
@@ -406,8 +406,8 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
     iValue = sbiValue.getDouble(iValue);
     dValue = sbdValue.getDouble(dValue);
     fValue = sbfValue.getDouble(fValue);
-    maxIntegralAccumulator = (int) sbmaxIntegralAccumulator.getNumber(maxIntegralAccumulator);
-    PIDLoopRate = (int) sbPIDLoopRate.getNumber(PIDLoopRate);
+    maxIntegralAccumulator = sbmaxIntegralAccumulator.getNumber(maxIntegralAccumulator).doubleValue();
+    PIDLoopRate = sbPIDLoopRate.getNumber(PIDLoopRate).intValue() ;
     topSpin = sbtopSpin.getDouble(topSpin);
 
     rightShooter.config_kP(0, pValue);
