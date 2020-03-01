@@ -100,6 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
 
     subsystemShuffleboardTab.add((Sendable) m_gyro);
+    resetOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
 
     m_frontLeft = new SwerveModule(Constants.DriveSubsystem.kFrontLeftDriveMotorCanID,
                                     Constants.DriveSubsystem.kFrontLeftTwistMotorCanID,
