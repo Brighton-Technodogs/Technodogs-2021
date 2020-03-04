@@ -5,22 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.storage;
+package frc.robot.commands.climb;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.ClimbSubsystem;
 
-public class RunStorageCommand extends CommandBase {
+public class RunClimbCommand extends CommandBase {
   
-  StorageSubsystem storageSubsystem;
+  ClimbSubsystem climbSubsystem;
 
-  double storageSpeed = 0.4;
+  XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
-  public RunStorageCommand(StorageSubsystem subsystem)
+  boolean inverseControl = true;
+
+  public RunClimbCommand(ClimbSubsystem climb) 
   {
-    storageSubsystem = subsystem;
-    
-    addRequirements(storageSubsystem);
+    climbSubsystem = climb;
+
+    addRequirements(climbSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,17 +37,17 @@ public class RunStorageCommand extends CommandBase {
   public void execute() 
   {
 
-    storageSubsystem.runStorage(storageSpeed);
+    double climbSpeed = operatorController.getRawAxis(Constants.OperatorControl.operatorControllerLeftStickYAxis);
+
+    climbSpeed *= inverseControl ? -1 : 1;
+
+    climbSubsystem.runClimb(climbSpeed);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-
-    storageSubsystem.runStorage(0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.

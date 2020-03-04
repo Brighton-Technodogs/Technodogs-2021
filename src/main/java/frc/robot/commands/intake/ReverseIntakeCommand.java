@@ -5,22 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.storage;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class RunStorageCommand extends CommandBase {
+public class ReverseIntakeCommand extends CommandBase {
   
-  StorageSubsystem storageSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  double storageSpeed = 0.4;
+  double intakeSpeed = -0.5;
 
-  public RunStorageCommand(StorageSubsystem subsystem)
+  public ReverseIntakeCommand(IntakeSubsystem intake)
   {
-    storageSubsystem = subsystem;
-    
-    addRequirements(storageSubsystem);
+    intakeSubsystem = intake;
+
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +33,7 @@ public class RunStorageCommand extends CommandBase {
   public void execute() 
   {
 
-    storageSubsystem.runStorage(storageSpeed);
+    intakeSubsystem.runIntake(intakeSpeed);
 
   }
 
@@ -42,7 +42,7 @@ public class RunStorageCommand extends CommandBase {
   public void end(boolean interrupted) 
   {
 
-    storageSubsystem.runStorage(0);
+    intakeSubsystem.runIntake(0);
 
   }
 

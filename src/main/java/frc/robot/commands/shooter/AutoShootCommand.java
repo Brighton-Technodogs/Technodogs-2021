@@ -52,10 +52,10 @@ public class AutoShootCommand extends CommandBase {
   public void execute() 
   {
     //get index of seen area
-    int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getVertical());
+    // int index = (int)shooterSubsystem.getDistance(shooterSubsystem.getVertical());
 
-    //report index to the screen
-    SmartDashboard.putNumber("Array Index", index);
+    // //report index to the screen
+    // SmartDashboard.putNumber("Array Index", index);
     
     // if (index < shooterSubsystem.speeds.length - 1)
     // {
@@ -88,12 +88,15 @@ public class AutoShootCommand extends CommandBase {
 
       if (firstShot)
       {
+        shooterSubsystem.enableLimelight();
         shooterSubsystem.shootAtVelocity();
         firstShot = false;
       }
+  
     }
     else
     {
+      shooterSubsystem.disableLimelight();
       //else reset to 0 motor speed
       shooterSubsystem.shoot(0, 0, 0);
       firstShot = true;

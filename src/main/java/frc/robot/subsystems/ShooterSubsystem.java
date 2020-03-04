@@ -298,6 +298,16 @@ public class ShooterSubsystem extends SubsystemBase {
       return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
   }
 
+  public void enableLimelight()
+  {
+    limelightTable.getEntry("ledMode").forceSetNumber(3);
+  }
+
+  public void disableLimelight()
+  {
+    limelightTable.getEntry("ledMode").forceSetNumber(1);
+  }
+
   //set the shooter motors to desired speed using velocity
   public void spinToSpeed (double spinSpeed)
   {

@@ -19,13 +19,15 @@ import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.intake.ReverseIntakeCommand;
 import frc.robot.commands.intake.RunIntakeCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
-
+import frc.robot.commands.climb.RunClimbCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final StorageSubsystem storageSubsystem = new StorageSubsystem();
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
   //Drive Commands
   private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
@@ -57,7 +60,11 @@ public class RobotContainer {
 
   //Intake Commands
   private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
+  private final ReverseIntakeCommand reverseIntakeCommand = new ReverseIntakeCommand(intakeSubsystem);
 
+  //Climb Commands
+  private final RunClimbCommand runClimbCommand = new RunClimbCommand(climbSubsystem);
+  
   //Auto Commands
   private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem);
 
@@ -66,7 +73,7 @@ public class RobotContainer {
   private final JoystickButton operatorBButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
   private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
   private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
-  private final JoystickButton operatorYButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+  private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
 
   
   public RobotContainer() 
@@ -78,6 +85,8 @@ public class RobotContainer {
     shooterSubsystem.setDefaultCommand(autoShootCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeCommand);
+
+    climbSubsystem.setDefaultCommand(runClimbCommand);
   }
 
   /**
@@ -91,9 +100,11 @@ public class RobotContainer {
 
     operatorBButton.whenHeld(quickFireCommand);
 
-    operatorAButton.whenHeld(runStorageWithSensorCommand);
+    operatorAButton.whenHeld(runStorageCommand);
 
     operatorXButton.whenHeld(reverseStorageCommand);
+
+    operatorLeftBumper.whenHeld(reverseIntakeCommand);
   }
 
   //get the auto command

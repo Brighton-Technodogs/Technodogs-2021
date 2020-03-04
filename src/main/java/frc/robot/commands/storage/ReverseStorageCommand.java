@@ -14,7 +14,7 @@ public class ReverseStorageCommand extends CommandBase {
   
   StorageSubsystem storageSubsystem;
 
-  double storageSpeed = -0.5;
+  double storageSpeed = -0.4;
 
   public ReverseStorageCommand(StorageSubsystem subsystem) 
   {

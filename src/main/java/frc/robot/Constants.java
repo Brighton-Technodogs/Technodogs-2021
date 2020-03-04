@@ -32,6 +32,8 @@ public final class Constants {
         public static final int operatorControllerPort = 1;
         public static final int operatorRightTrigger = 3;
         public static final int operatorLeftTrigger = 2;
+
+        public static final int operatorControllerLeftStickYAxis = 1;
     }
 
     public final class DriveSubsystem {
@@ -79,6 +81,12 @@ public final class Constants {
         public static final int innerStorageVictorCan = 41; //
 
         public static final int outerIntakeVictorCan = 40; //
+    }
+
+    public final class ClimbSubsystemConstants
+    {
+        public static final int climbMotor = 50;
+        public static final int winchMotor = 51;
     }
 
     public final class Sensors
