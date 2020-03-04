@@ -73,7 +73,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         rotation = 0;
       }
 
-      double controllerAssist = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis) / 5;
+      double controllerAssist = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis) / 10;
 
       //spin to center on target
       
@@ -88,7 +88,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       // SmartDashboard.putNumber("X Box Rotation", rotation);
 
       //drive normally with joysticks
-      this.driveSubsystem.drive(directionX, directionY, rotation, false, true, false);
+      this.driveSubsystem.drive(directionX, directionY, rotation, false, false, false);
     }
 
 

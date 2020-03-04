@@ -63,8 +63,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // right motor is reversed
     //set right sensor to it's motor and set values
     rightShooterSensor = rightShooter.getSensorCollection();
-    rightShooter.configPeakOutputForward(0);
-    rightShooter.configPeakOutputReverse(-1);
+    rightShooter.configPeakOutputForward(1);
+    rightShooter.configPeakOutputReverse(0);
     rightShooter.config_kP(0, pValue);
     rightShooter.config_kI(0, iValue);
     rightShooter.config_kD(0, dValue);
@@ -89,8 +89,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // left motor is not reversed
     //set left sensor to it's motor and set values
     leftShooterSensor = leftShooter.getSensorCollection();
-    leftShooter.configPeakOutputForward(1);
-    leftShooter.configPeakOutputReverse(0);
+    leftShooter.configPeakOutputForward(0);
+    leftShooter.configPeakOutputReverse(-1);
     leftShooter.config_kP(0, pValue);
     leftShooter.config_kI(0, iValue);
     leftShooter.config_kD(0, dValue);
@@ -104,8 +104,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shoot (double bottomSpeed, double rightSpeed, double leftSpeed)
   {
     bottomShooter.set(ControlMode.PercentOutput, -1*bottomSpeed);
-    rightShooter.set(ControlMode.PercentOutput, -1*rightSpeed);
-    leftShooter.set(ControlMode.PercentOutput, leftSpeed);
+    rightShooter.set(ControlMode.PercentOutput, rightSpeed);
+    leftShooter.set(ControlMode.PercentOutput, -leftSpeed);
   }
 
   public void displayEncoders()
@@ -210,22 +210,24 @@ public class ShooterSubsystem extends SubsystemBase {
 
     double velocity = 0;
 
-    if (height > 21)
-    {
-      velocity = getShootVelocityMid();
-      System.out.println("Shooting Mid");
-    }
-    else
-    {
-      velocity = getShootVelocityFar();
-      System.out.println("Shooting Far");
-    }
+    // if (height > 21)
+    // {
+    //   velocity = getShootVelocityMid();
+    //   System.out.println("Shooting Mid");
+    // }
+    // else
+    // {
+    //   velocity = getShootVelocityFar();
+    //   System.out.println("Shooting Far");
+    // }
 
     velocity = getShootVelocityMid();
 
     velocity = velocity + getAngledSpeedDecrease();
 
-    spinToSpeed(velocity);
+      System.out.println(velocity);
+
+    spinToSpeed(velocity / 17500);
   }
 
   //formula for shooting speed with velocity and height
@@ -262,7 +264,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getAngledSpeedDecrease ()
   {
-    double offset = 14000 / getHorizontal();
+    double offset = 17000 / getHorizontal();
 
     return -offset;
   }
@@ -299,9 +301,9 @@ public class ShooterSubsystem extends SubsystemBase {
   //set the shooter motors to desired speed using velocity
   public void spinToSpeed (double spinSpeed)
   {
-    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed * 1); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed * bottomSpin);
-    leftShooter.set(ControlMode.Velocity, spinSpeed *  1);
+    rightShooter.set(ControlMode.PercentOutput, spinSpeed * 1); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.PercentOutput, -1 * spinSpeed * bottomSpin);
+    leftShooter.set(ControlMode.PercentOutput, spinSpeed *  -1);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());

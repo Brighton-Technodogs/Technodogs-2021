@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
   //run the intake motor at desired speed
   public void runIntake (double speed)
   {
-    intakeMotor.set(ControlMode.PercentOutput, -speed);
+    intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
   @Override

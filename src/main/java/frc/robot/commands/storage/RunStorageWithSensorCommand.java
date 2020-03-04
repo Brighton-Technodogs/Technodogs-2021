@@ -37,7 +37,7 @@ public class RunStorageWithSensorCommand extends CommandBase {
   public void execute() 
   {
 
-    boolean canSee = !contrastSensor.get();
+    //boolean canSee = !contrastSensor.get();
 
     // storageSubsystem.runStorage(canSee ? 0.45 : 0.65);
     storageSubsystem.runStorage(0.4);

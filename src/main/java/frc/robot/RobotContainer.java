@@ -94,8 +94,6 @@ public class RobotContainer {
     operatorAButton.whenHeld(runStorageWithSensorCommand);
 
     operatorXButton.whenHeld(reverseStorageCommand);
-
-    operatorYButton.whenPressed(changeConfigCommand);
   }
 
   //get the auto command
