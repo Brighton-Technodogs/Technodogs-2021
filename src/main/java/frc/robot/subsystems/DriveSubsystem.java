@@ -101,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void drive(double directionX, double directionY, double rotation, boolean useGyro, boolean slowSpeed,
             boolean noPush) {
-        swerve.drive(directionX * 0.6, directionY * 0.6, rotation * 0.4, false, slowSpeed, noPush);
+        swerve.drive(directionX * 0.5, directionY * 0.5, rotation * 0.34, false, slowSpeed, noPush);
     }
 
     //rotates the swerves to a circle and runs the motors at a desired speed
@@ -113,6 +113,11 @@ public class DriveSubsystem extends SubsystemBase {
     public void driveSimple(double speed, double angle)
     {
         swerve.driveSimple(speed, angle);
+    }
+
+    public void xMode()
+    {
+        swerve.XModeActivate();
     }
 
     /**

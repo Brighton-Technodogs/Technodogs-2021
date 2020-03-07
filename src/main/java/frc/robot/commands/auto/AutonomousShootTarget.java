@@ -37,6 +37,7 @@ public class AutonomousShootTarget extends CommandBase {
 
     shooterSubsystem.shootAtVelocity();
 
+    shooterSubsystem.disableLimelight();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

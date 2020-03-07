@@ -26,6 +26,7 @@ public final class Constants {
         public static final int driverControllerRightStickXAxis = 4;
         public static final int driverControllerRightStickYAxis = 5;
         public static final int driverControllerRightTriggerAxis = 3;
+        public static final int driverControllerLeftTriggerAxis = 2;
     }
 
     public final class OperatorControl {
@@ -34,6 +35,7 @@ public final class Constants {
         public static final int operatorLeftTrigger = 2;
 
         public static final int operatorControllerLeftStickYAxis = 1;
+        public static final int operatorControllerRightStickYAxis = 5;
     }
 
     public final class DriveSubsystem {
@@ -63,10 +65,10 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 1;
         public static final int kBackRightEncoderPort = 2;
 
-        public static final double kFrontLeftEncoderOffset = 312; //60
-        public static final double kRearLeftEncoderOffset = 59; //11
-        public static final double kFrontRightEncoderOffset = 128; //28
-        public static final double kRearRightEncoderOffset = 340.5; //18
+        public static final double kFrontLeftEncoderOffset = 107; //60
+        public static final double kRearLeftEncoderOffset = 94; //11
+        public static final double kFrontRightEncoderOffset = 129; //28
+        public static final double kRearRightEncoderOffset = 341; //18
     }
 
     public final class ShooterSubsystem

@@ -5,23 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
+import com.fasterxml.jackson.core.util.RequestPayload;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class AutonomousMoveForward extends CommandBase {
+public class DeployIntakeCommand extends CommandBase {
   
-  DriveSubsystem driveSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  Timer timer = new Timer();
-
-  public AutonomousMoveForward(DriveSubsystem drive) 
+  public DeployIntakeCommand(IntakeSubsystem intake) 
   {
-    driveSubsystem = drive;
+    intakeSubsystem = intake;
+
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -29,10 +28,7 @@ public class AutonomousMoveForward extends CommandBase {
   public void initialize() 
   {
 
-    driveSubsystem.init();
-    driveSubsystem.enable();
-
-    timer.start();
+    
 
   }
 
@@ -41,29 +37,18 @@ public class AutonomousMoveForward extends CommandBase {
   public void execute() 
   {
 
-    if (timer.get() > 1)
-    {
-      driveSubsystem.driveSimple(0.35, 0);
-    }
-    else
-    {
-      driveSubsystem.driveSimple(0, 2);
-    }
+    intakeSubsystem.deployIntake();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-
-    driveSubsystem.driveSimple(0, 0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 1.5;
+    return true;
   }
 }

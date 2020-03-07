@@ -14,14 +14,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.ChangeConfigCommand;
+import frc.robot.commands.shooter.LongShootCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.ResetIntakeCommand;
 import frc.robot.commands.intake.ReverseIntakeCommand;
 import frc.robot.commands.intake.RunIntakeCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
+import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
 import frc.robot.commands.climb.RunClimbCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -52,6 +56,7 @@ public class RobotContainer {
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
   private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
   private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
+  private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
 
   //Storage Commands
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
@@ -61,12 +66,15 @@ public class RobotContainer {
   //Intake Commands
   private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
   private final ReverseIntakeCommand reverseIntakeCommand = new ReverseIntakeCommand(intakeSubsystem);
+  private final DeployIntakeCommand deployIntakeCommand = new DeployIntakeCommand(intakeSubsystem);
+  private final ResetIntakeCommand resetIntakeCommand = new ResetIntakeCommand(intakeSubsystem);
 
   //Climb Commands
   private final RunClimbCommand runClimbCommand = new RunClimbCommand(climbSubsystem);
   
   //Auto Commands
-  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem);
+  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
 
   //Operator Contoller and Buttons
   private final XboxController operatorController = new XboxController(1);
@@ -74,6 +82,13 @@ public class RobotContainer {
   private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
   private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
   private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+  private final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
+  private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
+  private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+
+  //Driver Controller and Buttons
+  private final XboxController driverController = new XboxController(0);
+  private final JoystickButton driverStartButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
 
   
   public RobotContainer() 
@@ -100,16 +115,27 @@ public class RobotContainer {
 
     operatorBButton.whenHeld(quickFireCommand);
 
+    operatorRightBumper.whenHeld(longShootCommand);
+
     operatorAButton.whenHeld(runStorageCommand);
 
     operatorXButton.whenHeld(reverseStorageCommand);
 
     operatorLeftBumper.whenHeld(reverseIntakeCommand);
+
+    operatorStartButton.whenPressed(deployIntakeCommand);
+
+    operatorSelectButton.whenPressed(resetIntakeCommand);
   }
 
   //get the auto command
   public Command getAutoCommand ()
   {
-    return autonomousSequentialCommandGroup;
+    //This auton rotates, shoots, moves forward
+    // return autonomousSequentialCommandGroup;
+
+    //this auton moves backwards, intakes, rotates, then shoots
+    return autonomousBackwardsShootingSequentialCommand;
+    
   }
 }

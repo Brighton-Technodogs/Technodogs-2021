@@ -8,6 +8,8 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.ResetIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -20,9 +22,9 @@ public class AutonomousSequentialCommandGroup extends SequentialCommandGroup {
   /**
    * Creates a new AutonomousSequentialCommandGroup.
    */
-  public AutonomousSequentialCommandGroup(DriveSubsystem drive, ShooterSubsystem shoot, StorageSubsystem storage) {
+  public AutonomousSequentialCommandGroup(DriveSubsystem drive, ShooterSubsystem shoot, StorageSubsystem storage, IntakeSubsystem intake) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new AutonomousRotateToTarget(drive), new AutonomousShootTarget(shoot, storage), new AutonomousMoveForward(drive));
+    super(new DeployIntakeCommand(intake), new AutonomousRotateToTarget(drive), new AutonomousShootTarget(shoot, storage), new AutonomousMoveForward(drive), new ResetIntakeCommand(intake));
   }
 }

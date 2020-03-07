@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +18,7 @@ import frc.robot.Constants;
 public class ClimbSubsystem extends SubsystemBase {
   
   private VictorSPX climbMotor = new VictorSPX(Constants.ClimbSubsystemConstants.climbMotor);
+  private CANSparkMax winchMotor = new CANSparkMax(51, MotorType.kBrushless);
 
 
   public ClimbSubsystem() {
@@ -37,6 +40,24 @@ public class ClimbSubsystem extends SubsystemBase {
 
     climbMotor.set(ControlMode.PercentOutput, speed);
   }
+
+  public void runWinch (double speed)
+  {
+    if (speed > 0.2)
+    {
+      winchMotor.set(speed);
+    }
+    else if (speed < -0.75)
+    {
+      winchMotor.set(-0.2);
+    }
+    else
+    {
+      winchMotor.set(0);
+    }
+  }
+
+
 
 
   @Override

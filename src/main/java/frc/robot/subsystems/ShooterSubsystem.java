@@ -225,8 +225,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     velocity = velocity + getAngledSpeedDecrease();
 
-      System.out.println(velocity);
+    System.out.println(velocity);
 
+    SmartDashboard.putNumber("Current Found Shooting Height", getVertical());
+    SmartDashboard.putNumber("Current Velocity Target", velocity);
+    SmartDashboard.putNumber("Current Percentage Target", velocity / 17500);
     spinToSpeed(velocity / 17500);
   }
 
@@ -240,7 +243,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     double velocity = 8 * Math.pow((height - 30), 2);
     velocity = velocity + Math.abs(height * 10);
-    velocity = velocity + 3800;
+    velocity = velocity + 3650;
 
     //double velocity = 6350;
 
@@ -264,7 +267,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getAngledSpeedDecrease ()
   {
-    double offset = 17000 / getHorizontal();
+    double horizontal = getHorizontal();
+
+    double offset = 18500 / horizontal;
+
+    if (horizontal < 66)
+    {
+      offset = offset * 1.25;
+    }
 
     return -offset;
   }

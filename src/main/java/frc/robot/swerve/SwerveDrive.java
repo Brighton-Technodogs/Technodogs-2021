@@ -15,10 +15,10 @@ public class SwerveDrive {
     private double wheelbase = 22.5;
     private double trackwidth = 24.5;
 
-    private double directionStickDeadZone = 0.15;
-    private double rotateStickDeadZone = 0.2;
+    private double directionStickDeadZone = 0.08;
+    private double rotateStickDeadZone = 0.08;
 
-    private double slowModeSpeedMultiplier = 0.5;
+    private double slowModeSpeedMultiplier = 0.45;
 
     public SwerveDrive(SwerveWheel rightFront, SwerveWheel leftFront, SwerveWheel leftBack, SwerveWheel rightBack,
             GyroBase gyro) {
@@ -197,4 +197,16 @@ public class SwerveDrive {
         this.rightBackWheel.drive(speed, 315);
     }
 
+    public void XModeActivate()
+    {
+        this.rightFrontWheel.updateSpeed(0);
+        this.leftFrontWheel.updateSpeed(0);
+        this.leftBackWheel.updateSpeed(0);
+        this.rightBackWheel.updateSpeed(0);
+
+        this.rightFrontWheel.updateRotation(45 + 90);
+        this.leftFrontWheel.updateRotation(315 + 90);
+        this.leftBackWheel.updateRotation(225 + 90);
+        this.rightBackWheel.updateRotation(135 + 90);
+    }
 }

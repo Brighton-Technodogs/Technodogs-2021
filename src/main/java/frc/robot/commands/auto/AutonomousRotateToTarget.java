@@ -37,7 +37,11 @@ public class AutonomousRotateToTarget extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    limelightTable.getEntry("ledMode").forceSetNumber(3);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,6 +62,7 @@ public class AutonomousRotateToTarget extends CommandBase {
       //get position of target on camera
       horizontalEntry = limelightTable.getEntry("tx");
       horizontal = horizontalEntry.getDouble(0);
+      horizontal = horizontal - 1.5;
       rotation = horizontal / 23.0;
       //rotation = rotation - rotation * 0.35;
       System.out.println(rotation);

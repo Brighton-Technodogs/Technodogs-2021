@@ -88,15 +88,19 @@ public class AutoShootCommand extends CommandBase {
 
       if (firstShot)
       {
-        shooterSubsystem.enableLimelight();
+        //shooterSubsystem.enableLimelight();
         shooterSubsystem.shootAtVelocity();
         firstShot = false;
       }
+      // else
+      // {
+      //   shooterSubsystem.disableLimelight();
+      // }
   
     }
     else
     {
-      shooterSubsystem.disableLimelight();
+      //shooterSubsystem.disableLimelight();
       //else reset to 0 motor speed
       shooterSubsystem.shoot(0, 0, 0);
       firstShot = true;

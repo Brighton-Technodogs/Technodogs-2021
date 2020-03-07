@@ -5,35 +5,39 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class AutonomousMoveForward extends CommandBase {
+public class LongShootCommand extends CommandBase {
   
-  DriveSubsystem driveSubsystem;
+  ShooterSubsystem shooterSubsystem;
 
-  Timer timer = new Timer();
+  double shootingOffset;
 
-  public AutonomousMoveForward(DriveSubsystem drive) 
+  public LongShootCommand(ShooterSubsystem subsystem)
   {
-    driveSubsystem = drive;
+    shooterSubsystem = subsystem;
+
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() 
   {
+    // double shootingOffset = shooterSubsystem.getVertical() - 21;
 
-    driveSubsystem.init();
-    driveSubsystem.enable();
-
-    timer.start();
-
+    // if (shootingOffset > 0)
+    // {
+    //   shootingOffset = 0.05;
+    // }
+    // else if (shootingOffset < 0)
+    // {
+    //   shootingOffset = -0.05;
+    // }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,14 +45,15 @@ public class AutonomousMoveForward extends CommandBase {
   public void execute() 
   {
 
-    if (timer.get() > 1)
-    {
-      driveSubsystem.driveSimple(0.35, 0);
-    }
-    else
-    {
-      driveSubsystem.driveSimple(0, 2);
-    }
+    // shooterSubsystem.shoot(0.6 + shootingOffset, 0.35 + shootingOffset, 0.35 + shootingOffset);
+
+    // shooterSubsystem.shoot(1, 1, 1);
+
+    //closer shooting, height of 24
+    shooterSubsystem.shoot(0.55, 0.35, 0.35); //0.35 needs changing saturday comp
+
+    //farthest shot needed, vertical 20
+    // shooterSubsystem.shoot(0.55, 0.4, 0.4);
 
   }
 
@@ -57,13 +62,13 @@ public class AutonomousMoveForward extends CommandBase {
   public void end(boolean interrupted) 
   {
 
-    driveSubsystem.driveSimple(0, 0);
-
+    shooterSubsystem.shoot(0, 0, 0);
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 1.5;
+    return false;
   }
 }

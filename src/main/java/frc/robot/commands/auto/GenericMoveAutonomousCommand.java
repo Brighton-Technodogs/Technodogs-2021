@@ -7,21 +7,29 @@
 
 package frc.robot.commands.auto;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class AutonomousMoveForward extends CommandBase {
+public class GenericMoveAutonomousCommand extends CommandBase {
   
   DriveSubsystem driveSubsystem;
 
   Timer timer = new Timer();
 
-  public AutonomousMoveForward(DriveSubsystem drive) 
+  double runTime;
+  double runSpeed;
+  double runAngle;
+
+  public GenericMoveAutonomousCommand(DriveSubsystem drive, double time, double speed, double angle) 
   {
     driveSubsystem = drive;
+
+    runTime = time;
+    runSpeed = speed;
+    runAngle = angle;
+
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -41,13 +49,13 @@ public class AutonomousMoveForward extends CommandBase {
   public void execute() 
   {
 
-    if (timer.get() > 1)
+    if (timer.get() > 0.5)
     {
-      driveSubsystem.driveSimple(0.35, 0);
+      driveSubsystem.driveSimple(0, runAngle);
     }
     else
     {
-      driveSubsystem.driveSimple(0, 2);
+      driveSubsystem.driveSimple(runSpeed, runAngle);
     }
 
   }
@@ -64,6 +72,6 @@ public class AutonomousMoveForward extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get() > 1.5;
+    return timer.get() > runTime;
   }
 }
