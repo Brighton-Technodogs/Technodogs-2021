@@ -37,6 +37,16 @@ public class LongShootCommand extends CommandBase {
     // {
     //   shootingOffset = -0.05;
     // }
+
+    double shootingHeight = shooterSubsystem.getVertical();
+
+    shootingHeight = shootingHeight - 18;
+
+    shootingOffset = shootingHeight / 10;
+
+    shootingOffset = shootingOffset * 0.1;
+
+    shootingOffset = shootingOffset - 0.015;
     
   }
 
@@ -45,12 +55,16 @@ public class LongShootCommand extends CommandBase {
   public void execute() 
   {
 
+    System.out.println(shootingOffset);
+
+    shooterSubsystem.shoot(0.55, 0.38 - shootingOffset, 0.38 - shootingOffset);
+
     // shooterSubsystem.shoot(0.6 + shootingOffset, 0.35 + shootingOffset, 0.35 + shootingOffset);
 
     // shooterSubsystem.shoot(1, 1, 1);
 
     //closer shooting, height of 24
-    shooterSubsystem.shoot(0.55, 0.35, 0.35); //0.35 needs changing saturday comp
+    // shooterSubsystem.shoot(0.55, 0.30, 0.30); //0.35 needs changing saturday comp
 
     //farthest shot needed, vertical 20
     // shooterSubsystem.shoot(0.55, 0.4, 0.4);

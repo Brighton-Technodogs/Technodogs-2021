@@ -48,6 +48,9 @@ public class AutonomousRotateToTarget extends CommandBase {
   @Override
   public void execute() 
   {
+
+    limelightTable.getEntry("ledMode").forceSetNumber(3);
+
     //test if the target can be seen, if no spin
     if (limelightTable.getEntry("tv").getDouble(0) == 0)
     {
@@ -65,7 +68,7 @@ public class AutonomousRotateToTarget extends CommandBase {
       horizontal = horizontal - 1.5;
       rotation = horizontal / 23.0;
       //rotation = rotation - rotation * 0.35;
-      System.out.println(rotation);
+      // System.out.println(rotation);
       //set a max to the rotation
       if (rotation > 0.1)
       {
@@ -95,7 +98,8 @@ public class AutonomousRotateToTarget extends CommandBase {
   {
 
     //stop spinning when command is over
-    //driveSubsystem.CircleDrive(0);
+    // driveSubsystem.CircleDrive(0);
+    driveSubsystem.driveSimple(0, 0);
     System.out.println("Im done");
 
   }

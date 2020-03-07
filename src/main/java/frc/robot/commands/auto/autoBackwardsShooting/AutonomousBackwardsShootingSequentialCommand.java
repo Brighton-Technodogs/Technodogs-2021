@@ -51,7 +51,7 @@ public class AutonomousBackwardsShootingSequentialCommand extends SequentialComm
       new GenericMoveAutonomousCommand(driveSubsystem, 4, -0.25, 0), 
       new WaitCommand(0.75), 
       new AutonomousRotateToTarget(driveSubsystem), 
-      new AutonomousShootTarget(shooterSubsystem, storageSubsystem),
+      new AutonomousShootTarget(shooterSubsystem, storageSubsystem, driveSubsystem),
       new ResetIntakeCommand(intakeSubsystem)
     );
   }

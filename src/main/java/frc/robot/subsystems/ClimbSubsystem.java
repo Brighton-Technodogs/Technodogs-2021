@@ -31,12 +31,16 @@ public class ClimbSubsystem extends SubsystemBase {
     {
       speed = speed * 0.25;
     }
+    else if(speed < -0.85)
+    {
+      speed = -1;
+    }
     else
     {
       speed = speed * 0.75;
     }
 
-    System.out.println(speed);
+    // System.out.println(speed);
 
     climbMotor.set(ControlMode.PercentOutput, speed);
   }

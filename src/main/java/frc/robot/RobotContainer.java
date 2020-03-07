@@ -25,6 +25,7 @@ import frc.robot.commands.intake.ResetIntakeCommand;
 import frc.robot.commands.intake.ReverseIntakeCommand;
 import frc.robot.commands.intake.RunIntakeCommand;
 import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
+import frc.robot.commands.auto.AutoShootBasicWithXMode.AutoShootWithXModeSequesntialCommand;
 import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
 import frc.robot.commands.climb.RunClimbCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -75,6 +76,7 @@ public class RobotContainer {
   //Auto Commands
   private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
   private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  private final AutoShootWithXModeSequesntialCommand autoShootWithXModeSequesntialCommand = new AutoShootWithXModeSequesntialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
 
   //Operator Contoller and Buttons
   private final XboxController operatorController = new XboxController(1);
@@ -132,10 +134,13 @@ public class RobotContainer {
   public Command getAutoCommand ()
   {
     //This auton rotates, shoots, moves forward
-    // return autonomousSequentialCommandGroup;
+    return autonomousSequentialCommandGroup;
 
     //this auton moves backwards, intakes, rotates, then shoots
-    return autonomousBackwardsShootingSequentialCommand;
+    // return autonomousBackwardsShootingSequentialCommand;
+
+    //This auton rotates, xmodes, shoots, moves forawrd
+    // return autoShootWithXModeSequesntialCommand;
     
   }
 }

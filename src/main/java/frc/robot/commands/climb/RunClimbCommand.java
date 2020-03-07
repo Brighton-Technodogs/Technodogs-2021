@@ -41,8 +41,16 @@ public class RunClimbCommand extends CommandBase {
 
     climbSpeed *= inverseControl ? -1 : 1;
 
-    climbSpeed = climbSpeed * 0.5;
 
+    if (climbSpeed < -0.85)
+    {
+      climbSpeed = -1;
+    }
+    else
+    {
+      climbSpeed = climbSpeed * 0.5;
+    }
+    
     climbSubsystem.runClimb(climbSpeed);
 
     double winchSpeed = operatorController.getRawAxis(Constants.OperatorControl.operatorControllerRightStickYAxis);

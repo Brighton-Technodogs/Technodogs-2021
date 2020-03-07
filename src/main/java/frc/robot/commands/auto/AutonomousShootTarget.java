@@ -9,6 +9,7 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -17,15 +18,17 @@ public class AutonomousShootTarget extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
   StorageSubsystem storageSubsystem;
+  DriveSubsystem driveSubsystem;
 
   //creates a new timer for intake
   Timer timer = new Timer();
 
-  public AutonomousShootTarget(ShooterSubsystem subsystem, StorageSubsystem storageSubsystem) 
+  public AutonomousShootTarget(ShooterSubsystem subsystem, StorageSubsystem storageSubsystem, DriveSubsystem driveSubsystem) 
   {
     shooterSubsystem = subsystem;
     this.storageSubsystem = storageSubsystem;
-    addRequirements(shooterSubsystem, storageSubsystem);
+    this.driveSubsystem = driveSubsystem;
+    addRequirements(shooterSubsystem, storageSubsystem, driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -34,6 +37,8 @@ public class AutonomousShootTarget extends CommandBase {
   {
     //starts the timer
     timer.start();
+
+    shooterSubsystem.enableLimelight();
 
     shooterSubsystem.shootAtVelocity();
 
@@ -44,6 +49,8 @@ public class AutonomousShootTarget extends CommandBase {
   @Override
   public void execute() 
   {
+
+    driveSubsystem.xMode();
 
     if (timer.get() > 0.5)
     {

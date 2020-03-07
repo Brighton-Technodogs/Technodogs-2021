@@ -80,13 +80,13 @@ public class DriveSubsystem extends SubsystemBase {
         rearLeftWheel.enableRotation();
     }
 
-    public void disable() {
+    /*public void disable() {
         System.out.println("Disabling DriveSubsystem");
         frontRightWheel.disableRotation();
         frontLeftWheel.disableRotation();
         rearRightWheel.disableRotation();
         rearLeftWheel.disableRotation();
-    }
+    }*/
 
     /**
      * Drives the robot based on parameter values
