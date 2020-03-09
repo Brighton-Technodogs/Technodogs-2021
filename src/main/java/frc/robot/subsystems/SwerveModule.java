@@ -173,8 +173,11 @@ public class SwerveModule {
 
     double setpoint, setpoint_scaled;
 
+    // Our encoders are not aligned such that 0 means "the front of the robot".
+    // Because of this, we need to add the offset here
     setpoint = state.angle.getDegrees() + this.offset;
 
+    // Because we added an offset, we now have to normalize the angle to 0-360
     if (setpoint < 0) {
       setpoint_scaled =  360 - (setpoint * -1);
     } else if (setpoint > 360) {
@@ -188,6 +191,7 @@ public class SwerveModule {
     double currentAngle = m_twistEncoder.get();
     double currentAngle_scaled;
 
+    // display the actual angle of the wheel on shuffleboard.
     currentAngle -= this.offset;
 
     if (currentAngle < 0) {

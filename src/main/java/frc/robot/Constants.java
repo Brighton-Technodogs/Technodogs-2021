@@ -65,10 +65,11 @@ public final class Constants {
         public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
         public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
 
-        public static final double kMaxSpeedMetersPerSecond = 7;
+        public static final double kMaxSpeedMetersPerSecond = 2.5;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 1; // yeet
 
+        // Define the order of the swerve modules.
         public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
           new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),

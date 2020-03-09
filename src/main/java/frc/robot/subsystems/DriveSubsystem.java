@@ -155,6 +155,8 @@ public class DriveSubsystem extends SubsystemBase {
     sbPoseRotation.setDouble(m_odometry.getPoseMeters().getRotation().getDegrees());
     // sbDriveGyro.setValue(m_gyro.getAngle());
     // Update the odometry in the periodic block
+
+    // TODO: Are the motors in the right order?
     m_odometry.update(new Rotation2d(getHeading()), m_frontLeft.getState(), m_rearLeft.getState(),
         m_frontRight.getState(), m_rearRight.getState());
 
