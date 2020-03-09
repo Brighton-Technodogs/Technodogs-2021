@@ -134,13 +134,13 @@ public class RobotContainer {
   public Command getAutoCommand ()
   {
     //This auton rotates, shoots, moves forward
-    return autonomousSequentialCommandGroup;
+    // return autonomousSequentialCommandGroup;
 
     //this auton moves backwards, intakes, rotates, then shoots
     // return autonomousBackwardsShootingSequentialCommand;
 
     //This auton rotates, xmodes, shoots, moves forawrd
-    // return autoShootWithXModeSequesntialCommand;
+    return autoShootWithXModeSequesntialCommand;
     
   }
 }

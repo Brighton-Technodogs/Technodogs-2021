@@ -27,18 +27,18 @@ public class ClimbSubsystem extends SubsystemBase {
 
   public void runClimb (double speed)
   {
-    if (speed > 0)
-    {
-      speed = speed * 0.25;
-    }
-    else if(speed < -0.85)
-    {
-      speed = -1;
-    }
-    else
-    {
-      speed = speed * 0.75;
-    }
+    // if (speed > 0)
+    // {
+    //   speed = speed * 0.25;
+    // }
+    // else if(speed < -0.85)
+    // {
+    //   speed = -1;
+    // }
+    // else
+    // {
+    //   speed = speed * 0.75;
+    // }
 
     // System.out.println(speed);
 

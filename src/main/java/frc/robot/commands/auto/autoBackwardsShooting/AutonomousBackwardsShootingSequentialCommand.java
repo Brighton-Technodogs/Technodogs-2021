@@ -8,6 +8,8 @@
 package frc.robot.commands.auto.autoBackwardsShooting;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.auto.AutonomousDriveByGyroCommand;
+import frc.robot.commands.auto.AutonomousLongShootCommand;
 import frc.robot.commands.auto.AutonomousRotateToTarget;
 import frc.robot.commands.auto.AutonomousRunIntakeCommand;
 import frc.robot.commands.auto.AutonomousShootTarget;
@@ -48,10 +50,12 @@ public class AutonomousBackwardsShootingSequentialCommand extends SequentialComm
       new DeployIntakeCommand(intakeSubsystem),
       new WaitCommand(0.25),
       new AutonomousRunIntakeCommand(intakeSubsystem), 
-      new GenericMoveAutonomousCommand(driveSubsystem, 4, -0.25, 0), 
-      new WaitCommand(0.75), 
+      // new GenericMoveAutonomousCommand(driveSubsystem, 3.75, -0.15, 0), 
+      new AutonomousDriveByGyroCommand(driveSubsystem, 0, -0.1, 2),
+      new WaitCommand(1), 
       new AutonomousRotateToTarget(driveSubsystem), 
-      new AutonomousShootTarget(shooterSubsystem, storageSubsystem, driveSubsystem),
+      // new AutonomousShootTarget(shooterSubsystem, storageSubsystem, driveSubsystem),
+      new AutonomousLongShootCommand(driveSubsystem, shooterSubsystem, storageSubsystem),
       new ResetIntakeCommand(intakeSubsystem)
     );
   }

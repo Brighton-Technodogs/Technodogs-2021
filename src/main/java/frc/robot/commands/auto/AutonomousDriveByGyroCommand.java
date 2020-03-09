@@ -7,19 +7,32 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class AutonomousRunIntakeCommand extends CommandBase {
+public class AutonomousDriveByGyroCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  DriveSubsystem driveSubsystem;
 
-  public AutonomousRunIntakeCommand(IntakeSubsystem intakeSubsystem) 
+  Timer timer = new Timer();
+
+  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+  double xSpeed;
+  double ySpeed;
+  double time;
+
+  public AutonomousDriveByGyroCommand(DriveSubsystem driveSubsystem, double xSpeed, double ySpeed, double time) 
   {
-    this.intakeSubsystem = intakeSubsystem;
-    
-    addRequirements(intakeSubsystem);
+    this.driveSubsystem = driveSubsystem;
+
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
+    this.time = time;
+
+    addRequirements(this.driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -27,6 +40,11 @@ public class AutonomousRunIntakeCommand extends CommandBase {
   public void initialize() 
   {
 
+    driveSubsystem.enable();
+    driveSubsystem.init();
+
+    timer.start();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,19 +52,29 @@ public class AutonomousRunIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.runIntake(0.75);
+    // double rotation = gyro.getAngle() / 180;
+
+    double angle = gyro.getAngle();
+
+    double rotation = -angle;
+
+    driveSubsystem.drive(0, -0.1, rotation, false, false, false);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    driveSubsystem.driveSimple(0, 0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() 
   {
-    return true;
+    return timer.get() > time;
   }
 }

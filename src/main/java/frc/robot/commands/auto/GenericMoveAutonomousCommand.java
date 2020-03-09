@@ -49,7 +49,7 @@ public class GenericMoveAutonomousCommand extends CommandBase {
   public void execute() 
   {
 
-    if (timer.get() > 0.5)
+    if (timer.get() < 0.5)
     {
       driveSubsystem.driveSimple(0, runAngle);
     }
