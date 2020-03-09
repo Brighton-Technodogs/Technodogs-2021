@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,6 +18,8 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   
   private VictorSPX intakeMotor = new VictorSPX(Constants.IntakeSubsystem.outerIntakeVictorCan);
+
+  private Servo deployingServo = new Servo(9);
 
   /**
    * Creates a new IntakeSubsystem.
@@ -28,7 +31,17 @@ public class IntakeSubsystem extends SubsystemBase {
   //run the intake motor at desired speed
   public void runIntake (double speed)
   {
-    intakeMotor.set(ControlMode.PercentOutput, -speed);
+    intakeMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void deployIntake ()
+  {
+    deployingServo.set(0);
+  }
+
+  public void resetIntake()
+  {
+    deployingServo.set(0.5);
   }
 
   @Override

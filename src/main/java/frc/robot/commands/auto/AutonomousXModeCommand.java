@@ -5,25 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class AutonomousXModeCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  DriveSubsystem driveSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  public AutonomousXModeCommand(DriveSubsystem driveSubsystem)
   {
-    shooterSubsystem = subsystem;
-
-    addRequirements(shooterSubsystem);
+    this.driveSubsystem = driveSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    driveSubsystem.enable();
+    driveSubsystem.init();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,23 +34,18 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    driveSubsystem.xMode();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

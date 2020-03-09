@@ -5,9 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.auto;
+package frc.robot.commands.auto.AutoShootBasicWithXMode;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.auto.AutonomousMoveForward;
+import frc.robot.commands.auto.AutonomousRotateToTarget;
+import frc.robot.commands.auto.AutonomousShootTarget;
+import frc.robot.commands.auto.AutonomousXModeCommand;
 import frc.robot.commands.intake.DeployIntakeCommand;
 import frc.robot.commands.intake.ResetIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -18,13 +22,13 @@ import frc.robot.subsystems.StorageSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutonomousSequentialCommandGroup extends SequentialCommandGroup {
+public class AutoShootWithXModeSequesntialCommand extends SequentialCommandGroup {
   /**
-   * Creates a new AutonomousSequentialCommandGroup.
+   * Creates a new AutoShootWithXModeSequesntialCommand.
    */
-  public AutonomousSequentialCommandGroup(DriveSubsystem drive, ShooterSubsystem shoot, StorageSubsystem storage, IntakeSubsystem intake) {
+  public AutoShootWithXModeSequesntialCommand(DriveSubsystem drive, ShooterSubsystem shoot, StorageSubsystem storage, IntakeSubsystem intake) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new DeployIntakeCommand(intake), new AutonomousRotateToTarget(drive), new AutonomousShootTarget(shoot, storage, drive), new AutonomousMoveForward(drive), new ResetIntakeCommand(intake));
+    super(new DeployIntakeCommand(intake), new AutonomousRotateToTarget(drive), new AutonomousXModeCommand(drive), new AutonomousShootTarget(shoot, storage, drive), new AutonomousMoveForward(drive), new ResetIntakeCommand(intake));
   }
 }

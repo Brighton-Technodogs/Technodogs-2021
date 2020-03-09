@@ -31,9 +31,15 @@ public class ShooterSubsystem extends SubsystemBase {
   //TalonFXConfiguration fxC = new TalonFXConfiguration();
 
   //hard set PID values
-  double pValue = 1;
-  double iValue = 0.002;
-  double dValue = 50;
+  double pValue = 0.06;
+  double iValue = 0.02;
+  double dValue = 0.8;
+  double fValue = 0.05;
+  int allowableError = 150;
+  int PIDLoopRate = 10; //In ms
+  int maxIntegralAccumulator = 1000;
+
+  double bottomSpin = 4; //1,25
 
   /**
    * Creates a new ShooterSubsystem.
@@ -48,16 +54,24 @@ public class ShooterSubsystem extends SubsystemBase {
     {
       SmartDashboard.putNumber("Array Index", 0);
     }
+    
+    SmartDashboard.putNumber("P Value Right", 0);
+    SmartDashboard.putNumber("I Value Right", 0.02);
+    SmartDashboard.putNumber("D Value Right", 0);
+    SmartDashboard.putNumber("F Value Right", 0.05);
 
     // right motor is reversed
     //set right sensor to it's motor and set values
     rightShooterSensor = rightShooter.getSensorCollection();
-    rightShooter.configPeakOutputForward(0);
-    rightShooter.configPeakOutputReverse(-1);
+    rightShooter.configPeakOutputForward(1);
+    rightShooter.configPeakOutputReverse(0);
     rightShooter.config_kP(0, pValue);
     rightShooter.config_kI(0, iValue);
     rightShooter.config_kD(0, dValue);
-    rightShooter.config_kF(0, 0.1);
+    rightShooter.config_kF(0, fValue);
+    rightShooter.configAllowableClosedloopError(0, 0);
+    rightShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    rightShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // bottom motor is reversed
     //set bottom sensor to it's motor and set values
@@ -67,25 +81,31 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooter.config_kP(0, pValue);
     bottomShooter.config_kI(0, iValue);
     bottomShooter.config_kD(0, dValue);
-    bottomShooter.config_kF(0, 0.1);
+    bottomShooter.config_kF(0, fValue);
+    bottomShooter.configAllowableClosedloopError(0, 0);
+    bottomShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    bottomShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // left motor is not reversed
     //set left sensor to it's motor and set values
     leftShooterSensor = leftShooter.getSensorCollection();
-    leftShooter.configPeakOutputForward(1);
-    leftShooter.configPeakOutputReverse(0);
+    leftShooter.configPeakOutputForward(0);
+    leftShooter.configPeakOutputReverse(-1);
     leftShooter.config_kP(0, pValue);
     leftShooter.config_kI(0, iValue);
     leftShooter.config_kD(0, dValue);
-    leftShooter.config_kF(0, 0.1);
+    leftShooter.config_kF(0, fValue);
+    leftShooter.configAllowableClosedloopError(0, 0);
+    leftShooter.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
+    leftShooter.configClosedLoopPeriod(0, PIDLoopRate);
   }
 
   //set each motor to desired speed using percent
   public void shoot (double bottomSpeed, double rightSpeed, double leftSpeed)
   {
     bottomShooter.set(ControlMode.PercentOutput, -1*bottomSpeed);
-    rightShooter.set(ControlMode.PercentOutput, -1*rightSpeed);
-    leftShooter.set(ControlMode.PercentOutput, leftSpeed);
+    rightShooter.set(ControlMode.PercentOutput, rightSpeed);
+    leftShooter.set(ControlMode.PercentOutput, -leftSpeed);
   }
 
   public void displayEncoders()
@@ -184,6 +204,81 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public void shootAtVelocity()
+  {
+    double height = getVertical();
+
+    double velocity = 0;
+
+    // if (height > 21)
+    // {
+    //   velocity = getShootVelocityMid();
+    //   System.out.println("Shooting Mid");
+    // }
+    // else
+    // {
+    //   velocity = getShootVelocityFar();
+    //   System.out.println("Shooting Far");
+    // }
+
+    velocity = getShootVelocityMid();
+
+    velocity = velocity + getAngledSpeedDecrease();
+
+    System.out.println(velocity);
+
+    SmartDashboard.putNumber("Current Found Shooting Height", getVertical());
+    SmartDashboard.putNumber("Current Velocity Target", velocity);
+    SmartDashboard.putNumber("Current Percentage Target", velocity / 17500);
+    spinToSpeed(velocity / 17500);
+  }
+
+  //formula for shooting speed with velocity and height
+  public double getShootVelocityMid ()
+  {
+    double height = getVertical();
+
+    // double velocity = 30 * Math.pow((height - 20), 2);
+    // velocity = velocity + 9000;
+
+    double velocity = 8 * Math.pow((height - 30), 2);
+    velocity = velocity + Math.abs(height * 10);
+    velocity = velocity + 3650;
+
+    //double velocity = 6350;
+
+    // System.out.println(velocity);
+
+    // velocity = 17500;
+
+    return velocity;
+  }
+
+  public double getShootVelocityFar ()
+  {
+    double height = getVertical();
+
+    double velocity = 15 * Math.pow((height - 18), 2);
+    velocity = velocity + Math.abs(height * 15);
+    velocity = velocity + 7650;
+
+    return velocity;
+  }
+
+  public double getAngledSpeedDecrease ()
+  {
+    double horizontal = getHorizontal();
+
+    double offset = 18500 / horizontal;
+
+    if (horizontal < 66)
+    {
+      offset = offset * 1.25;
+    }
+
+    return -offset;
+  }
+
   //create limelight network table object
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -213,17 +308,45 @@ public class ShooterSubsystem extends SubsystemBase {
       return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
   }
 
-  //set the shooter motors to desired speed using velocity
-  public void SpinToSpeed (double spinSpeed)
+  public void enableLimelight()
   {
-    rightShooter.set(ControlMode.Velocity, -1 * spinSpeed); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed);
-    leftShooter.set(ControlMode.Velocity, spinSpeed);
-    SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
+    limelightTable.getEntry("ledMode").forceSetNumber(3);
+  }
 
-    SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
-    SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
-    SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
+  public void disableLimelight()
+  {
+    limelightTable.getEntry("ledMode").forceSetNumber(1);
+  }
+
+  //set the shooter motors to desired speed using velocity
+  public void spinToSpeed (double spinSpeed)
+  {
+    rightShooter.set(ControlMode.PercentOutput, spinSpeed * 1); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.PercentOutput, -1 * spinSpeed * bottomSpin);
+    leftShooter.set(ControlMode.PercentOutput, spinSpeed *  -1);
+    // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
+
+    // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
+  }
+
+  public void changeConfig()
+  {
+    rightShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    rightShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    rightShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    rightShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+
+    leftShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    leftShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    leftShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    leftShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+
+    bottomShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
+    bottomShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
+    bottomShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
+    bottomShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
   }
 
   @Override

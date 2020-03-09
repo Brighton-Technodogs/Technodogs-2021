@@ -5,25 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.storage;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.StorageSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class RunStorageWithSensorCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  StorageSubsystem storageSubsystem = new StorageSubsystem();
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  private final DigitalInput contrastSensor = new DigitalInput(Constants.Sensors.storageContrastSensorDIO);
+
+  public RunStorageWithSensorCommand(StorageSubsystem subsystem)
   {
-    shooterSubsystem = subsystem;
+    storageSubsystem = subsystem;
 
-    addRequirements(shooterSubsystem);
+    addRequirements(storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,8 +37,10 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    //boolean canSee = !contrastSensor.get();
+
+    // storageSubsystem.runStorage(canSee ? 0.45 : 0.65);
+    storageSubsystem.runStorage(0.4);
 
   }
 
@@ -40,8 +48,8 @@ public class QuickFireCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) 
   {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
+
+    storageSubsystem.runStorage(0);
 
   }
 

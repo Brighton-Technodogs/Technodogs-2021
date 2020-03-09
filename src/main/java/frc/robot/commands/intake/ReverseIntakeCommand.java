@@ -5,20 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class ReverseIntakeCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  double intakeSpeed = -0.5;
+
+  public ReverseIntakeCommand(IntakeSubsystem intake)
   {
-    shooterSubsystem = subsystem;
+    intakeSubsystem = intake;
 
-    addRequirements(shooterSubsystem);
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,8 +33,7 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    intakeSubsystem.runIntake(intakeSpeed);
 
   }
 
@@ -40,8 +41,8 @@ public class QuickFireCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) 
   {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
+
+    intakeSubsystem.runIntake(0);
 
   }
 

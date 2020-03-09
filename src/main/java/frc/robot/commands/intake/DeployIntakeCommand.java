@@ -5,25 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
+
+import com.fasterxml.jackson.core.util.RequestPayload;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class DeployIntakeCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  public DeployIntakeCommand(IntakeSubsystem intake) 
   {
-    shooterSubsystem = subsystem;
+    intakeSubsystem = intake;
 
-    addRequirements(shooterSubsystem);
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,23 +37,18 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    intakeSubsystem.deployIntake();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

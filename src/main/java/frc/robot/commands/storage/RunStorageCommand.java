@@ -14,7 +14,7 @@ public class RunStorageCommand extends CommandBase {
   
   StorageSubsystem storageSubsystem;
 
-  double storageSpeed = 0.85;
+  double storageSpeed = 0.4;
 
   public RunStorageCommand(StorageSubsystem subsystem)
   {

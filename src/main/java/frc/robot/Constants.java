@@ -26,12 +26,16 @@ public final class Constants {
         public static final int driverControllerRightStickXAxis = 4;
         public static final int driverControllerRightStickYAxis = 5;
         public static final int driverControllerRightTriggerAxis = 3;
+        public static final int driverControllerLeftTriggerAxis = 2;
     }
 
     public final class OperatorControl {
         public static final int operatorControllerPort = 1;
         public static final int operatorRightTrigger = 3;
         public static final int operatorLeftTrigger = 2;
+
+        public static final int operatorControllerLeftStickYAxis = 1;
+        public static final int operatorControllerRightStickYAxis = 5;
     }
 
     public final class DriveSubsystem {
@@ -46,43 +50,49 @@ public final class Constants {
         public static final int kFrontRightDriveMotorPort = 1;
         public static final int kRearRightDriveMotorPort = 0;
 
-        public static final int kFrontLeftDriveMotorCanID = 2;
-        public static final int kRearLeftDriveMotorCanID = 1;
-        public static final int kFrontRightDriveMotorCanID = 3;
-        public static final int kRearRightDriveMotorCanID = 4;
+        public static final int kFrontLeftDriveMotorCanID = 10; //
+        public static final int kFrontRightDriveMotorCanID = 11; //
+        public static final int kRearRightDriveMotorCanID = 12; //
+        public static final int kRearLeftDriveMotorCanID = 13; //
 
-        public static final int kFrontLeftTwistMotorPort = 12;
-        public static final int kRearLeftTwistMotorPort = 11;
-        public static final int kFrontRightTwistMotorPort = 13;
-        public static final int kRearRightTwistMotorPort = 14;
+        public static final int kFrontLeftTwistMotorPort = 20; //
+        public static final int kFrontRightTwistMotorPort = 21; //
+        public static final int kRearRightTwistMotorPort = 22; //
+        public static final int kRearLeftTwistMotorPort = 23; //
 
-        public static final int kFrontLeftEncoderPort = 1;
-        public static final int kBackLeftEncoderPort = 0;
-        public static final int kFrontRightEncoderPort = 2;
-        public static final int kBackRightEncoderPort = 3;
+        public static final int kFrontLeftEncoderPort = 0;
+        public static final int kBackLeftEncoderPort = 3;
+        public static final int kFrontRightEncoderPort = 1;
+        public static final int kBackRightEncoderPort = 2;
 
-        public static final double kFrontLeftEncoderOffset = 352; //60
-        public static final double kRearLeftEncoderOffset = 191; //11
-        public static final double kFrontRightEncoderOffset = 4; //28
-        public static final double kRearRightEncoderOffset = 251; //18
+        public static final double kFrontLeftEncoderOffset = 96; //60
+        public static final double kRearLeftEncoderOffset = 93; //11
+        public static final double kFrontRightEncoderOffset = 130; //28
+        public static final double kRearRightEncoderOffset = 338; //18
     }
 
     public final class ShooterSubsystem
     {
-        public static final int bottomShooterFalconCan = 21;
-        public static final int leftShooterFalconCan = 22;
-        public static final int rightShooterFalconCan = 23;
+        public static final int bottomShooterFalconCan = 32; //
+        public static final int leftShooterFalconCan = 30; //
+        public static final int rightShooterFalconCan = 31; //
     }
 
     public final class IntakeSubsystem
     {
-        public static final int innerStorageVictorCan = 31;
+        public static final int innerStorageVictorCan = 41; //
 
-        public static final int outerIntakeVictorCan = 32;
+        public static final int outerIntakeVictorCan = 40; //
+    }
+
+    public final class ClimbSubsystemConstants
+    {
+        public static final int climbMotor = 50;
+        public static final int winchMotor = 51;
     }
 
     public final class Sensors
     {
-        public static final int intakeContrastSensorDIO = 0;
+        public static final int storageContrastSensorDIO = 0;
     }
 }

@@ -10,11 +10,11 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class ChangeConfigCommand extends CommandBase {
   
   ShooterSubsystem shooterSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  public ChangeConfigCommand(ShooterSubsystem subsystem) 
   {
     shooterSubsystem = subsystem;
 
@@ -31,23 +31,20 @@ public class QuickFireCommand extends CommandBase {
   public void execute() 
   {
 
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    System.out.println("Beep Boop Changing Config");
+
+    shooterSubsystem.changeConfig();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

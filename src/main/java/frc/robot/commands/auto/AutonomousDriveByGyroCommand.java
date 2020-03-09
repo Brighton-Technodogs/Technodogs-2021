@@ -7,42 +7,44 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.StorageSubsystem;
 
-public class AutonomousShootTarget extends CommandBase {
+public class AutonomousDriveByGyroCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
-  StorageSubsystem storageSubsystem;
   DriveSubsystem driveSubsystem;
 
-  //creates a new timer for intake
   Timer timer = new Timer();
 
-  public AutonomousShootTarget(ShooterSubsystem subsystem, StorageSubsystem storageSubsystem, DriveSubsystem driveSubsystem) 
+  ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+  double xSpeed;
+  double ySpeed;
+  double time;
+
+  public AutonomousDriveByGyroCommand(DriveSubsystem driveSubsystem, double xSpeed, double ySpeed, double time) 
   {
-    shooterSubsystem = subsystem;
-    this.storageSubsystem = storageSubsystem;
     this.driveSubsystem = driveSubsystem;
-    addRequirements(shooterSubsystem, storageSubsystem, driveSubsystem);
+
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
+    this.time = time;
+
+    addRequirements(this.driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() 
   {
-    //starts the timer
+
+    driveSubsystem.enable();
+    driveSubsystem.init();
+
     timer.start();
-
-    shooterSubsystem.enableLimelight();
-
-    shooterSubsystem.shootAtVelocity();
-
-    shooterSubsystem.disableLimelight();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,13 +52,13 @@ public class AutonomousShootTarget extends CommandBase {
   public void execute() 
   {
 
-    driveSubsystem.xMode();
+    // double rotation = gyro.getAngle() / 180;
 
-    if (timer.get() > 0.5)
-    {
-      //if timer reads half a second run the storage system
-      storageSubsystem.runStorage(0.4);
-    }
+    double angle = gyro.getAngle();
+
+    double rotation = -angle;
+
+    driveSubsystem.drive(0, -0.1, rotation, false, false, false);
 
   }
 
@@ -65,16 +67,14 @@ public class AutonomousShootTarget extends CommandBase {
   public void end(boolean interrupted) 
   {
 
-    //when over set shooter and storage to 0
-    storageSubsystem.runStorage(0);
-    shooterSubsystem.shoot(0, 0, 0);
+    driveSubsystem.driveSimple(0, 0);
 
   }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
-    //finish early if the timer hits 10 seconds
-    return timer.get() > 4;
+  public boolean isFinished() 
+  {
+    return timer.get() > time;
   }
 }

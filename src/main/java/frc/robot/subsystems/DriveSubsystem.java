@@ -80,13 +80,13 @@ public class DriveSubsystem extends SubsystemBase {
         rearLeftWheel.enableRotation();
     }
 
-    public void disable() {
+    /*public void disable() {
         System.out.println("Disabling DriveSubsystem");
         frontRightWheel.disableRotation();
         frontLeftWheel.disableRotation();
         rearRightWheel.disableRotation();
         rearLeftWheel.disableRotation();
-    }
+    }*/
 
     /**
      * Drives the robot based on parameter values
@@ -101,13 +101,23 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void drive(double directionX, double directionY, double rotation, boolean useGyro, boolean slowSpeed,
             boolean noPush) {
-        swerve.drive(directionX, directionY, rotation, false, slowSpeed, noPush);
+        swerve.drive(directionX * 0.5, directionY * 0.5, rotation * 0.34, false, slowSpeed, noPush);
     }
 
     //rotates the swerves to a circle and runs the motors at a desired speed
     public void CircleDrive(double speed)
     {
         swerve.CircleRotate(speed);
+    }
+
+    public void driveSimple(double speed, double angle)
+    {
+        swerve.driveSimple(speed, angle);
+    }
+
+    public void xMode()
+    {
+        swerve.XModeActivate();
     }
 
     /**

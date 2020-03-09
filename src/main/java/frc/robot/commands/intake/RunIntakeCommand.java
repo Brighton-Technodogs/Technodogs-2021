@@ -5,20 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class QuickFireCommand extends CommandBase {
+public class RunIntakeCommand extends CommandBase {
   
-  ShooterSubsystem shooterSubsystem;
+  IntakeSubsystem intakeSubsystem;
 
-  public QuickFireCommand(ShooterSubsystem subsystem)
+  XboxController operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
+
+  public RunIntakeCommand(IntakeSubsystem intake) 
   {
-    shooterSubsystem = subsystem;
-
-    addRequirements(shooterSubsystem);
+    intakeSubsystem = intake;
+    
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,18 +34,17 @@ public class QuickFireCommand extends CommandBase {
   @Override
   public void execute() 
   {
-
-    //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
-
+    double intakeSpeed = operatorController.getRawAxis(Constants.OperatorControl.operatorLeftTrigger);
+    
+    intakeSubsystem.runIntake(intakeSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) 
   {
-    //resets to 0 on end
-    shooterSubsystem.shoot(0, 0, 0);
+
+    intakeSubsystem.runIntake(0);
 
   }
 
