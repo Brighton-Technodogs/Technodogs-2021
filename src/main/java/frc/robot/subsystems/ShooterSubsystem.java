@@ -7,12 +7,18 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,11 +47,113 @@ public class ShooterSubsystem extends SubsystemBase {
 
   double bottomSpin = 4; //1,25
 
+
+  private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Shooter Subsystem");
+  private NetworkTableEntry sbpValue = subsystemShuffleboardTab.add("PID pValue", pValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbiValue = subsystemShuffleboardTab.add("PID iValue", iValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbdValue = subsystemShuffleboardTab.add("PID dValue", dValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbfValue = subsystemShuffleboardTab.add("PID fValue", fValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+  
+  private NetworkTableEntry sbPIDLoopRate = subsystemShuffleboardTab.add("PID PIDLoopRate ms", PIDLoopRate)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max",30)) 
+  .getEntry();
+
+  private NetworkTableEntry sbmaxIntegralAccumulator = subsystemShuffleboardTab.add("maxIntegralAccumulator", 1000)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 500, "max",2000)) 
+  .getEntry();
+  
+  private NetworkTableEntry sbbottomSpin = subsystemShuffleboardTab.add("bottomSpin", bottomSpin)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min",0, "max",3)) 
+  .getEntry();
+  
+  
+  private NetworkTableEntry llXCoord = subsystemShuffleboardTab.add("LL X Coord.", 0).getEntry();
+  private NetworkTableEntry llYCoord = subsystemShuffleboardTab.add("LL Y Coord.", 0).getEntry();
+  private NetworkTableEntry llHoriz = subsystemShuffleboardTab.add("LL Horiz.", 0).getEntry();
+  private NetworkTableEntry llVert = subsystemShuffleboardTab.add("LL Vert.", 0).getEntry();
+  private NetworkTableEntry llArea = subsystemShuffleboardTab.add("LL Area", 0).getEntry();
+  private NetworkTableEntry shooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
+  private NetworkTableEntry shooterRS = subsystemShuffleboardTab.add("Right Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterBS = subsystemShuffleboardTab.add("Bottom Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry shooterLS = subsystemShuffleboardTab.add("Left Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
+private NetworkTableEntry gshooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterRS = subsystemShuffleboardTab.add("Graph Right Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterBS = subsystemShuffleboardTab.add("Graph Bottom Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
   /**
    * Creates a new ShooterSubsystem.
    */
   public ShooterSubsystem() 
   {
+
+    sbpValue.setDouble(pValue);
+    sbiValue.setDouble(iValue);
+    sbdValue.setDouble(dValue);
+    sbfValue.setDouble(fValue);
+    sbmaxIntegralAccumulator.setNumber(maxIntegralAccumulator);
+    sbPIDLoopRate.setNumber(PIDLoopRate);
+    sbbottomSpin.setDouble(bottomSpin);
     try
     {
       SmartDashboard.getNumber("Array Index", 0);
@@ -333,6 +441,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void changeConfig()
   {
+    pValue = sbpValue.getDouble(pValue);
+    iValue = sbiValue.getDouble(iValue);
+    dValue = sbdValue.getDouble(dValue);
+    fValue = sbfValue.getDouble(fValue);
+    maxIntegralAccumulator = (int)Math.floor(sbmaxIntegralAccumulator.getNumber(maxIntegralAccumulator).doubleValue());
+    PIDLoopRate = sbPIDLoopRate.getNumber(PIDLoopRate).intValue() ;
+    bottomSpin = sbbottomSpin.getDouble(bottomSpin);
+
+
     rightShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
     rightShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
     rightShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
