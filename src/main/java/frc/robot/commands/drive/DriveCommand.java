@@ -10,7 +10,10 @@
 
 package frc.robot.commands.drive;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants;
@@ -36,8 +39,8 @@ public class DriveCommand extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Initializing DriveCommand");
-        this.mDriveSubsystem.init();
-        this.mDriveSubsystem.enable();
+        // this.mDriveSubsystem.init();
+        // this.mDriveSubsystem.enable();
     }
 
     // Lidar lidarCrab = new Lidar(new DigitalInput(10));

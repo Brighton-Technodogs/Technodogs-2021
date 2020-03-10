@@ -13,24 +13,29 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import java.util.Map;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  
-  //create the shooter objects from constants can ID
+
+  // create the shooter objects from constants can ID
   private TalonFX bottomShooter = new TalonFX(Constants.ShooterSubsystem.bottomShooterFalconCan);
   private TalonFX rightShooter = new TalonFX(Constants.ShooterSubsystem.rightShooterFalconCan);
   private TalonFX leftShooter = new TalonFX(Constants.ShooterSubsystem.leftShooterFalconCan);
-  
-  //create objects of sensor information for each shooter
+
+  // create objects of sensor information for each shooter
   public final TalonFXSensorCollection bottomShooterSensor;
   public final TalonFXSensorCollection rightShooterSensor;
   public final TalonFXSensorCollection leftShooterSensor;
-  //TalonFXConfiguration fxC = new TalonFXConfiguration();
+  // TalonFXConfiguration fxC = new TalonFXConfiguration();
 
-  //hard set PID values
+  // hard set Default PID values, can tune with Shuffleboard
+ 
   double pValue = 0.06;
   double iValue = 0.02;
   double dValue = 0.8;
@@ -41,27 +46,119 @@ public class ShooterSubsystem extends SubsystemBase {
 
   double bottomSpin = 4; //1,25
 
+
+
+  private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Shooter Subsystem");
+  private NetworkTableEntry sbpValue = subsystemShuffleboardTab.add("PID pValue", pValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbiValue = subsystemShuffleboardTab.add("PID iValue", iValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbdValue = subsystemShuffleboardTab.add("PID dValue", dValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+
+  private NetworkTableEntry sbfValue = subsystemShuffleboardTab.add("PID fValue", fValue)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max", 1)) 
+  .getEntry();
+  
+  private NetworkTableEntry sbPIDLoopRate = subsystemShuffleboardTab.add("PID PIDLoopRate ms", PIDLoopRate)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 0, "max",30)) 
+  .getEntry();
+
+  private NetworkTableEntry sbmaxIntegralAccumulator = subsystemShuffleboardTab.add("maxIntegralAccumulator", 1000)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min", 500, "max",2000)) 
+  .getEntry();
+  
+  private NetworkTableEntry sbtopSpin = subsystemShuffleboardTab.add("topSpin", topSpin)
+  .withWidget(BuiltInWidgets.kDial)
+  .withProperties(Map.of("min",0, "max",3)) 
+  .getEntry();
+  
+  
+  private NetworkTableEntry llXCoord = subsystemShuffleboardTab.add("LL X Coord.", 0).getEntry();
+  private NetworkTableEntry llYCoord = subsystemShuffleboardTab.add("LL Y Coord.", 0).getEntry();
+  private NetworkTableEntry llHoriz = subsystemShuffleboardTab.add("LL Horiz.", 0).getEntry();
+  private NetworkTableEntry llVert = subsystemShuffleboardTab.add("LL Vert.", 0).getEntry();
+  private NetworkTableEntry llArea = subsystemShuffleboardTab.add("LL Area", 0).getEntry();
+  private NetworkTableEntry shooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
+  private NetworkTableEntry shooterRS = subsystemShuffleboardTab.add("Right Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+  private NetworkTableEntry shooterBS = subsystemShuffleboardTab.add("Bottom Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry shooterLS = subsystemShuffleboardTab.add("Left Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kDial)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
+private NetworkTableEntry gshooterRV = subsystemShuffleboardTab.add("Right Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterBV = subsystemShuffleboardTab.add("Bottom Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterLV = subsystemShuffleboardTab.add("Left Shooter Set Speed Graph", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterRS = subsystemShuffleboardTab.add("Graph Right Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterBS = subsystemShuffleboardTab.add("Graph Bottom Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left Shooter Encoder", 0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withProperties(Map.of("min", -1, "max", 1)) 
+            .getEntry();
+
+
+
   /**
    * Creates a new ShooterSubsystem.
    */
-  public ShooterSubsystem() 
-  {
-    try
-    {
-      SmartDashboard.getNumber("Array Index", 0);
-    }
-    catch (Exception e)
-    {
-      SmartDashboard.putNumber("Array Index", 0);
-    }
+  public ShooterSubsystem() {
+    sbpValue.setDouble(pValue);
+    sbiValue.setDouble(iValue);
+    sbdValue.setDouble(dValue);
+    sbfValue.setDouble(fValue);
+    sbmaxIntegralAccumulator.setNumber(maxIntegralAccumulator);
+    sbPIDLoopRate.setNumber(PIDLoopRate);
+    sbtopSpin.setDouble(topSpin);
     
-    SmartDashboard.putNumber("P Value Right", 0);
-    SmartDashboard.putNumber("I Value Right", 0.02);
-    SmartDashboard.putNumber("D Value Right", 0);
-    SmartDashboard.putNumber("F Value Right", 0.05);
 
+    
     // right motor is reversed
-    //set right sensor to it's motor and set values
+    // set right sensor to it's motor and set values
     rightShooterSensor = rightShooter.getSensorCollection();
     rightShooter.configPeakOutputForward(1);
     rightShooter.configPeakOutputReverse(0);
@@ -74,7 +171,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rightShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // bottom motor is reversed
-    //set bottom sensor to it's motor and set values
+    // set bottom sensor to it's motor and set values
     bottomShooterSensor = bottomShooter.getSensorCollection();
     bottomShooter.configPeakOutputForward(0);
     bottomShooter.configPeakOutputReverse(-1);
@@ -87,7 +184,7 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooter.configClosedLoopPeriod(0, PIDLoopRate);
 
     // left motor is not reversed
-    //set left sensor to it's motor and set values
+    // set left sensor to it's motor and set values
     leftShooterSensor = leftShooter.getSensorCollection();
     leftShooter.configPeakOutputForward(0);
     leftShooter.configPeakOutputReverse(-1);
@@ -108,104 +205,75 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, -leftSpeed);
   }
 
-  public void displayEncoders()
-  {
-    SmartDashboard.putNumber("Bottom Shooter Encoder", bottomShooterSensor.getIntegratedSensorVelocity());
-    SmartDashboard.putNumber("Right Shooter Encoder", rightShooterSensor.getIntegratedSensorVelocity());
-    SmartDashboard.putNumber("Left Shooter Encoder", leftShooterSensor.getIntegratedSensorVelocity());
+  public void displayEncoders() {
+    shooterRS.setNumber(rightShooterSensor.getIntegratedSensorVelocity());
+    shooterBS.setNumber(bottomShooterSensor.getIntegratedSensorVelocity());
+    shooterLS.setNumber(leftShooterSensor.getIntegratedSensorVelocity());
+
+    gshooterRS.setNumber(rightShooterSensor.getIntegratedSensorVelocity());
+    gshooterBS.setNumber(bottomShooterSensor.getIntegratedSensorVelocity());
+    gshooterLS.setNumber(leftShooterSensor.getIntegratedSensorVelocity());
   }
 
-  //unused
+  // unused
   int distanceOffset = 5;
 
-  //array for each heights taken everyfoot starting at 5 feet
-  int[] heights = 
-  {
-    46,
-    42,
-    40,
-    36,
-    34,
-    32,
-    30,
-    28,
-    26,
-    25,
-    24,
-    23,
-    22,
-    21,
-    20,
-    19,
-    18
+  // array for each heights taken everyfoot starting at 5 feet
+  int[] heights = { 46, 42, 40, 36, 34, 32, 30, 28, 26, 25, 24, 23, 22, 21, 20, 19, 18 };
+
+  // coordinating speed for each area index
+  public final double[] speeds = { 0.4, // 0
+      0.4, // 1
+      0.4, // 2
+      0.4, // 3
+      0.3, // 4
+      0.30, // 5
+      0.35, // 6
+      0.275, // 7
+      0.275, // 8
+      0.2675, // 9
+      0.3, // 10
+      0.3, // 11
+      0.31, // 12
+      0.32, // 13
+      0.32, // 14
+      0.33, // 15
+      0.40, // 16
+      0.42, // 17
+      0.42, // 18
+      0.42, // 19
+      0.42, // 20
+      0.42, // 21
+      0.42 // 22
   };
 
-  //coordinating speed for each area index
-  public final double[] speeds = 
-  {
-      0.4, //0
-      0.4, //1
-      0.4, //2
-      0.4, //3
-      0.3, //4
-      0.30, //5
-      0.35, //6
-      0.275, //7
-      0.275, //8
-      0.2675, //9
-      0.3, //10
-      0.3, //11
-      0.31, //12
-      0.32, //13
-      0.32, //14
-      0.33, //15
-      0.40, //16
-      0.42, //17
-      0.42, //18
-      0.42, //19
-      0.42, //20
-      0.42, //21
-      0.42 //22
-  };
-
-  //report index of inputed area
-  public double getDistance (double area)
-  {
-      if (area == 0)
-      {
-        return 0;
-      }
-      else if (area < heights[heights.length - 1])
-      {
-        return heights.length;
-      }
-      return getDistance(area, 0, heights.length);
+  // report index of inputed area
+  public double getDistance(double area) {
+    if (area == 0) {
+      return 0;
+    } else if (area < heights[heights.length - 1]) {
+      return heights.length;
+    }
+    return getDistance(area, 0, heights.length);
   }
 
-  //recursive search for the desired area
-  public double getDistance (double area, int start, int end) throws ArrayIndexOutOfBoundsException
-  {
-    if (Math.abs(start - end) == 1)
-    {
-        return (end + start) / 2;
+  // recursive search for the desired area
+  public double getDistance(double area, int start, int end) throws ArrayIndexOutOfBoundsException {
+    if (Math.abs(start - end) == 1) {
+      return (end + start) / 2;
     }
 
-    if (heights[(end + start) / 2] == area || (heights[(end + start) / 2] > area && heights[(end + start) / 2 + 1] < area))
-    {
-        return (end + start) / 2;
-    }
-    else if (heights[(end + start) / 2] < area)
-    {
-        return getDistance(area, start, (end + start) / 2);
-    }
-    else
-    {
-        return getDistance(area, (end + start) / 2, end);
+    if (heights[(end + start) / 2] == area
+        || (heights[(end + start) / 2] > area && heights[(end + start) / 2 + 1] < area)) {
+      return (end + start) / 2;
+    } else if (heights[(end + start) / 2] < area) {
+      return getDistance(area, start, (end + start) / 2);
+    } else {
+      return getDistance(area, (end + start) / 2, end);
     }
   }
 
-  public void shootAtVelocity()
-  {
+  public void shootAtVelocity() {
     double height = getVertical();
 
     double velocity = 0;
@@ -233,9 +301,8 @@ public class ShooterSubsystem extends SubsystemBase {
     spinToSpeed(velocity / 17500);
   }
 
-  //formula for shooting speed with velocity and height
-  public double getShootVelocityMid ()
-  {
+  // formula for shooting speed with velocity and height
+  public double getShootVelocityMid() {
     double height = getVertical();
 
     // double velocity = 30 * Math.pow((height - 20), 2);
@@ -245,7 +312,7 @@ public class ShooterSubsystem extends SubsystemBase {
     velocity = velocity + Math.abs(height * 10);
     velocity = velocity + 3650;
 
-    //double velocity = 6350;
+    // double velocity = 6350;
 
     // System.out.println(velocity);
 
@@ -254,8 +321,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return velocity;
   }
 
-  public double getShootVelocityFar ()
-  {
+  public double getShootVelocityFar() {
     double height = getVertical();
 
     double velocity = 15 * Math.pow((height - 18), 2);
@@ -279,33 +345,42 @@ public class ShooterSubsystem extends SubsystemBase {
     return -offset;
   }
 
-  //create limelight network table object
+  // create limelight network table object
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-  //get the X Coordinate of target
-  public double getXCoord ()
-  {
-      return limelightTable.getEntry("tx").getDouble(0);
+  // get the X Coordinate of target
+  public double getXCoord() {
+    double x = limelightTable.getEntry("tx").getDouble(0);
+    llXCoord.setDouble(x);
+    return x;
   }
-  //get the Y Coordinate of target
-  public double getYCoord ()
-  {
-      return limelightTable.getEntry("ty").getDouble(0);
+
+  // get the Y Coordinate of target
+  public double getYCoord() {
+    double y = limelightTable.getEntry("ty").getDouble(0);
+    llYCoord.setDouble(y);
+    return y;
   }
-  //get the Horizontal length of target
-  public double getHorizontal ()
-  {
-      return limelightTable.getEntry("thor").getDouble(0);
+
+  // get the Horizontal length of target
+  public double getHorizontal() {
+    double horizontal = limelightTable.getEntry("thor").getDouble(0);
+    llHoriz.setDouble(horizontal);
+    return horizontal;
   }
-  //get the Vertical Height of target
-  public double getVertical ()
-  {
-      return limelightTable.getEntry("tvert").getDouble(0);
+
+  // get the Vertical Height of target
+  public double getVertical() {
+    double vertical = limelightTable.getEntry("tvert").getDouble(0);
+    llVert.setDouble(vertical);
+    return vertical;
   }
-  //get the area of the target
-  public double getArea ()
-  {
-      return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
+
+  // get the area of the target
+  public double getArea() {
+    double area = limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
+    llArea.setDouble(area);
+    return area;
   }
 
   public void enableLimelight()
@@ -326,32 +401,53 @@ public class ShooterSubsystem extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, spinSpeed *  -1);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
-    // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
-    // SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
+    gshooterRV.setDouble(rightVelocity);
+    gshooterBV.setDouble(bottomVelocity);
+    gshooterLV.setDouble(leftVelocity);
+
+    rightShooter.set(ControlMode.Velocity, -1 * rightVelocity); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.Velocity, -1 * bottomVelocity);
+    leftShooter.set(ControlMode.Velocity, leftVelocity);
+    // SmartDashboard.putNumber("Current Velocity",
+    // rightShooterSensor.getIntegratedSensorVelocity());
+
+    // SmartDashboard.putNumber("right Output",
+    // rightShooter.getMotorOutputPercent());
+    // SmartDashboard.putNumber("bottom Output",
+    // bottomShooter.getMotorOutputPercent());
     // SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
   }
 
-  public void changeConfig()
-  {
-    rightShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
-    rightShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
-    rightShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
-    rightShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+  public void changeConfig() {
 
-    leftShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
-    leftShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
-    leftShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
-    leftShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+    pValue = sbpValue.getDouble(pValue);
+    iValue = sbiValue.getDouble(iValue);
+    dValue = sbdValue.getDouble(dValue);
+    fValue = sbfValue.getDouble(fValue);
+    maxIntegralAccumulator = sbmaxIntegralAccumulator.getNumber(maxIntegralAccumulator).doubleValue();
+    PIDLoopRate = sbPIDLoopRate.getNumber(PIDLoopRate).intValue() ;
+    topSpin = sbtopSpin.getDouble(topSpin);
 
-    bottomShooter.config_kP(0, SmartDashboard.getNumber("P Value Right", 0));
-    bottomShooter.config_kI(0, SmartDashboard.getNumber("I Value Right", 0));
-    bottomShooter.config_kD(0, SmartDashboard.getNumber("D Value Right", 0));
-    bottomShooter.config_kF(0, SmartDashboard.getNumber("F Value Right", 0));
+    rightShooter.config_kP(0, pValue);
+    rightShooter.config_kI(0, iValue);
+    rightShooter.config_kD(0, dValue);
+    rightShooter.config_kF(0, fValue);
+
+    leftShooter.config_kP(0,  pValue);
+    leftShooter.config_kI(0,  iValue);
+    leftShooter.config_kD(0,  dValue);
+    leftShooter.config_kF(0,  fValue);
+
+    bottomShooter.config_kP(0,  pValue);
+    bottomShooter.config_kI(0,  iValue);
+    bottomShooter.config_kD(0,  dValue);
+    bottomShooter.config_kF(0,  fValue);
+ 
   }
 
   @Override
-  public void periodic() 
-  {
-    
+  public void periodic() {
+    displayEncoders();
+    changeConfig();
   }
 }

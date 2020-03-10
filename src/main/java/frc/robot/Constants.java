@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -38,17 +41,45 @@ public final class Constants {
         public static final int operatorControllerRightStickYAxis = 5;
     }
 
-    public final class DriveSubsystem {
+    public static final class DriveSubsystem {
 
         public static final double kSwerveTwistPIDTolerance = 10;
         public static final double kSwerveTwistPID_P = 0.05;
         public static final double kSwerveTwistPID_I = 0;
         public static final double kSwerveTwistPID_D = 0;
 
-        public static final int kFrontLeftDriveMotorPort = 2;
-        public static final int kRearLeftDriveMotorPort = 3;
-        public static final int kFrontRightDriveMotorPort = 1;
-        public static final int kRearRightDriveMotorPort = 0;
+        public static final double kSwerveDrivePIDTolerance = 10;
+        public static final double kSwerveDrivePID_P = 0;
+        public static final double kSwerveDrivePID_I = 0;
+        public static final double kSwerveDrivePID_D = 0;
+        public static final double kSwerveDrivePID_F = 0.052;
+
+        public static final double kMaxTwistAngularVelocity = 360; // deg/s
+        public static final double kMaxTwistAngularAcceleration = 360; // deg/s^2
+
+        public static final double kGearRatioMotorToWheel = 6.64; // 6.64 motor rotations = 1 wheel rotation
+        public static final double kWheelDiameter = 0.1524; // in meters
+        public static final double kMotorEncoderTicksPerRev = 2048;
+        public static final double kMotorEncoderTimeUnit = 0.100; // 100ms
+
+        //kPXController
+
+        public static final boolean kGyroReversed = true;
+
+        public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
+        public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
+
+        public static final double kMaxSpeedMetersPerSecond = 2.5;
+
+        public static final double kMaxAccelerationMetersPerSecondSquared = 1; // yeet
+
+        // Define the order of the swerve modules.
+        public static final SwerveDriveKinematics kDriveKinematics =
+        new SwerveDriveKinematics(
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2));
 
         public static final int kFrontLeftDriveMotorCanID = 10; //
         public static final int kFrontRightDriveMotorCanID = 11; //

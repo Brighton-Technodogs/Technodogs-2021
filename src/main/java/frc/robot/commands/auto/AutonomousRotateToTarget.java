@@ -54,7 +54,7 @@ public class AutonomousRotateToTarget extends CommandBase {
     //test if the target can be seen, if no spin
     if (limelightTable.getEntry("tv").getDouble(0) == 0)
     {
-      driveSubsystem.CircleDrive(-0.15);
+      // driveSubsystem.CircleDrive(-0.15);
     }
     //if it can see the target
     else
@@ -87,7 +87,7 @@ public class AutonomousRotateToTarget extends CommandBase {
       //System.out.println(rotation);
 
       //spin according to rotation value
-      driveSubsystem.CircleDrive(-rotation);
+      // driveSubsystem.CircleDrive(-rotation);
     }
 
   }

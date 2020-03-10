@@ -7,11 +7,21 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.LongShootCommand;
@@ -28,6 +38,10 @@ import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
 import frc.robot.commands.auto.AutoShootBasicWithXMode.AutoShootWithXModeSequesntialCommand;
 import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
 import frc.robot.commands.climb.RunClimbCommand;
+import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -44,7 +58,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   //Subsystems
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  // private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final StorageSubsystem storageSubsystem = new StorageSubsystem();
@@ -53,6 +67,7 @@ public class RobotContainer {
   //Drive Commands
   private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
+  private final DriveCommand driveCommand = new DriveCommand(driveSubsystem);
   //Shooter Commands
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
   private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
@@ -60,9 +75,9 @@ public class RobotContainer {
   private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
 
   //Storage Commands
-  private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
-  private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
-  private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
+  // private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
+  // private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
+  // private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
 
   //Intake Commands
   private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
@@ -97,7 +112,7 @@ public class RobotContainer {
   {
     configureButtonBindings();
 
-    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
+    driveSubsystem.setDefaultCommand(driveCommand);
 
     shooterSubsystem.setDefaultCommand(autoShootCommand);
 
@@ -115,13 +130,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
 
-    operatorBButton.whenHeld(quickFireCommand);
+    // operatorBButton.whenHeld(quickFireCommand);
 
     operatorRightBumper.whenHeld(longShootCommand);
 
     operatorAButton.whenHeld(runStorageCommand);
 
-    operatorXButton.whenHeld(reverseStorageCommand);
+    // operatorXButton.whenHeld(reverseStorageCommand);
 
     operatorLeftBumper.whenHeld(reverseIntakeCommand);
 
@@ -142,5 +157,54 @@ public class RobotContainer {
     //This auton rotates, xmodes, shoots, moves forawrd
     return autoShootWithXModeSequesntialCommand;
     
+    // operatorYButton.whenPressed(changeConfigCommand);
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutoCommand_Odometry() {
+
+    driveSubsystem.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(0)));
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(Constants.DriveSubsystem.kMaxSpeedMetersPerSecond,
+        Constants.DriveSubsystem.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(Constants.DriveSubsystem.kDriveKinematics);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(
+            0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        config
+    );
+
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        exampleTrajectory,
+        driveSubsystem::getPose, //Functional interface to feed supplier
+        Constants.DriveSubsystem.kDriveKinematics,
+
+        //Position controllers
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0, 0),
+        new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(3,3)),
+
+        driveSubsystem::setModuleStates,
+
+        driveSubsystem
+
+    );
+
+    // Run path following command, then stop at the end.
+    return swerveControllerCommand.andThen(() -> driveSubsystem.drive(0, 0, 0, false));
   }
 }

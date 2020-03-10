@@ -12,8 +12,12 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import java.util.Map;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
 
 public class StorageSubsystem extends SubsystemBase {
   
@@ -29,6 +33,7 @@ public class StorageSubsystem extends SubsystemBase {
   //Run the storage motor at desired speed
   public void runStorage (double speed)
   {
+    // storageSpeed.setDouble(speed);
     innerStorageMotor.set(ControlMode.PercentOutput, speed);
 
     //storageTab.addPersistent("Inner Storage Motor", speed);

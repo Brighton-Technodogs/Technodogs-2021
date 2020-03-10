@@ -42,8 +42,8 @@ public class AssistedLimelightDriveCommand extends CommandBase {
   public void initialize() 
   {
     //run the init method on drive subsystem......should not have to do this......
-    this.driveSubsystem.init();
-    this.driveSubsystem.enable();
+    // this.driveSubsystem.init();
+    // this.driveSubsystem.enable();
 
   }
 
