@@ -86,15 +86,15 @@ public final class Constants {
         public static final int kRearRightDriveMotorCanID = 12; //
         public static final int kRearLeftDriveMotorCanID = 13; //
 
-        public static final int kFrontLeftTwistMotorPort = 20; //
-        public static final int kFrontRightTwistMotorPort = 21; //
-        public static final int kRearRightTwistMotorPort = 22; //
-        public static final int kRearLeftTwistMotorPort = 23; //
+        public static final int kFrontLeftTwistMotorCanID = 20; //
+        public static final int kFrontRightTwistMotorCanID = 21; //
+        public static final int kRearRightTwistMotorCanID = 22; //
+        public static final int kRearLeftTwistMotorCanID = 23; //
 
         public static final int kFrontLeftEncoderPort = 0;
-        public static final int kBackLeftEncoderPort = 3;
+        public static final int kRearLeftEncoderPort = 3;
         public static final int kFrontRightEncoderPort = 1;
-        public static final int kBackRightEncoderPort = 2;
+        public static final int kRearRightEncoderPort = 2;
 
         public static final double kFrontLeftEncoderOffset = 96; //60
         public static final double kRearLeftEncoderOffset = 93; //11
