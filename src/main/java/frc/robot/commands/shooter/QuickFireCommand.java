@@ -32,7 +32,7 @@ public class QuickFireCommand extends CommandBase {
   {
 
     //quick fire launcher at set speed
-    shooterSubsystem.shoot(0.4, 0.4, 0.4);
+    shooterSubsystem.shoot(0.45, 0.45, 0.45);
 
   }
 

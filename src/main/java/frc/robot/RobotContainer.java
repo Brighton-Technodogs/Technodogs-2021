@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.LongShootCommand;
+import frc.robot.commands.shooter.QuickFireBackSpinCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
@@ -56,6 +57,7 @@ public class RobotContainer {
   //Shooter Commands
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
   private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
+  private final QuickFireBackSpinCommand quickFireBackSpinCommand = new QuickFireBackSpinCommand(shooterSubsystem);
   private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
   private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
 
@@ -83,6 +85,7 @@ public class RobotContainer {
   private final JoystickButton operatorBButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
   private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
   private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
+  private final JoystickButton operatorYButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
   private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
   private final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
   private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
@@ -116,6 +119,7 @@ public class RobotContainer {
     System.out.println("Configuring Button Bindings");
 
     operatorBButton.whenHeld(quickFireCommand);
+    operatorYButton.whenHeld(quickFireBackSpinCommand);
 
     operatorRightBumper.whenHeld(longShootCommand);
 
