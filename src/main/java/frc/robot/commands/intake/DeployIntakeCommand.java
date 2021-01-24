@@ -7,14 +7,16 @@
 
 package frc.robot.commands.intake;
 
+import com.fasterxml.jackson.core.util.RequestPayload;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class DeployIntakeCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  public DeployIntakeCommand(IntakeSubsystem intake) 
   {
     intakeSubsystem = intake;
 
@@ -23,7 +25,11 @@ public class ResetIntakeCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +37,7 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    intakeSubsystem.deployIntake();
 
   }
 

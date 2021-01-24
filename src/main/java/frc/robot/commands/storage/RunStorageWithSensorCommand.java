@@ -5,25 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.storage;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.StorageSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class RunStorageWithSensorCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  StorageSubsystem storageSubsystem = new StorageSubsystem();
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  private final DigitalInput contrastSensor = new DigitalInput(Constants.Sensors.storageContrastSensorDIO);
+
+  public RunStorageWithSensorCommand(StorageSubsystem subsystem)
   {
-    intakeSubsystem = intake;
+    storageSubsystem = subsystem;
 
-    addRequirements(intakeSubsystem);
+    addRequirements(storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,18 +37,25 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    //boolean canSee = !contrastSensor.get();
+
+    // storageSubsystem.runStorage(canSee ? 0.45 : 0.65);
+    storageSubsystem.runStorage(0.4);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    storageSubsystem.runStorage(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

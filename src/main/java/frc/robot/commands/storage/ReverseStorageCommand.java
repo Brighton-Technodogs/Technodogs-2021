@@ -5,20 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.storage;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.StorageSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class ReverseStorageCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  StorageSubsystem storageSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  double storageSpeed = -0.4;
+
+  public ReverseStorageCommand(StorageSubsystem subsystem) 
   {
-    intakeSubsystem = intake;
+    storageSubsystem = subsystem;
 
-    addRequirements(intakeSubsystem);
+    addRequirements(storageSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,18 +33,22 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    storageSubsystem.runStorage(storageSpeed);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    storageSubsystem.runStorage(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

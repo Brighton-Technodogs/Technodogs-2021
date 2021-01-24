@@ -10,11 +10,13 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class ReverseIntakeCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  double intakeSpeed = -0.5;
+
+  public ReverseIntakeCommand(IntakeSubsystem intake)
   {
     intakeSubsystem = intake;
 
@@ -31,18 +33,22 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    intakeSubsystem.runIntake(intakeSpeed);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+
+    intakeSubsystem.runIntake(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

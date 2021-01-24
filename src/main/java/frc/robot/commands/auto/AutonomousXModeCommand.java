@@ -5,25 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class AutonomousXModeCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  DriveSubsystem driveSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  public AutonomousXModeCommand(DriveSubsystem driveSubsystem)
   {
-    intakeSubsystem = intake;
-
-    addRequirements(intakeSubsystem);
+    this.driveSubsystem = driveSubsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
+    driveSubsystem.enable();
+    driveSubsystem.init();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +34,7 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    driveSubsystem.xMode();
 
   }
 

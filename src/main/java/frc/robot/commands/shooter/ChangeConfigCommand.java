@@ -5,20 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class ChangeConfigCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  ShooterSubsystem shooterSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  public ChangeConfigCommand(ShooterSubsystem subsystem) 
   {
-    intakeSubsystem = intake;
+    shooterSubsystem = subsystem;
 
-    addRequirements(intakeSubsystem);
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +31,9 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    System.out.println("Beep Boop Changing Config");
+
+    shooterSubsystem.changeConfig();
 
   }
 

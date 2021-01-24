@@ -5,25 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class AutonomousRunIntakeCommand extends CommandBase {
   
   IntakeSubsystem intakeSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  public AutonomousRunIntakeCommand(IntakeSubsystem intakeSubsystem) 
   {
-    intakeSubsystem = intake;
-
+    this.intakeSubsystem = intakeSubsystem;
+    
     addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() 
+  {
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +34,7 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    intakeSubsystem.runIntake(0.75);
 
   }
 
@@ -42,7 +45,8 @@ public class ResetIntakeCommand extends CommandBase {
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean isFinished() 
+  {
     return true;
   }
 }

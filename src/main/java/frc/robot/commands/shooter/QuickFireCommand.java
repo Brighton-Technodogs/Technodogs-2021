@@ -5,20 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class ResetIntakeCommand extends CommandBase {
+public class QuickFireCommand extends CommandBase {
   
-  IntakeSubsystem intakeSubsystem;
+  ShooterSubsystem shooterSubsystem;
 
-  public ResetIntakeCommand(IntakeSubsystem intake) 
+  public QuickFireCommand(ShooterSubsystem subsystem)
   {
-    intakeSubsystem = intake;
+    shooterSubsystem = subsystem;
 
-    addRequirements(intakeSubsystem);
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,18 +31,23 @@ public class ResetIntakeCommand extends CommandBase {
   public void execute() 
   {
 
-    intakeSubsystem.resetIntake();
+    //quick fire launcher at set speed
+    shooterSubsystem.shoot(0.4, 0.4, 0.4);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean interrupted) 
+  {
+    //resets to 0 on end
+    shooterSubsystem.shoot(0, 0, 0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
