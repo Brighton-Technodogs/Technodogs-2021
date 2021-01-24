@@ -210,8 +210,4 @@ public class SwerveDrive {
         this.rightBackWheel.updateRotation(135 + 90);
     }
 
-    public double getVelocity()
-    {
-        double average
-    }
 }

@@ -9,8 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -45,7 +43,6 @@ import frc.robot.subsystems.ClimbSubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   //Subsystems
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -94,6 +91,9 @@ public class RobotContainer {
   private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
   private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
 
+    //Driver Controller and Buttons
+    private final XboxController driverController = new XboxController(0);
+    private final JoystickButton driverStartButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -101,6 +101,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
+
+    shooterSubsystem.setDefaultCommand(autoShootCommand);
+
+    intakeSubsystem.setDefaultCommand(runIntakeCommand);
+
+    climbSubsystem.setDefaultCommand(runClimbCommand);
   }
 
   /**
@@ -129,13 +137,17 @@ public class RobotContainer {
   }
 
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  //get the auto command
+  public Command getAutoCommand ()
+  {
+    //This auton rotates, shoots, moves forward
+    // return autonomousSequentialCommandGroup;
+
+    //this auton moves backwards, intakes, rotates, then shoots
+    // return autonomousBackwardsShootingSequentialCommand;
+
+    //This auton rotates, xmodes, shoots, moves forawrd
+    return autoShootWithXModeSequesntialCommand;
+    
   }
 }
