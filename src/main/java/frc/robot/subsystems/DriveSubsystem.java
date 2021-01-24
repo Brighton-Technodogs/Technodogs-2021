@@ -166,6 +166,17 @@ public class DriveSubsystem extends SubsystemBase {
         swerve.XModeActivate();
     }
 
+    public double getSpinVelocity()
+    {
+        double average = 
+        frontRightDriveMotor.getMotorOutputPercent() +
+        frontLeftDriveMotor.getMotorOutputPercent() + 
+        rearRightDriveMotor.getMotorOutputPercent() + 
+        rearLeftDriveMotor.getMotorOutputPercent();
+
+        return average;
+    }
+
     /**
      * The function which executes periodically to run the DriveTrain subsystem
      */

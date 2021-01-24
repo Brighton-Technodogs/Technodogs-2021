@@ -5,22 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.storage;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class RunStorageCommand extends CommandBase {
+public class QuickFireBackSpinCommand extends CommandBase {
   
-  StorageSubsystem storageSubsystem;
+  ShooterSubsystem shooterSubsystem;
 
-  double storageSpeed = 1; //best case 1
-
-  public RunStorageCommand(StorageSubsystem subsystem)
+  public QuickFireBackSpinCommand(ShooterSubsystem shooterSubsystem) 
   {
-    storageSubsystem = subsystem;
-    
-    addRequirements(storageSubsystem);
+    this.shooterSubsystem = shooterSubsystem;
+
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +31,7 @@ public class RunStorageCommand extends CommandBase {
   public void execute() 
   {
 
-    storageSubsystem.runStorage(storageSpeed);
+    shooterSubsystem.shoot(0.525, 0.325, 0.325);
 
   }
 
@@ -42,7 +40,7 @@ public class RunStorageCommand extends CommandBase {
   public void end(boolean interrupted) 
   {
 
-    storageSubsystem.runStorage(0);
+    shooterSubsystem.shoot(0, 0, 0);
 
   }
 

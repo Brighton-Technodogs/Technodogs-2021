@@ -5,22 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.storage;
+package frc.robot.commands.drive;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class RunStorageCommand extends CommandBase {
+public class AssistedSpinDriveCommand extends CommandBase {
   
-  StorageSubsystem storageSubsystem;
+  DriveSubsystem driveSubsystem;
+  
+  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-  double storageSpeed = 1; //best case 1
+  NetworkTableEntry horizontalEntry;
 
-  public RunStorageCommand(StorageSubsystem subsystem)
+  public AssistedSpinDriveCommand(DriveSubsystem driveSubsystem) 
   {
-    storageSubsystem = subsystem;
-    
-    addRequirements(storageSubsystem);
+    this.driveSubsystem = driveSubsystem;
+
+    addRequirements(this.driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,17 +38,17 @@ public class RunStorageCommand extends CommandBase {
   public void execute() 
   {
 
-    storageSubsystem.runStorage(storageSpeed);
+    horizontalEntry = limelightTable.getEntry("tx");
+
+    double currentVelocity = driveSubsystem.getSpinVelocity();
+
+    System.out.println(currentVelocity);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-
-    storageSubsystem.runStorage(0);
-
+  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.

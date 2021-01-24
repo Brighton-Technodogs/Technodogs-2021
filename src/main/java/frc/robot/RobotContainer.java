@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.LongShootCommand;
+import frc.robot.commands.shooter.QuickFireBackSpinCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
@@ -57,67 +58,72 @@ import frc.robot.subsystems.DriveOdometrySubsystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
- //Subsystems
- private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
- private final DriveSubsystem driveSubsystem = new DriveSubsystem();
- private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
- private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
- private final StorageSubsystem storageSubsystem = new StorageSubsystem();
- private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
- //Drive Commands
- private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
+  //Subsystems
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final StorageSubsystem storageSubsystem = new StorageSubsystem();
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
- //Shooter Commands
- private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
- private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
- private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
- private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
 
- //Storage Commands
- private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
- private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
- private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
+  //Drive Commands
+  private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
 
- //Intake Commands
- private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
- private final ReverseIntakeCommand reverseIntakeCommand = new ReverseIntakeCommand(intakeSubsystem);
- private final DeployIntakeCommand deployIntakeCommand = new DeployIntakeCommand(intakeSubsystem);
- private final ResetIntakeCommand resetIntakeCommand = new ResetIntakeCommand(intakeSubsystem);
+  //Shooter Commands
+  private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
+  private final QuickFireCommand quickFireCommand = new QuickFireCommand(shooterSubsystem);
+  private final QuickFireBackSpinCommand quickFireBackSpinCommand = new QuickFireBackSpinCommand(shooterSubsystem);
+  private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
+  private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
 
- //Climb Commands
- private final RunClimbCommand runClimbCommand = new RunClimbCommand(climbSubsystem);
+  //Storage Commands
+  private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
+  private final ReverseStorageCommand reverseStorageCommand = new ReverseStorageCommand(storageSubsystem);
+  private final RunStorageWithSensorCommand runStorageWithSensorCommand = new RunStorageWithSensorCommand(storageSubsystem);
+
+  //Intake Commands
+  private final RunIntakeCommand runIntakeCommand = new RunIntakeCommand(intakeSubsystem);
+  private final ReverseIntakeCommand reverseIntakeCommand = new ReverseIntakeCommand(intakeSubsystem);
+  private final DeployIntakeCommand deployIntakeCommand = new DeployIntakeCommand(intakeSubsystem);
+  private final ResetIntakeCommand resetIntakeCommand = new ResetIntakeCommand(intakeSubsystem);
+
+  //Climb Commands
+  private final RunClimbCommand runClimbCommand = new RunClimbCommand(climbSubsystem);
+
+  //Auto Commands
+  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  private final AutoShootWithXModeSequesntialCommand autoShootWithXModeSequesntialCommand = new AutoShootWithXModeSequesntialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+
+
+  //Operator Contoller and Buttons
+  private final XboxController operatorController = new XboxController(1);
+  private final JoystickButton operatorBButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+  private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+  private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
+  private final JoystickButton operatorYButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+  private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+  private final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
+  private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
+  private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+
+  //Driver Controller and Buttons
+  private final XboxController driverController = new XboxController(0);
+  private final JoystickButton driverStartButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
+
+  public RobotContainer() 
+  {
+    configureButtonBindings();
  
- //Auto Commands
- private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
- private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
- private final AutoShootWithXModeSequesntialCommand autoShootWithXModeSequesntialCommand = new AutoShootWithXModeSequesntialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
- //Operator Contoller and Buttons
- private final XboxController operatorController = new XboxController(1);
- private final JoystickButton operatorBButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
- private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
- private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
- private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
- private final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
- private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
- private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+    shooterSubsystem.setDefaultCommand(autoShootCommand);
 
- //Driver Controller and Buttons
- private final XboxController driverController = new XboxController(0);
- private final JoystickButton driverStartButton = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  
- public RobotContainer() 
- {
-   configureButtonBindings();
+    intakeSubsystem.setDefaultCommand(runIntakeCommand);
 
-   driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
-
-   shooterSubsystem.setDefaultCommand(autoShootCommand);
-
-   intakeSubsystem.setDefaultCommand(runIntakeCommand);
-
-   climbSubsystem.setDefaultCommand(runClimbCommand);
+    climbSubsystem.setDefaultCommand(runClimbCommand);
  }
 
   /**
@@ -129,7 +135,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
 
-    // operatorBButton.whenHeld(quickFireCommand);
+    operatorBButton.whenHeld(quickFireCommand);
+    operatorYButton.whenHeld(quickFireBackSpinCommand);
 
     operatorRightBumper.whenHeld(longShootCommand);
 
@@ -143,6 +150,7 @@ public class RobotContainer {
 
     operatorSelectButton.whenPressed(resetIntakeCommand);
   }
+
 
   //get the auto command
   public Command getAutoCommand ()
