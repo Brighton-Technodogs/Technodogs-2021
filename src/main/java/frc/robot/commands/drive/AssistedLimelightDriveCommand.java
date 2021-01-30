@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -30,6 +31,9 @@ public class AssistedLimelightDriveCommand extends CommandBase {
 
   NetworkTableEntry horizontalEntry;
   double horizontal;
+
+  //new limelight timer
+  Timer limeTime = new Timer();
 
   public AssistedLimelightDriveCommand(DriveSubsystem subsystem) {
     
@@ -56,11 +60,28 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     double rotation = 0;
     boolean slowMode = driverController.getBumper(Hand.kLeft);
     
-    //if pressing the B - Button
+    //if pressing the right trigger
     if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2)
     {
 
-      limelightTable.getEntry("ledMode").forceSetNumber(3);
+      limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
+
+      if (limeTime.get() == 0 ){
+        limeTime.start();
+        limelightTable.getEntry("ledMode").forceSetNumber(3); // set Limelight LED Mode to ON
+      }
+      else if (limeTime.get() <= 5.75 && limelightTable.getEntry("ledMode").getDouble(0) == 1){ // if timer is over 5.75 and LED is off
+        limeTime.stop();
+        limeTime.reset();
+      }
+      else if (limeTime.get() <= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // if timer is over 5 seconds and LED is on
+      {
+        limelightTable.getEntry("ledMode").forceSetNumber(1); //Set the LED to off
+      }
+      else if (limeTime.get() < 5 && limelightTable.getEntry("ledMode").getDouble(0) == 1) // if timer is less than 5 and LED is off
+      {
+        limelightTable.getEntry("ledMode").forceSetNumber(3); // Set the LED to ON
+      }
 
       //find the center of target
       horizontalEntry = limelightTable.getEntry("tx");
@@ -73,15 +94,19 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       if (rotation > 0.2)
       {
         rotation = 0.2;
+        // Shuffleboard align yellow
       }
       else if (rotation < -0.2)
       {
         rotation = -0.2;
+        // Shuffleboard align yellow
       }
       
       if (Math.abs(rotation) <= 0.015)
       {
+        // this will be run when once the robot has reached aligned with the target
         rotation = 0;
+        // Shuffleboard align green
       }
 
       //Not needed from Jacob T. Save for later if desired
@@ -106,14 +131,17 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       {
         driveSubsystem.CircleDrive(-rotation - controllerAssist);
       }
-    }
+    } // End of if trigger pressed
     else
     {
-
-      if (limelightTable.getEntry("ledMode").getDouble(0) == 3)
+      if (limelightTable.getEntry("ledMode").getDouble(0) == 3) // If limelight led is set on
       {
+        limeTime.stop();
+        limeTime.reset();
         limelightTable.getEntry("ledMode").forceSetDouble(1);
       }
+
+      // 
 
       rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
       
