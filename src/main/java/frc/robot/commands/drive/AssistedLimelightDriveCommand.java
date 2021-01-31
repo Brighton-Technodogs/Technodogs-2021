@@ -98,7 +98,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       {
         rotation = 0.2;
         // Shuffleboard drive align red
-        SmartDashboard.putBoolean("Drive Aligned", false)
+        SmartDashboard.putBoolean("Drive Aligned", false);
       }
       else if (rotation < -0.2)
       {
