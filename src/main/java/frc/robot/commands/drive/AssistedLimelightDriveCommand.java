@@ -34,7 +34,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
   NetworkTableEntry horizontalEntry;
   double horizontal;
 
-  //new limelight timer
+  // create limelight timer object
   Timer limeTime = new Timer();
 
   public AssistedLimelightDriveCommand(DriveSubsystem subsystem) {
@@ -70,14 +70,14 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
 
       if (limeTime.get() == 0 ){
-        limeTime.start();
+        limeTime.start(); // start the limelight LED timer
         limelightTable.getEntry("ledMode").forceSetNumber(3); // set Limelight LED Mode to ON
       }
-      else if (limeTime.get() <= 5.75 && limelightTable.getEntry("ledMode").getDouble(0) == 1){ // if timer is over 5.75 and LED is off
-        limeTime.stop();
-        limeTime.reset();
+      else if (limeTime.get() >= 5.75 && limelightTable.getEntry("ledMode").getDouble(0) == 1){ // if timer is over 5.75 and LED is off
+        limeTime.stop(); // stop the limelight timer
+        limeTime.reset(); // reset the limelight timer to 0
       }
-      else if (limeTime.get() <= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // if timer is over 5 seconds and LED is on
+      else if (limeTime.get() >= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // if timer is over 5 seconds and LED is on
       {
         limelightTable.getEntry("ledMode").forceSetNumber(1); //Set the LED to off
       }
