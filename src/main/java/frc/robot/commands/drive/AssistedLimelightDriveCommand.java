@@ -12,6 +12,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
@@ -63,7 +65,8 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     //if pressing the right trigger
     if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2)
     {
-
+      SmartDashboard.putBoolean("Shooter Aligned", false); // disable shooter alignment display because it won't be done by the time this executes
+      //nice
       limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
 
       if (limeTime.get() == 0 ){
@@ -94,19 +97,22 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       if (rotation > 0.2)
       {
         rotation = 0.2;
-        // Shuffleboard align yellow
+        // Shuffleboard drive align red
+        SmartDashboard.putBoolean("Drive Aligned", false)
       }
       else if (rotation < -0.2)
       {
         rotation = -0.2;
-        // Shuffleboard align yellow
+        // Shuffleboard drive align red
+        SmartDashboard.putBoolean("Drive Aligned", false);
       }
       
       if (Math.abs(rotation) <= 0.015)
       {
-        // this will be run when once the robot has reached aligned with the target
+        // this will be run when once the robot has aligned it self with the target
         rotation = 0;
-        // Shuffleboard align green
+        // Shuffleboard drive align green
+        SmartDashboard.putBoolean("Drive Aligned", true);
       }
 
       //Not needed from Jacob T. Save for later if desired
@@ -139,6 +145,10 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         limeTime.stop();
         limeTime.reset();
         limelightTable.getEntry("ledMode").forceSetDouble(1);
+        // Shuffleboard drive align red
+        SmartDashboard.putBoolean("Drive Aligned", false);
+        SmartDashboard.putBoolean("Shooter Aligned", false); // disable shooter alignment display because it can't be disabled by the shooter subsystem
+
       }
 
       // 
