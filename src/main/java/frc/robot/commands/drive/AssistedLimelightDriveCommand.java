@@ -65,10 +65,8 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     //if pressing the right trigger
     if (driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2)
     {
-      SmartDashboard.putBoolean("Shooter Aligned", false); // disable shooter alignment display because it won't be done by the time this executes
+      //limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
       //nice
-      limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
-
       if (limeTime.get() == 0 ){
         limeTime.start(); // start the limelight LED timer
         limelightTable.getEntry("ledMode").forceSetNumber(3); // set Limelight LED Mode to ON
@@ -147,8 +145,6 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         limelightTable.getEntry("ledMode").forceSetDouble(1);
         // Shuffleboard drive align red
         SmartDashboard.putBoolean("Drive Aligned", false);
-        SmartDashboard.putBoolean("Shooter Aligned", false); // disable shooter alignment display because it can't be disabled by the shooter subsystem
-
       }
 
       // 

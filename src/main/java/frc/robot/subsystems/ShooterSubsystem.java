@@ -206,8 +206,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shootAtVelocity()
   {
-    SmartDashboard.putBoolean("Shooter Aligned", false);
-
     double height = getVertical();
 
     double velocity = 0;
@@ -233,7 +231,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Current Velocity Target", velocity);
     SmartDashboard.putNumber("Current Percentage Target", velocity / 17500);
     spinToSpeed(velocity / 17500);
-    SmartDashboard.putBoolean("Shooter Aligned", true);
   }
 
   //formula for shooting speed with velocity and height
