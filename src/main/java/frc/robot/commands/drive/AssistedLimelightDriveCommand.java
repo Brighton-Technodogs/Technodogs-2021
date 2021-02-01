@@ -95,18 +95,18 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
-      if (rotation > 0.2)
+      if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
       {
         rotation = 0.2;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
-      else if (rotation < -0.2)
+      else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
       {
         rotation = -0.2;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       
-      if (Math.abs(rotation) <= 0.015)
+      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) < 3)
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
