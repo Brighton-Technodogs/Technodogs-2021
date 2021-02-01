@@ -110,6 +110,12 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
+        //SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
+      }
+      if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
+      {
+        // this will be run when once the robot has aligned it self with the target
+        rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
 
@@ -145,6 +151,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         limelightTable.getEntry("ledMode").forceSetDouble(1);
         SmartDashboard.putBoolean("Drive Aligned", false);  // Shuffleboard drive align off
         SmartDashboard.putNumber("LimeLight Timer", 0); // set the limelight timer to 0 when exiting alignment sequence
+        System.out.println("Targeting Mode Exited, turning LED off");
       }
 
       rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
