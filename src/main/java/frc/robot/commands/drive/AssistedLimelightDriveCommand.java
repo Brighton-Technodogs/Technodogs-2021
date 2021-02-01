@@ -67,20 +67,24 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     {
       //limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED Mode to OFF
       //nice
+      SmartDashboard.putNumber("LimeLight Timer", limeTime.get()); // send the current value of the limelight timer to the dashboard
       if (limeTime.get() == 0 ){
+        System.out.println("Starting Limelight Timer and turning LED On");
         limeTime.start(); // start the limelight LED timer
         limelightTable.getEntry("ledMode").forceSetNumber(3); // set Limelight LED Mode to ON
       }
       else if (limeTime.get() >= 5.75 && limelightTable.getEntry("ledMode").getDouble(0) == 1){ // if timer is over 5.75 and LED is off
+        System.out.println("Limelight timer has reached 5.75 seconds and will now reset");
         limeTime.stop(); // stop the limelight timer
         limeTime.reset(); // reset the limelight timer to 0
       }
-      else if (limeTime.get() >= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // if timer is over 5 seconds and LED is on
-      {
+      else if (limeTime.get() >= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3){ // if timer is over 5 seconds and LED is on
+        System.out.println("Limelight timer has reached 5 seconds and the LED will turn off");
         limelightTable.getEntry("ledMode").forceSetNumber(1); //Set the LED to off
       }
       else if (limeTime.get() < 5 && limelightTable.getEntry("ledMode").getDouble(0) == 1) // if timer is less than 5 and LED is off
       {
+        System.out.println("Limelight timer is under 5 seconds, turning the LED on");
         limelightTable.getEntry("ledMode").forceSetNumber(3); // Set the LED to ON
       }
 
@@ -89,28 +93,24 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       horizontal = horizontalEntry.getDouble(0);
       horizontal = horizontal - 2.9/* + limelightTable.getEntry("thor").getDouble(0) / 15*/;
       
-      
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
       if (rotation > 0.2)
       {
         rotation = 0.2;
-        // Shuffleboard drive align red
-        SmartDashboard.putBoolean("Drive Aligned", false);
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       else if (rotation < -0.2)
       {
         rotation = -0.2;
-        // Shuffleboard drive align red
-        SmartDashboard.putBoolean("Drive Aligned", false);
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       
       if (Math.abs(rotation) <= 0.015)
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
-        // Shuffleboard drive align green
-        SmartDashboard.putBoolean("Drive Aligned", true);
+        SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
 
       //Not needed from Jacob T. Save for later if desired
@@ -143,11 +143,9 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         limeTime.stop();
         limeTime.reset();
         limelightTable.getEntry("ledMode").forceSetDouble(1);
-        // Shuffleboard drive align red
-        SmartDashboard.putBoolean("Drive Aligned", false);
+        SmartDashboard.putBoolean("Drive Aligned", false);  // Shuffleboard drive align off
+        SmartDashboard.putNumber("LimeLight Timer", 0); // set the limelight timer to 0 when exiting alignment sequence
       }
-
-      // 
 
       rotation = driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
       
