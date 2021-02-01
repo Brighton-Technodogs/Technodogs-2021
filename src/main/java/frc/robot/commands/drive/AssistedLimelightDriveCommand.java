@@ -112,13 +112,14 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
-      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 0)
+      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1)
       {
         // this will be run when once the robot has aligned it self with the target
+        System.out.println("Pausing rotation alignment while LED is off...");
         rotation = 0;
         //SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
-
+      SmartDashboard.putNumber("Align Rotation", rotation);
       //Not needed from Jacob T. Save for later if desired
       // if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
       // {
@@ -144,7 +145,7 @@ public class AssistedLimelightDriveCommand extends CommandBase {
     } // End of if trigger pressed
     else
     {
-      if (limelightTable.getEntry("ledMode").getDouble(0) == 3) // If limelight led is set on
+      if (limelightTable.getEntry("ledMode").getDouble(0) == 3 || limeTime.get() >= 5) // If limelight led is set on or timer is not 0
       {
         limeTime.stop();
         limeTime.reset();
