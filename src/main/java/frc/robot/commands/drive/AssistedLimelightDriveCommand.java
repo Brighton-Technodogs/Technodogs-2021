@@ -95,24 +95,24 @@ public class AssistedLimelightDriveCommand extends CommandBase {
       
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
-      if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
+      if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
       {
         rotation = 0.2;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
-      else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
+      else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
       {
         rotation = -0.2;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       
-      if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3)
+      if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // stop rotation and tell dashboard that the robot is aligned
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
-      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1)
+      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
       {
         // this will be run when once the robot has aligned it self with the target
         System.out.println("Pausing rotation alignment while LED is off...");
@@ -143,10 +143,11 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         driveSubsystem.CircleDrive(-rotation - controllerAssist);
       }
     } // End of if trigger pressed
-    else
+    else // run this if the trigger is NOT pressed
     {
-      if (limelightTable.getEntry("ledMode").getDouble(0) == 3 || limeTime.get() >= 5) // If limelight led is set on or timer is not 0
+      if (limelightTable.getEntry("ledMode").getDouble(0) == 3 || limeTime.get() >= 5) // If limelight led is set on or timer is greater than 5
       {
+        // ^^^^^^^^^ the limeTime.get() >=5 makes the timer reset when targeting mode is exited between 5 and 5.75 seconds
         limeTime.stop();
         limeTime.reset();
         limelightTable.getEntry("ledMode").forceSetDouble(1);
