@@ -62,7 +62,7 @@ public class RobotContainer {
   //Subsystems
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
+  // private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final StorageSubsystem storageSubsystem = new StorageSubsystem();
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
@@ -172,46 +172,46 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutoCommand_Odometry() {
+  // public Command getAutoCommand_Odometry() {
 
-    driveOdometrySubsystem.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(0)));
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(Constants.DriveSubsystem.kMaxSpeedMetersPerSecond,
-        Constants.DriveSubsystem.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(Constants.DriveSubsystem.kDriveKinematics);
+  //   driveOdometrySubsystem.resetOdometry(new Pose2d(new Translation2d(0,0), new Rotation2d(0)));
+  //   // Create config for trajectory
+  //   TrajectoryConfig config =
+  //       new TrajectoryConfig(Constants.DriveSubsystem.kMaxSpeedMetersPerSecond,
+  //       Constants.DriveSubsystem.kMaxAccelerationMetersPerSecondSquared)
+  //           // Add kinematics to ensure max speed is actually obeyed
+  //           .setKinematics(Constants.DriveSubsystem.kDriveKinematics);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(
-            0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(
-        ),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config
-    );
+  //   // An example trajectory to follow.  All units in meters.
+  //   Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+  //       // Start at the origin facing the +X direction
+  //       new Pose2d(0, 0, new Rotation2d(
+  //           0)),
+  //       // Pass through these two interior waypoints, making an 's' curve path
+  //       List.of(
+  //       ),
+  //       // End 3 meters straight ahead of where we started, facing forward
+  //       new Pose2d(3, 0, new Rotation2d(0)),
+  //       config
+  //   );
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        driveOdometrySubsystem::getPose, //Functional interface to feed supplier
-        Constants.DriveSubsystem.kDriveKinematics,
+  //   SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+  //       exampleTrajectory,
+  //       driveOdometrySubsystem::getPose, //Functional interface to feed supplier
+  //       Constants.DriveSubsystem.kDriveKinematics,
 
-        //Position controllers
-        new PIDController(1, 0, 0),
-        new PIDController(1, 0, 0),
-        new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(3,3)),
+  //       //Position controllers
+  //       new PIDController(1, 0, 0),
+  //       new PIDController(1, 0, 0),
+  //       new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(3,3)),
 
-        driveOdometrySubsystem::setModuleStates,
+  //       driveOdometrySubsystem::setModuleStates,
 
-        driveSubsystem
+  //       driveSubsystem
 
-    );
+  //   );
 
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> driveOdometrySubsystem.drive(0, 0, 0, false));
-  }
+  //   // Run path following command, then stop at the end.
+  //   return swerveControllerCommand.andThen(() -> driveOdometrySubsystem.drive(0, 0, 0, false));
+  // }
 }

@@ -42,7 +42,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.DriveSubsystem.kDriveKinematics, getAngle());
 
-  private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Drive Subsystem");
+  private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Drive Odometry Subsystem");
 
     // Shuffleboard 
     private NetworkTableEntry sbFowardInput = subsystemShuffleboardTab.add("Forward Input", 0)
