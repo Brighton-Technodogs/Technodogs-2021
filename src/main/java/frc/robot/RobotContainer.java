@@ -99,7 +99,7 @@ public class RobotContainer {
 
     driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
-    shooterSubsystem.setDefaultCommand(autoShootCommand);
+    shooterSubsystem.setDefaultCommand(longShootCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeCommand);
 
@@ -117,7 +117,7 @@ public class RobotContainer {
 
     operatorBButton.whenHeld(quickFireCommand);
 
-    operatorRightBumper.whenHeld(longShootCommand);
+    operatorRightBumper.whenHeld(autoShootCommand);
 
     operatorAButton.whenHeld(runStorageCommand);
 
