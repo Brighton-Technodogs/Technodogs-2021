@@ -112,12 +112,12 @@ public class AssistedLimelightDriveCommand extends CommandBase {
         rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
       }
-      if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
+      else if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
       {
         // this will be run when once the robot has aligned it self with the target
         System.out.println("Pausing rotation alignment while LED is off...");
         rotation = 0;
-        //SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align on
       }
       SmartDashboard.putNumber("Align Rotation", rotation);
       //Not needed from Jacob T. Save for later if desired
