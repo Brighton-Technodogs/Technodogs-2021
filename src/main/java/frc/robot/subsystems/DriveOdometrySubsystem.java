@@ -36,6 +36,9 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   private final SwerveModule m_frontRight;
   private final SwerveModule m_rearRight;
 
+  private double directionStickDeadZone = 0.08;
+  private double rotateStickDeadZone = 0.08;
+
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
 
@@ -191,6 +194,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    *                      field.
    */
   @SuppressWarnings("ParameterName")
+  
   public void drive(double forwardInput, double sidewaysInput, double rot, boolean fieldRelative) {
 
     sbFowardInput.setDouble(forwardInput);
@@ -201,6 +205,10 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     forwardInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
     sidewaysInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
 
+    if (rot < rotateStickDeadZone && rot > rotateStickDeadZone*-1) {
+      rot = 0;
+    }
+
     var swerveModuleStates = Constants.DriveSubsystem.kDriveKinematics
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
             : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
@@ -208,10 +216,43 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
     System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+    // m_frontLeft.setDesiredState(
+    //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
+    // );
+    // m_frontRight.setDesiredState(
+    //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
+    // );
+    // m_rearLeft.setDesiredState(
+    //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
+    // );
+    // m_rearRight.setDesiredState(
+    //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
+    // );
+
+    if ((forwardInput < directionStickDeadZone && forwardInput > directionStickDeadZone*-1) && (sidewaysInput < directionStickDeadZone && sidewaysInput > directionStickDeadZone*-1)
+                && (rot < rotateStickDeadZone && rot > rotateStickDeadZone*-1)) {
+
+                  m_frontLeft.setDesiredState(swerveModuleStates[0], true);
+                  m_frontRight.setDesiredState(swerveModuleStates[1], true);
+                  m_rearLeft.setDesiredState(swerveModuleStates[2], true);
+                  m_rearRight.setDesiredState(swerveModuleStates[3], true);
+
+
+      }
+
+      else{
+        m_frontLeft.setDesiredState(swerveModuleStates[0], false);
+        m_frontRight.setDesiredState(swerveModuleStates[1], false);
+        m_rearLeft.setDesiredState(swerveModuleStates[2], false);
+        m_rearRight.setDesiredState(swerveModuleStates[3], false);
+
+      }
+      
+    
+    
+    
+
     
   }
 
@@ -222,10 +263,10 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_rearLeft.setDesiredState(desiredStates[2]);
-    m_rearRight.setDesiredState(desiredStates[3]);
+    m_frontLeft.setDesiredState(desiredStates[0], false);
+    m_frontRight.setDesiredState(desiredStates[1], false);
+    m_rearLeft.setDesiredState(desiredStates[2], false);
+    m_rearRight.setDesiredState(desiredStates[3], false);
   }
 
   /**

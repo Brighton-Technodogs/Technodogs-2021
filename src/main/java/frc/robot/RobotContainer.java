@@ -7,21 +7,20 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
+import frc.robot.commands.auto.AutoShootBasicWithXMode.AutoShootWithXModeSequesntialCommand;
+import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
+import frc.robot.commands.climb.RunClimbCommand;
+import frc.robot.commands.drive.AssistedLimelightDriveCommand;
+import frc.robot.commands.drive.DriveOdometryCommand;
+import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.ResetIntakeCommand;
+import frc.robot.commands.intake.ReverseIntakeCommand;
+import frc.robot.commands.intake.RunIntakeCommand;
 import frc.robot.commands.shooter.AutoShootCommand;
 import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.LongShootCommand;
@@ -30,25 +29,12 @@ import frc.robot.commands.shooter.QuickFireCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
-import frc.robot.commands.drive.AssistedLimelightDriveCommand;
-import frc.robot.commands.intake.DeployIntakeCommand;
-import frc.robot.commands.intake.ResetIntakeCommand;
-import frc.robot.commands.intake.ReverseIntakeCommand;
-import frc.robot.commands.intake.RunIntakeCommand;
-import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
-import frc.robot.commands.auto.AutoShootBasicWithXMode.AutoShootWithXModeSequesntialCommand;
-import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
-import frc.robot.commands.climb.RunClimbCommand;
-import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.DriveOdometrySubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.DriveOdometrySubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -61,15 +47,17 @@ public class RobotContainer {
 
   //Subsystems
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  // private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
+  // private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveOdometrySubsystem driveOdometrySubsystem = new DriveOdometrySubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final StorageSubsystem storageSubsystem = new StorageSubsystem();
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
 
   //Drive Commands
-  private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
+  // private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
+  private final DriveOdometryCommand driveOdometryCommand = new DriveOdometryCommand(driveOdometrySubsystem);
+
 
   //Shooter Commands
   private final AutoShootCommand autoShootCommand = new AutoShootCommand(shooterSubsystem);
@@ -93,9 +81,9 @@ public class RobotContainer {
   private final RunClimbCommand runClimbCommand = new RunClimbCommand(climbSubsystem);
 
   //Auto Commands
-  private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
-  private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
-  private final AutoShootWithXModeSequesntialCommand autoShootWithXModeSequesntialCommand = new AutoShootWithXModeSequesntialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  // private final AutonomousSequentialCommandGroup autonomousSequentialCommandGroup = new AutonomousSequentialCommandGroup(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  // private final AutonomousBackwardsShootingSequentialCommand autonomousBackwardsShootingSequentialCommand = new AutonomousBackwardsShootingSequentialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
+  // private final AutoShootWithXModeSequesntialCommand autoShootWithXModeSequesntialCommand = new AutoShootWithXModeSequesntialCommand(driveSubsystem, shooterSubsystem, storageSubsystem, intakeSubsystem);
 
 
   //Operator Contoller and Buttons
@@ -117,7 +105,9 @@ public class RobotContainer {
   {
     configureButtonBindings();
  
-    driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
+    // driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
+
+    driveOdometrySubsystem.setDefaultCommand(driveOdometryCommand);
 
     shooterSubsystem.setDefaultCommand(autoShootCommand);
 
@@ -162,7 +152,8 @@ public class RobotContainer {
     // return autonomousBackwardsShootingSequentialCommand;
 
     //This auton rotates, xmodes, shoots, moves forawrd
-    return autoShootWithXModeSequesntialCommand;
+    // return autoShootWithXModeSequesntialCommand;
+    return null;
     
     // operatorYButton.whenPressed(changeConfigCommand);
   }

@@ -158,9 +158,26 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
+
+
+    double currentAngle = m_twistEncoder.get();
+    double currentAngle_scaled;
+
+    // display the actual angle of the wheel on shuffleboard.
+    // currentAngle -= this.offset;
+
+    if (currentAngle < 0) {
+      currentAngle_scaled =  360 - (currentAngle * -1);
+    } else if (currentAngle > 360) {
+      currentAngle_scaled = currentAngle - 360;
+    } else {
+      currentAngle_scaled = currentAngle;
+    }
+
     return new SwerveModuleState(
       convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()), 
-      Rotation2d.fromDegrees(m_twistEncoder.get()));
+      
+      Rotation2d.fromDegrees(currentAngle_scaled));
   }
 
   /**
@@ -168,14 +185,16 @@ public class SwerveModule {
    *
    * @param state Desired state with speed and angle.
    */
-  public void setDesiredState(SwerveModuleState state) {
+  public void setDesiredState(SwerveModuleState state, boolean disableSwerve) {
     // Calculate the drive output from the drive PID controller.
 
     double setpoint, setpoint_scaled;
 
     // Our encoders are not aligned such that 0 means "the front of the robot".
     // Because of this, we need to add the offset here
-    setpoint = state.angle.getDegrees() + this.offset;
+    setpoint = state.angle.getDegrees();
+
+    setpoint += offset;
 
     // Because we added an offset, we now have to normalize the angle to 0-360
     if (setpoint < 0) {
@@ -192,7 +211,7 @@ public class SwerveModule {
     double currentAngle_scaled;
 
     // display the actual angle of the wheel on shuffleboard.
-    currentAngle -= this.offset;
+    // currentAngle -= this.offset;
 
     if (currentAngle < 0) {
       currentAngle_scaled =  360 - (currentAngle * -1);
@@ -212,7 +231,14 @@ public class SwerveModule {
           m_twistEncoder.get(), setpoint_scaled
       );
 
+    if (disableSwerve){
+      sbSwerveModuleTurnMotorOutput.setDouble(0);
+      m_twistMotor.set(ControlMode.PercentOutput, 0);
+    }
+    else {
       sbSwerveModuleTurnMotorOutput.setDouble(turnOutput);
+      m_twistMotor.set(ControlMode.PercentOutput, turnOutput);
+    }
 
     // System.out.println("Setting State. Drive Motor Output  = " + driveOutput + ". Turning motor output = " + turnOutput);
 
@@ -223,7 +249,7 @@ public class SwerveModule {
     sbSwerveModuleSpeedRawCommand.setDouble(driveOutput);
     sbSwerveModuleSpeedRawActual.setDouble(m_driveMotorSensors.getIntegratedSensorVelocity());
     m_driveMotor.set(ControlMode.Velocity, driveOutput);
-    m_twistMotor.set(ControlMode.PercentOutput, turnOutput);
+    
   }
 
   private double convertTicksToMeters(double ticks){
