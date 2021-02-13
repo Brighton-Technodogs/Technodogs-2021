@@ -3,6 +3,17 @@ package frc.robot.swerve;
 import edu.wpi.first.wpilibj.GyroBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/*
+
+SwerveDrive contains the swerve math. That is, all of the calculations
+that determine where each wheel needs to be pointed happens here. 
+
+The way this is typically used, is that the SwerveDrive object is created
+in the DriveSubsystem, and it calls SwerveDrive.drive, passing the xbox 
+joystick values directly.
+
+*/
+
 public class SwerveDrive {
 
     private SwerveWheel rightFrontWheel;

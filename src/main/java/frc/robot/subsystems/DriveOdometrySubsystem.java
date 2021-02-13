@@ -205,7 +205,21 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     forwardInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
     sidewaysInput *= Constants.DriveSubsystem.kMaxSpeedMetersPerSecond;
 
-    if (rot < rotateStickDeadZone && rot > rotateStickDeadZone*-1) {
+    if (forwardInput < directionStickDeadZone 
+        && forwardInput > directionStickDeadZone*-1)
+    {
+      forwardInput = 0;
+    }
+
+    if (sidewaysInput < directionStickDeadZone 
+        && sidewaysInput > directionStickDeadZone*-1)
+    {
+      sidewaysInput = 0;
+    }
+
+    if (rot < rotateStickDeadZone 
+        && rot > rotateStickDeadZone*-1) 
+    {
       rot = 0;
     }
 
@@ -230,30 +244,26 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
     // );
 
-    if ((forwardInput < directionStickDeadZone && forwardInput > directionStickDeadZone*-1) && (sidewaysInput < directionStickDeadZone && sidewaysInput > directionStickDeadZone*-1)
-                && (rot < rotateStickDeadZone && rot > rotateStickDeadZone*-1)) {
+    if ((forwardInput < directionStickDeadZone 
+        && forwardInput > directionStickDeadZone*-1) 
+        && (sidewaysInput < directionStickDeadZone 
+        && sidewaysInput > directionStickDeadZone*-1)
+        && (rot < rotateStickDeadZone 
+        && rot > rotateStickDeadZone*-1)) 
+    {
+      m_frontLeft.setDesiredState(swerveModuleStates[0], true);
+      m_frontRight.setDesiredState(swerveModuleStates[1], true);
+      m_rearLeft.setDesiredState(swerveModuleStates[2], true);
+      m_rearRight.setDesiredState(swerveModuleStates[3], true);
+    }
 
-                  m_frontLeft.setDesiredState(swerveModuleStates[0], true);
-                  m_frontRight.setDesiredState(swerveModuleStates[1], true);
-                  m_rearLeft.setDesiredState(swerveModuleStates[2], true);
-                  m_rearRight.setDesiredState(swerveModuleStates[3], true);
+    else{
+      m_frontLeft.setDesiredState(swerveModuleStates[0], false);
+      m_frontRight.setDesiredState(swerveModuleStates[1], false);
+      m_rearLeft.setDesiredState(swerveModuleStates[2], false);
+      m_rearRight.setDesiredState(swerveModuleStates[3], false);
 
-
-      }
-
-      else{
-        m_frontLeft.setDesiredState(swerveModuleStates[0], false);
-        m_frontRight.setDesiredState(swerveModuleStates[1], false);
-        m_rearLeft.setDesiredState(swerveModuleStates[2], false);
-        m_rearRight.setDesiredState(swerveModuleStates[3], false);
-
-      }
-      
-    
-    
-    
-
-    
+    }
   }
 
   /**

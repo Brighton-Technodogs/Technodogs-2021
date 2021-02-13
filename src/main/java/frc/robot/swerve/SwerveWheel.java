@@ -8,6 +8,29 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+/*
+
+The SwerveWheel is the lowest layer (closest to the hardware). It contains
+the motors (one for drive, one for twist) as well as the analog (absolute) 
+encoder. It also contains a PIDController that is used to control the rotational
+position of the wheel (twist). 
+
+The way this is used, is that the all of the hardware is instansiated in
+the DriveSubsystem, the SwerveWheel's are created, and then the SwerveWheel's
+are passed into the SwerveDrive.
+
+The drive method is called, taking in a speed (percent) and a rotation (degrees).
+These are calculated using swerve math in SwerveDrive. This is called
+in normal driving scenarios
+
+UpdateRotation uses the PID to calculate motor power needed to get the 
+wheel to the correct rotation. This is called to set the wheels to certain
+modes such as "X Mode" to avoid being pushed. UpdateRotation called with
+no arguments turns the motors off. This prevents them from shaking when
+the robot is not being driven/moved.
+
+*/
+
 public class SwerveWheel {
     private PIDController rotationController;
     private AnalogPotentiometer potentiometer;

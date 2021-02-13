@@ -28,6 +28,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
+
+/*
+The SwerveModule class represents a single swerve module 
+(there are 4 of these on the robot). This is used with the WPILib
+swerve classes (Chassis, Kinematics, Odometry)
+
+Those classes take in the driving commands and return an array of
+swerve module states. Each one is sent to an instance of this class
+(one instance per wheel)
+
+The module state contains the speed the wheel should spin, as well as the
+angle it should be pointing. This class manages the PIDs. There is one
+PID for the rotation (get the wheel to the setpoint) and another PID
+for the velocity of the wheel.
+
+*/
+
 public class SwerveModule {
   private final String moduleIdentifier;
   private final TalonFX m_driveMotor;
@@ -226,10 +243,8 @@ public class SwerveModule {
     sbSwerveModuleSpeedCommand.setDouble(state.speedMetersPerSecond);
     sbSwerveModuleSpeedActual.setDouble(convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()));
 
-        // Calculate the turning motor output from the turning PID controller.
-    final var turnOutput = m_twistPIDController.calculate(
-          m_twistEncoder.get(), setpoint_scaled
-      );
+    // Calculate the turning motor output from the turning PID controller.
+    double turnOutput = m_twistPIDController.calculate(m_twistEncoder.get(), setpoint_scaled);
 
     if (disableSwerve){
       sbSwerveModuleTurnMotorOutput.setDouble(0);
