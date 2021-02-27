@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 
+import frc.robot.FixedPIDController;
+
 
 /*
 The SwerveModule class represents a single swerve module 
@@ -79,8 +81,8 @@ public class SwerveModule {
                         Constants.DriveSubsystem.kSwerveDrivePID_D);
 
   //Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final PIDController m_twistPIDController
-      = new PIDController(
+  private final FixedPIDController m_twistPIDController
+      = new FixedPIDController(
         Constants.DriveSubsystem.kSwerveTwistPID_P,
         Constants.DriveSubsystem.kSwerveTwistPID_I,
         Constants.DriveSubsystem.kSwerveTwistPID_D);
@@ -256,7 +258,7 @@ public class SwerveModule {
 
     //     // Calculate the turning motor output from the turning PID controller.
       /*final*/ double turnOutput = m_twistPIDController.calculate(
-        currentAngle, setpoint_scaled
+        currentAngle_scaled, setpoint_scaled
         );
 
     double error = m_twistPIDController.getPositionError();
