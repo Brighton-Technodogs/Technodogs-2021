@@ -38,7 +38,7 @@ public class SwerveDrive {
         this.leftBackWheel = leftBack;
         this.rightBackWheel = rightBack;
 
-        System.out.println("SwerveDrive Initialized");
+        // System.out.println("SwerveDrive Initialized");
 
         this.gyro = gyro;
     }

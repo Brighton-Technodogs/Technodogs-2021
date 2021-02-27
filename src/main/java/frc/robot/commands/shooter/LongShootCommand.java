@@ -55,7 +55,7 @@ public class LongShootCommand extends CommandBase {
   public void execute() 
   {
 
-    System.out.println(shootingOffset);
+    // System.out.println(shootingOffset);
 
     shooterSubsystem.shoot(0.55, 0.38 - shootingOffset, 0.38 - shootingOffset);
 

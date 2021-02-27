@@ -41,7 +41,7 @@ public class SwerveWheel {
     private String moduleID;
 
     public SwerveWheel(PIDController rotationController, AnalogPotentiometer potentiometer, VictorSPX twistMotor, BaseMotorController driveMotor, double offset, String moudleId) {
-        System.out.println("wheel Initialized");
+        // System.out.println("wheel Initialized");
         this.potentiometer = potentiometer;
         this.rotationController = rotationController;
         this.driveMotor = driveMotor;

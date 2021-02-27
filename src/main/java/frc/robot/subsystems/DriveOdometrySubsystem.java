@@ -227,9 +227,9 @@ public class DriveOdometrySubsystem extends SubsystemBase {
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
             : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
 
-    System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
+    // System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
-    System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
+    // System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
 
     // m_frontLeft.setDesiredState(
     //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))

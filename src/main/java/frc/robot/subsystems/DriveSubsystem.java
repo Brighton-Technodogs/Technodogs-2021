@@ -94,7 +94,7 @@ public class DriveSubsystem extends SubsystemBase {
     .getEntry();
 
     public void init() {
-        System.out.println("Initializing DriveSubsystem");
+        // System.out.println("Initializing DriveSubsystem");
         setupEncoders();
     }
 
@@ -119,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public void enable() {
-        System.out.println("Enabling DriveSubsystem");
+        // System.out.println("Enabling DriveSubsystem");
         frontRightWheel.enableRotation();
         frontLeftWheel.enableRotation();
         rearRightWheel.enableRotation();

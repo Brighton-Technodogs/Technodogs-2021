@@ -29,7 +29,7 @@ public class DriveCommand extends CommandBase {
     XboxController m_driverController = new XboxController(Constants.DriverControl.driverControllerPort);
 
     public DriveCommand(DriveSubsystem driveSubsystem) {
-        System.out.println("Constructing DriveCommand");
+        // System.out.println("Constructing DriveCommand");
         this.mDriveSubsystem = driveSubsystem;
         this.addRequirements(driveSubsystem);
 
@@ -38,7 +38,7 @@ public class DriveCommand extends CommandBase {
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-        System.out.println("Initializing DriveCommand");
+        // System.out.println("Initializing DriveCommand");
         // this.mDriveSubsystem.init();
         // this.mDriveSubsystem.enable();
     }

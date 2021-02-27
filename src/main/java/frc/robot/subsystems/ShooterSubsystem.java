@@ -333,7 +333,7 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
 
     velocity = velocity + getAngledSpeedDecrease();
 
-    System.out.println(velocity);
+    // System.out.println(velocity);
 
     SmartDashboard.putNumber("Current Found Shooting Height", getVertical());
     SmartDashboard.putNumber("Current Velocity Target", velocity);

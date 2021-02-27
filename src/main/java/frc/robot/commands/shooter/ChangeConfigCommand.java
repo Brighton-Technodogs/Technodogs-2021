@@ -31,7 +31,7 @@ public class ChangeConfigCommand extends CommandBase {
   public void execute() 
   {
 
-    System.out.println("Beep Boop Changing Config");
+    // System.out.println("Beep Boop Changing Config");
 
     shooterSubsystem.changeConfig();
 

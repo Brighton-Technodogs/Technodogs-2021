@@ -42,7 +42,7 @@ public class AssistedSpinDriveCommand extends CommandBase {
 
     double currentVelocity = driveSubsystem.getSpinVelocity();
 
-    System.out.println(currentVelocity);
+    // System.out.println(currentVelocity);
 
   }
 

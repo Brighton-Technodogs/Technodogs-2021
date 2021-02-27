@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 
 
@@ -99,7 +100,7 @@ public class SwerveModule {
 
     // TODO: Add offsets
 
-    System.out.println("Initializing Swerve: " + moduleIdentifier + ". Driver motor = " + driveMotorCanID + ". Turning motor = " + twistMotorCanID);
+    // System.out.println("Initializing Swerve: " + moduleIdentifier + ". Driver motor = " + driveMotorCanID + ". Turning motor = " + twistMotorCanID);
 
 
     // use this to put to individual module dashboard.
@@ -158,6 +159,9 @@ public class SwerveModule {
     m_driveMotor.config_kI(0, Constants.DriveSubsystem.kSwerveDrivePID_I);
     m_driveMotor.config_kD(0, Constants.DriveSubsystem.kSwerveDrivePID_D);
     m_driveMotor.config_kF(0, Constants.DriveSubsystem.kSwerveDrivePID_F);
+
+    m_twistMotor.configPeakOutputForward(1);
+    m_twistMotor.configPeakOutputReverse(-1);
     // m_driveMotor.configAllowableClosedloopError(0, 0);
     // m_driveMotor.configMaxIntegralAccumulator(0, maxIntegralAccumulator);
     // m_driveMotor.configClosedLoopPeriod(0, PIDLoopRate);
@@ -165,7 +169,8 @@ public class SwerveModule {
     this.m_twistEncoder = new AnalogPotentiometer(twistEncoderPort, 360.0, 0.0);
 
     // Limit the PID Controller's input range between 0 and 360 and set the input to be continuous.
-    m_twistPIDController.enableContinuousInput(0, 360);
+    //m_twistPIDController.disableContinuousInput();
+    m_twistPIDController.enableContinuousInput(0.0, 360.0);
     m_twistPIDController.setTolerance(Constants.DriveSubsystem.kSwerveTwistPIDTolerance);
   }
 
@@ -211,6 +216,8 @@ public class SwerveModule {
     // Because of this, we need to add the offset here
     setpoint = state.angle.getDegrees();
 
+    // setpoint = 200;
+
     setpoint += offset;
 
     // Because we added an offset, we now have to normalize the angle to 0-360
@@ -222,9 +229,11 @@ public class SwerveModule {
       setpoint_scaled = setpoint;
     }
 
+
     sbSwerveModuleAngleCommand.setDouble(setpoint_scaled);
 
     double currentAngle = m_twistEncoder.get();
+    // System.out.println(currentAngle);
     double currentAngle_scaled;
 
     // display the actual angle of the wheel on shuffleboard.
@@ -238,13 +247,28 @@ public class SwerveModule {
       currentAngle_scaled = currentAngle;
     }
 
-    sbSwerveModuleAngleActual.setDouble(currentAngle_scaled);
+
+    // sbSwerveModuleAngleActual.setDouble(currentAngle);
+    sbSwerveModuleAngleActual.setDouble(currentAngle);
 
     sbSwerveModuleSpeedCommand.setDouble(state.speedMetersPerSecond);
     sbSwerveModuleSpeedActual.setDouble(convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()));
 
-    // Calculate the turning motor output from the turning PID controller.
-    double turnOutput = m_twistPIDController.calculate(m_twistEncoder.get(), setpoint_scaled);
+    //     // Calculate the turning motor output from the turning PID controller.
+      /*final*/ double turnOutput = m_twistPIDController.calculate(
+        currentAngle, setpoint_scaled
+        );
+
+    double error = m_twistPIDController.getPositionError();
+
+    System.out.println(error);
+    System.out.println("PID Out: " + turnOutput);
+
+    // turnOutput = MathUtil.clamp(turnOutput, -0.5, 0.5);
+
+    System.out.println("Clamp Out: " + turnOutput);
+
+    // System.out.println(turnOutput);
 
     if (disableSwerve){
       sbSwerveModuleTurnMotorOutput.setDouble(0);
