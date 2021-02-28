@@ -16,16 +16,14 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+//import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+//import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
 
@@ -72,8 +70,7 @@ public class SwerveModule {
   private NetworkTableEntry sbSwerveModuleSpeedRawActual;
 
   private NetworkTableEntry sbSwerveModuleTurnMotorOutput;
-
-
+  private NetworkTableEntry sbSwerveModulePIDError;
 
   private final PIDController m_drivePIDController =
       new PIDController(Constants.DriveSubsystem.kSwerveDrivePID_P, 
@@ -81,6 +78,7 @@ public class SwerveModule {
                         Constants.DriveSubsystem.kSwerveDrivePID_D);
 
   //Using a TrapezoidProfile PIDController to allow for smooth turning
+  // ^^ Actually doesn't use a ProfiledPIDController like a boss
   private final FixedPIDController m_twistPIDController
       = new FixedPIDController(
         Constants.DriveSubsystem.kSwerveTwistPID_P,
@@ -92,6 +90,10 @@ public class SwerveModule {
    *
    * @param driveMotorCanID   ID for the drive motor.
    * @param twistMotorCanID ID for the turning motor.
+   * @param twistEncoderPort The port for the Twist Encoder
+   * @param offset The twist encoder offset
+   * @param tab The Shuffleboard tab for this SwerveModule
+   * @param moduleIdentifier A unique string to identify this SwerveModule
    */
   public SwerveModule(int driveMotorCanID,
                       int twistMotorCanID,
@@ -100,10 +102,7 @@ public class SwerveModule {
                       ShuffleboardTab tab,
                       String moduleIdentifier) {
 
-    // TODO: Add offsets
-
-    // System.out.println("Initializing Swerve: " + moduleIdentifier + ". Driver motor = " + driveMotorCanID + ". Turning motor = " + twistMotorCanID);
-
+    System.out.println("Initializing Swerve: " + moduleIdentifier + ". Driver motor = " + driveMotorCanID + ". Turning motor = " + twistMotorCanID + ". Encoder Offset = " + offset);
 
     // use this to put to individual module dashboard.
     subsystemShuffleboardTab = Shuffleboard.getTab(moduleIdentifier);
@@ -111,12 +110,10 @@ public class SwerveModule {
     // use this to put to main subsystem dashboard.
     // subsystemShuffleboardTab = tab;
 
-
     sbSwerveModuleAngleCommand = subsystemShuffleboardTab.add(moduleIdentifier + "_degC", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 360))
     .getEntry();
-
 
     sbSwerveModuleAngleActual = subsystemShuffleboardTab.add(moduleIdentifier + "_degA", 0)
     .withWidget(BuiltInWidgets.kDial)
@@ -146,6 +143,11 @@ public class SwerveModule {
     sbSwerveModuleTurnMotorOutput = subsystemShuffleboardTab.add(moduleIdentifier + "twistOut", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -1, "max", 1))
+    .getEntry();
+
+    sbSwerveModulePIDError = subsystemShuffleboardTab.add(moduleIdentifier + "_err", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -180, "max", 180))
     .getEntry();
 
     m_driveMotor = new TalonFX(driveMotorCanID);
@@ -190,13 +192,7 @@ public class SwerveModule {
     // display the actual angle of the wheel on shuffleboard.
     // currentAngle -= this.offset;
 
-    if (currentAngle < 0) {
-      currentAngle_scaled =  360 - (currentAngle * -1);
-    } else if (currentAngle > 360) {
-      currentAngle_scaled = currentAngle - 360;
-    } else {
-      currentAngle_scaled = currentAngle;
-    }
+    currentAngle_scaled = MathUtil.inputModulus(currentAngle, 0, 360);
 
     return new SwerveModuleState(
       convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()), 
@@ -223,32 +219,18 @@ public class SwerveModule {
     setpoint += offset;
 
     // Because we added an offset, we now have to normalize the angle to 0-360
-    if (setpoint < 0) {
-      setpoint_scaled =  360 - (setpoint * -1);
-    } else if (setpoint > 360) {
-      setpoint_scaled = setpoint - 360;
-    } else {
-      setpoint_scaled = setpoint;
-    }
-
+    setpoint_scaled = MathUtil.inputModulus(setpoint, 0, 360);
 
     sbSwerveModuleAngleCommand.setDouble(setpoint_scaled);
 
     double currentAngle = m_twistEncoder.get();
-    // System.out.println(currentAngle);
     double currentAngle_scaled;
 
     // display the actual angle of the wheel on shuffleboard.
-    // currentAngle -= this.offset;
+    currentAngle -= this.offset;
 
-    if (currentAngle < 0) {
-      currentAngle_scaled =  360 - (currentAngle * -1);
-    } else if (currentAngle > 360) {
-      currentAngle_scaled = currentAngle - 360;
-    } else {
-      currentAngle_scaled = currentAngle;
-    }
-
+    // Normalize current angle
+    currentAngle_scaled = MathUtil.inputModulus(currentAngle, 0, 360);
 
     // sbSwerveModuleAngleActual.setDouble(currentAngle);
     sbSwerveModuleAngleActual.setDouble(currentAngle);
@@ -256,21 +238,14 @@ public class SwerveModule {
     sbSwerveModuleSpeedCommand.setDouble(state.speedMetersPerSecond);
     sbSwerveModuleSpeedActual.setDouble(convertTicksPerTimeUnitToMetersPerSecond(m_driveMotorSensors.getIntegratedSensorVelocity()));
 
-    //     // Calculate the turning motor output from the turning PID controller.
-      /*final*/ double turnOutput = m_twistPIDController.calculate(
-        currentAngle_scaled, setpoint_scaled
-        );
+    // Calculate the turning motor output from the turning PID controller.
+    final double turnOutput = m_twistPIDController.calculate(
+      currentAngle_scaled, setpoint_scaled
+    );
 
     double error = m_twistPIDController.getPositionError();
 
-    System.out.println(error);
-    System.out.println("PID Out: " + turnOutput);
-
-    // turnOutput = MathUtil.clamp(turnOutput, -0.5, 0.5);
-
-    System.out.println("Clamp Out: " + turnOutput);
-
-    // System.out.println(turnOutput);
+    sbSwerveModulePIDError.setDouble(error);
 
     if (disableSwerve){
       sbSwerveModuleTurnMotorOutput.setDouble(0);
@@ -280,8 +255,6 @@ public class SwerveModule {
       sbSwerveModuleTurnMotorOutput.setDouble(turnOutput);
       m_twistMotor.set(ControlMode.PercentOutput, turnOutput);
     }
-
-    // System.out.println("Setting State. Drive Motor Output  = " + driveOutput + ". Turning motor output = " + turnOutput);
 
     // Convert the motor output command to ticks/100ms
     // TODO: Check that this works.
