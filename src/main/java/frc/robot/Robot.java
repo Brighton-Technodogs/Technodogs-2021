@@ -36,6 +36,21 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    System.out.println("   ______________  _____");
+    System.out.println("  |__  /__  / __ \\/__  /");
+    System.out.println("   /_ <  / / / / /  / / ");
+    System.out.println(" ___/ / / / /_/ /  / /  ");
+    System.out.println("/____/ /_/\\____/  /_/   ");
+    System.out.println("  ______          __              ");
+    System.out.println(" /_  __/__  _____/ /_  ____  ____ ");
+    System.out.println("  / / / _ \\/ ___/ __ \\/ __ \\/ __ \\");
+    System.out.println(" / / /  __/ /__/ / / / / / / /_/ /");
+    System.out.println("/_/ _\\___/\\___/_/ /_/_/ /_/\\____/ ");
+    System.out.println("   / __ \\____  ____ ______        ");
+    System.out.println("  / / / / __ \\/ __ `/ ___/        ");
+    System.out.println(" / /_/ / /_/ / /_/ (__  )         ");
+    System.out.println("/_____/\\____/\\__, /____/          ");
+    System.out.println("            /____/                ");
     robotContainer = new RobotContainer();
     CameraServer.getInstance().startAutomaticCapture();
   }

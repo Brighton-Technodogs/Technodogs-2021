@@ -204,9 +204,11 @@ public class FixedPIDController implements Sendable, AutoCloseable {
     double positionError;
     if (m_continuous) {
       positionError =
-          MathUtil.inputModulus(m_setpoint - m_measurement, m_minimumInput, m_maximumInput);
-    } else {
-      positionError = m_setpoint - m_measurement;
+        MathUtil.inputModulus(m_setpoint - m_measurement,
+          -(m_maximumInput - m_minimumInput) / 2.0,
+          (m_maximumInput - m_minimumInput) / 2.0);
+      } else {
+        positionError = m_setpoint - m_measurement;
     }
 
     double velocityError = (positionError - m_prevError) / m_period;
@@ -219,7 +221,7 @@ public class FixedPIDController implements Sendable, AutoCloseable {
    * Enables continuous input.
    *
    * <p>Rather then using the max and min input range as constraints, it considers them to be the
-   * same point and automatically calculates the shortest route to the setpoint.
+   * same point and *now* automatically calculates the shortest route to the setpoint.
    *
    * @param minimumInput The minimum value expected from the input.
    * @param maximumInput The maximum value expected from the input.
@@ -310,13 +312,13 @@ public class FixedPIDController implements Sendable, AutoCloseable {
     m_prevError = m_positionError;
 
     if (m_continuous) {
-        m_positionError =
-            MathUtil.inputModulus(m_setpoint - m_measurement,
-                                  -(m_maximumInput - m_minimumInput) / 2.0,
-                                  (m_maximumInput - m_minimumInput) / 2.0);
+      m_positionError =
+        MathUtil.inputModulus(m_setpoint - m_measurement,
+          -(m_maximumInput - m_minimumInput) / 2.0,
+          (m_maximumInput - m_minimumInput) / 2.0);
       } else {
         m_positionError = m_setpoint - m_measurement;
-      }
+    }
 
     m_velocityError = (m_positionError - m_prevError) / m_period;
 
