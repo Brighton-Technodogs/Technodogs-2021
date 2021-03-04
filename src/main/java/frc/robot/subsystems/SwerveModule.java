@@ -243,9 +243,7 @@ public class SwerveModule {
       currentAngle_scaled, setpoint_scaled
     );
 
-    double error = m_twistPIDController.getPositionError();
-
-    sbSwerveModulePIDError.setDouble(error);
+    sbSwerveModulePIDError.setDouble(m_twistPIDController.getPositionError());
 
     if (disableSwerve){
       sbSwerveModuleTurnMotorOutput.setDouble(0);

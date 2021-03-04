@@ -69,7 +69,7 @@ public final class Constants {
         public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
         public static final double kTrackWidth = 0.5588; // in meters. = 22 inches
 
-        public static final double kMaxSpeedMetersPerSecond = 2.5;
+        public static final double kMaxSpeedMetersPerSecond = 4;
 
         public static final double kMaxAccelerationMetersPerSecondSquared = 1; // yeet
 
