@@ -72,6 +72,8 @@ public class SwerveModule {
   private NetworkTableEntry sbSwerveModuleTurnMotorOutput;
   private NetworkTableEntry sbSwerveModulePIDError;
 
+  private NetworkTableEntry sbSwerveModuleTemperature;
+
   private final PIDController m_drivePIDController =
       new PIDController(Constants.DriveSubsystem.kSwerveDrivePID_P, 
                         Constants.DriveSubsystem.kSwerveDrivePID_I,
@@ -148,6 +150,11 @@ public class SwerveModule {
     sbSwerveModulePIDError = subsystemShuffleboardTab.add(moduleIdentifier + "_err", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", -180, "max", 180))
+    .getEntry();
+
+    sbSwerveModuleTemperature = subsystemShuffleboardTab.add(moduleIdentifier + "_temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 200))
     .getEntry();
 
     m_driveMotor = new TalonFX(driveMotorCanID);
@@ -262,6 +269,8 @@ public class SwerveModule {
     sbSwerveModuleSpeedRawCommand.setDouble(driveOutput);
     sbSwerveModuleSpeedRawActual.setDouble(m_driveMotorSensors.getIntegratedSensorVelocity());
     m_driveMotor.set(ControlMode.Velocity, driveOutput);
+
+    sbSwerveModuleTemperature.setDouble(m_driveMotor.getTemperature());
     
   }
 
