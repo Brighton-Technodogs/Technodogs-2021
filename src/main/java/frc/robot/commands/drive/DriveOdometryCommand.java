@@ -50,7 +50,7 @@ public class DriveOdometryCommand extends CommandBase {
     @Override
     public void execute() {
 
-        double directionX = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
+        double directionX = - m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
         double directionY = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
         double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
 

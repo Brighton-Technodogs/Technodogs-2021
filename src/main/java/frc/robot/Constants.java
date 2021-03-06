@@ -54,7 +54,7 @@ public final class Constants {
         public static final double kSwerveDrivePID_D = 0;
         public static final double kSwerveDrivePID_F = 0.052;
 
-        public static final double kMaxTwistAngularVelocity = 360; // deg/s
+        public static final double kMaxTwistAngularVelocity = 36; // deg/s
         public static final double kMaxTwistAngularAcceleration = 360; // deg/s^2
 
         public static final double kGearRatioMotorToWheel = 6.64; // 6.64 motor rotations = 1 wheel rotation
@@ -76,10 +76,10 @@ public final class Constants {
         // Define the order of the swerve modules.
         public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
-          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
-          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2),
-          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2),
-          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2));
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2), //FL
+          new Translation2d(Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2), //FR
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, Constants.DriveSubsystem.kTrackWidth / 2), //RL
+          new Translation2d(-Constants.DriveSubsystem.kWheelBase / 2, -Constants.DriveSubsystem.kTrackWidth / 2)); //RR
 
         public static final int kFrontLeftDriveMotorCanID = 10; //
         public static final int kFrontRightDriveMotorCanID = 11; //
@@ -96,10 +96,10 @@ public final class Constants {
         public static final int kFrontRightEncoderPort = 1;
         public static final int kRearRightEncoderPort = 2;
 
-        public static final double kFrontLeftEncoderOffset = 96; //60
-        public static final double kRearLeftEncoderOffset = 93; //11
-        public static final double kFrontRightEncoderOffset = 130; //28
-        public static final double kRearRightEncoderOffset = 338; //18
+        public static final double kFrontLeftEncoderOffset = 195 - 20; //60
+        public static final double kRearLeftEncoderOffset = 169; //11
+        public static final double kFrontRightEncoderOffset = 200; //28
+        public static final double kRearRightEncoderOffset = 240 - 180; //18
     }
 
     public final class ShooterSubsystem

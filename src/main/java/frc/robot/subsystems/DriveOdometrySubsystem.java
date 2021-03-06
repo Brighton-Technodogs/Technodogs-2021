@@ -222,6 +222,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     {
       rot = 0;
     }
+    rot *= Constants.DriveSubsystem.kMaxTwistAngularVelocity;
 
     var swerveModuleStates = Constants.DriveSubsystem.kDriveKinematics
         .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
@@ -230,6 +231,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     // System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
     // System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
+
 
     // m_frontLeft.setDesiredState(
     //   new SwerveModuleState(0, Rotation2d.fromDegrees(0))
@@ -251,17 +253,17 @@ public class DriveOdometrySubsystem extends SubsystemBase {
         && (rot < rotateStickDeadZone 
         && rot > rotateStickDeadZone*-1)) 
     {
-      m_frontLeft.setDesiredState(swerveModuleStates[0], true);
-      m_frontRight.setDesiredState(swerveModuleStates[1], true);
-      m_rearLeft.setDesiredState(swerveModuleStates[2], true);
-      m_rearRight.setDesiredState(swerveModuleStates[3], true);
+      m_frontLeft.setDesiredState(swerveModuleStates[2], true);
+      m_frontRight.setDesiredState(swerveModuleStates[0], true);
+      m_rearLeft.setDesiredState(swerveModuleStates[3], true);
+      m_rearRight.setDesiredState(swerveModuleStates[1], true);
     }
 
     else{
-      m_frontLeft.setDesiredState(swerveModuleStates[0], false);
-      m_frontRight.setDesiredState(swerveModuleStates[1], false);
-      m_rearLeft.setDesiredState(swerveModuleStates[2], false);
-      m_rearRight.setDesiredState(swerveModuleStates[3], false);
+      m_frontLeft.setDesiredState(swerveModuleStates[2], false);
+      m_frontRight.setDesiredState(swerveModuleStates[0], false);
+      m_rearLeft.setDesiredState(swerveModuleStates[3], false);
+      m_rearRight.setDesiredState(swerveModuleStates[1], false);
 
     }
   }
@@ -302,8 +304,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from 180 to 180
    */
   public double getHeading() {
-    return 0;
-    //return Math.IEEEremainder(m_gyro.getAngle(), 360) * (Constants.DriveSubsystem.kGyroReversed ? -1.0 : 1.0);
+    // return 0;
+    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (Constants.DriveSubsystem.kGyroReversed ? -1.0 : 1.0) * (Math.PI / 180) ;
   }
 
   /**

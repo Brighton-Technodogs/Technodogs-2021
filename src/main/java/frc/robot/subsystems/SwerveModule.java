@@ -213,6 +213,7 @@ public class SwerveModule {
     // Our encoders are not aligned such that 0 means "the front of the robot".
     // Because of this, we need to add the offset here
     setpoint = state.angle.getDegrees();
+    //System.out.println(setpoint);
 
     // setpoint = 200;
 
@@ -227,7 +228,7 @@ public class SwerveModule {
     double currentAngle_scaled;
 
     // display the actual angle of the wheel on shuffleboard.
-    currentAngle -= this.offset;
+    // currentAngle -= this.offset;
 
     // Normalize current angle
     currentAngle_scaled = MathUtil.inputModulus(currentAngle, 0, 360);
