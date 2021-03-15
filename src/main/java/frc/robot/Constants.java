@@ -54,7 +54,7 @@ public final class Constants {
         public static final double kSwerveDrivePID_D = 0;
         public static final double kSwerveDrivePID_F = 0.052;
 
-        public static final double kMaxTwistAngularVelocity = 36; // deg/s
+        public static final double kMaxTwistAngularVelocity = 180; // deg/s
         public static final double kMaxTwistAngularAcceleration = 360; // deg/s^2
 
         public static final double kGearRatioMotorToWheel = 6.64; // 6.64 motor rotations = 1 wheel rotation

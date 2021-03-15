@@ -7,13 +7,20 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,6 +30,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
+  private AnalogPotentiometer fl_twistEncoder;
+  private AnalogPotentiometer fr_twistEncoder;
+  private AnalogPotentiometer rl_twistEncoder;
+  private AnalogPotentiometer rr_twistEncoder;
+  private NetworkTableEntry flSwerveModuleAngleActual;
+  private NetworkTableEntry frSwerveModuleAngleActual;
+  private NetworkTableEntry rlSwerveModuleAngleActual;
+  private NetworkTableEntry rrSwerveModuleAngleActual;
+  private ShuffleboardTab testShuffleboardTab;
 
   private RobotContainer robotContainer;
 
@@ -36,21 +52,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    System.out.println("   ______________  _____");
-    System.out.println("  |__  /__  / __ \\/__  /");
-    System.out.println("   /_ <  / / / / /  / / ");
-    System.out.println(" ___/ / / / /_/ /  / /  ");
-    System.out.println("/____/ /_/\\____/  /_/   ");
-    System.out.println("  ______          __              ");
-    System.out.println(" /_  __/__  _____/ /_  ____  ____ ");
-    System.out.println("  / / / _ \\/ ___/ __ \\/ __ \\/ __ \\");
-    System.out.println(" / / /  __/ /__/ / / / / / / /_/ /");
-    System.out.println("/_/ _\\___/\\___/_/ /_/_/ /_/\\____/ ");
-    System.out.println("   / __ \\____  ____ ______        ");
-    System.out.println("  / / / / __ \\/ __ `/ ___/        ");
-    System.out.println(" / /_/ / /_/ / /_/ (__  )         ");
-    System.out.println("/_____/\\____/\\__, /____/          ");
-    System.out.println("            /____/                ");
     robotContainer = new RobotContainer();
     CameraServer.getInstance().startAutomaticCapture();
   }
@@ -144,6 +145,23 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    testShuffleboardTab = Shuffleboard.getTab("");
+    flSwerveModuleAngleActual = testShuffleboardTab.add("FL_degA", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 360))
+    .getEntry();
+    frSwerveModuleAngleActual = testShuffleboardTab.add("FR_degA", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 360))
+    .getEntry();
+    rlSwerveModuleAngleActual = testShuffleboardTab.add("RL_degA", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 360))
+    .getEntry();
+    rrSwerveModuleAngleActual = testShuffleboardTab.add("RR_degA", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 360))
+    .getEntry();
   }
 
   /**
@@ -151,5 +169,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    flSwerveModuleAngleActual.setDouble(fl_twistEncoder.get());
+    frSwerveModuleAngleActual.setDouble(fr_twistEncoder.get());
+    rlSwerveModuleAngleActual.setDouble(rl_twistEncoder.get());
+    rrSwerveModuleAngleActual.setDouble(rr_twistEncoder.get());
   }
 }
