@@ -17,6 +17,7 @@ import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShooting
 import frc.robot.commands.climb.RunClimbCommand;
 import frc.robot.commands.drive.AssistedLimelightDriveCommand;
 import frc.robot.commands.drive.DriveOdometryCommand;
+import frc.robot.commands.drive.LimelightDriveOdometryCommand;
 import frc.robot.commands.intake.DeployIntakeCommand;
 import frc.robot.commands.intake.ResetIntakeCommand;
 import frc.robot.commands.intake.ReverseIntakeCommand;
@@ -57,6 +58,7 @@ public class RobotContainer {
   //Drive Commands
   // private final AssistedLimelightDriveCommand assistedLimelightDriveCommand = new AssistedLimelightDriveCommand(driveSubsystem);
   private final DriveOdometryCommand driveOdometryCommand = new DriveOdometryCommand(driveOdometrySubsystem);
+  private final LimelightDriveOdometryCommand limelightDriveOdometryCommand = new LimelightDriveOdometryCommand(driveOdometrySubsystem);
 
 
   //Shooter Commands
@@ -107,7 +109,7 @@ public class RobotContainer {
  
     // driveSubsystem.setDefaultCommand(assistedLimelightDriveCommand);
 
-    driveOdometrySubsystem.setDefaultCommand(driveOdometryCommand);
+    driveOdometrySubsystem.setDefaultCommand(limelightDriveOdometryCommand);
 
     shooterSubsystem.setDefaultCommand(longShootCommand);
 

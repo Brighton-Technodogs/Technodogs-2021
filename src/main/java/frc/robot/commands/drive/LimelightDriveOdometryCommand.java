@@ -83,7 +83,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       // limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED
       // Mode to OFF
 
-      SmartDashboard.putNumber("LimeLight Timer", limeTime.get()); // send the current value of the limelight timer to the dashboard
+      //SmartDashboard.putNumber("LimeLight Timer", limeTime.get()); // send the current value of the limelight timer to the dashboard
       if (limeTime.get() == 0) {
         System.out.println("Starting Limelight Timer and turning LED On");
         limeTime.start(); // start the limelight LED timer
@@ -108,14 +108,29 @@ public class LimelightDriveOdometryCommand extends CommandBase {
 
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
-      if (rotation > 0.2) {
+      if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
+      {
         rotation = 0.2;
-      } else if (rotation < -0.2) {
-        rotation = -0.2;
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
-
-      if (Math.abs(rotation) <= 0.015) {
+      else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
+      {
+        rotation = -0.2;
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
+      }
+      
+      if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // stop rotation and tell dashboard that the robot is aligned
+      {
+        // this will be run when once the robot has aligned it self with the target
         rotation = 0;
+        SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
+      }
+      else if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
+      {
+        // this will be run when once the robot has aligned it self with the target
+        System.out.println("Pausing rotation alignment while LED is off...");
+        rotation = 0;
+        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align on
       }
 
       // Not needed from Jacob T. Save for later if desired
