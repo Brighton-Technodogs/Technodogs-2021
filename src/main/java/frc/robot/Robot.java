@@ -11,13 +11,13 @@ import java.util.Map;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+//import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -145,7 +145,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    testShuffleboardTab = Shuffleboard.getTab("");
+    testShuffleboardTab = Shuffleboard.getTab("TestTab");
     flSwerveModuleAngleActual = testShuffleboardTab.add("FL_degA", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 360))
@@ -162,6 +162,7 @@ public class Robot extends TimedRobot {
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 360))
     .getEntry();
+    Shuffleboard.selectTab("TestTab");
   }
 
   /**

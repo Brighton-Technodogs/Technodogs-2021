@@ -109,7 +109,7 @@ public class RobotContainer {
 
     driveOdometrySubsystem.setDefaultCommand(driveOdometryCommand);
 
-    shooterSubsystem.setDefaultCommand(autoShootCommand);
+    shooterSubsystem.setDefaultCommand(longShootCommand);
 
     intakeSubsystem.setDefaultCommand(runIntakeCommand);
 
@@ -128,11 +128,11 @@ public class RobotContainer {
     operatorBButton.whenHeld(quickFireCommand);
     operatorYButton.whenHeld(quickFireBackSpinCommand);
 
-    operatorRightBumper.whenHeld(longShootCommand);
+    operatorRightBumper.whenHeld(autoShootCommand);
 
     operatorAButton.whenHeld(runStorageCommand);
 
-    // operatorXButton.whenHeld(reverseStorageCommand);
+    operatorXButton.whenHeld(reverseStorageCommand);
 
     operatorLeftBumper.whenHeld(reverseIntakeCommand);
 
