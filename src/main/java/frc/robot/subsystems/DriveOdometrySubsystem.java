@@ -160,7 +160,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     // Update the odometry in the periodic block
 
     // TODO: Are the motors in the right order?
-    m_odometry.update(new Rotation2d(getHeading()), m_frontLeft.getState(), m_rearLeft.getState(),
+    m_odometry.update(new Rotation2d(java.lang.Math.toRadians(getHeading())), m_frontLeft.getState(), m_rearLeft.getState(),
         m_frontRight.getState(), m_rearRight.getState());
 
         super.periodic();
