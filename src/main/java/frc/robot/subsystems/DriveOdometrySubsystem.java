@@ -97,6 +97,46 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     .withProperties(Map.of("min", -1, "max", 1))
     .getEntry();
 
+    private NetworkTableEntry sbFLDriveTemp = subsystemShuffleboardTab.add("FL Drive Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbFLTwistTemp = subsystemShuffleboardTab.add("FL Twist Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbRLDriveTemp = subsystemShuffleboardTab.add("RL Drive Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbRLTwistTemp = subsystemShuffleboardTab.add("RL Twist Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbFRDriveTemp = subsystemShuffleboardTab.add("FR Drive Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbFRTwistTemp = subsystemShuffleboardTab.add("FR Twist Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbRRDriveTemp = subsystemShuffleboardTab.add("RR Drive Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
+    private NetworkTableEntry sbRRTwistTemp = subsystemShuffleboardTab.add("RR Twist Temp", 0)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", 0, "max", 120))
+    .getEntry();
+
   /**
    * Creates a new DriveOdometrySubsystem.
    */
@@ -152,6 +192,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     sbRLEncoderRaw.setDouble(m_rearLeft.getRawAngle());
     sbRREncoderRaw.setDouble(m_rearRight.getRawAngle());
 
+    sendSwerveModuleTempsToShuffleboard();
 
     sbPoseX.setDouble(m_odometry.getPoseMeters().getTranslation().getX());
     sbPoseY.setDouble(m_odometry.getPoseMeters().getTranslation().getY());
@@ -279,6 +320,17 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(desiredStates[1], false);
     m_rearLeft.setDesiredState(desiredStates[2], false);
     m_rearRight.setDesiredState(desiredStates[3], false);
+  }
+
+  public void sendSwerveModuleTempsToShuffleboard() {
+    sbFLDriveTemp.setDouble(m_frontLeft.getDriveTemperature());
+    sbFLTwistTemp.setDouble(m_frontLeft.getTwistTemperature());
+    sbRLDriveTemp.setDouble(m_rearLeft.getDriveTemperature());
+    sbRLTwistTemp.setDouble(m_rearLeft.getTwistTemperature());
+    sbFRDriveTemp.setDouble(m_frontRight.getDriveTemperature());
+    sbFRTwistTemp.setDouble(m_frontRight.getTwistTemperature());
+    sbRRDriveTemp.setDouble(m_rearRight.getDriveTemperature());
+    sbRRTwistTemp.setDouble(m_rearRight.getTwistTemperature());
   }
 
   /**

@@ -274,6 +274,14 @@ public class SwerveModule {
     
   }
 
+  public double getDriveTemperature(){
+    return m_driveMotor.getTemperature();
+  }
+  
+  public double getTwistTemperature(){
+    return m_twistMotor.getTemperature();
+  }
+
   private double convertTicksToMeters(double ticks){
 
     double wheelCircumference = Constants.DriveSubsystem.kWheelDiameter * Math.PI;
