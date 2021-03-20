@@ -130,7 +130,7 @@ public class RobotContainer {
     operatorBButton.whenHeld(quickFireCommand);
     operatorYButton.whenHeld(quickFireBackSpinCommand);
 
-    operatorRightBumper.whenHeld(autoShootCommand);
+    operatorRightBumper.whenHeld(quickFireCommand);
 
     operatorAButton.whenHeld(runStorageCommand);
 

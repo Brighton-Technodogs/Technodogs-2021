@@ -110,12 +110,12 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       rotation = rotation - rotation * 0.55;
       if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
       {
-        rotation = 0.2;
+        rotation = -0.5;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
       {
-        rotation = -0.2;
+        rotation = 0.5;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
       }
       
