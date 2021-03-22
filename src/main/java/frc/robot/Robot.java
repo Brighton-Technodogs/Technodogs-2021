@@ -170,9 +170,5 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    flSwerveModuleAngleActual.setDouble(fl_twistEncoder.get());
-    frSwerveModuleAngleActual.setDouble(fr_twistEncoder.get());
-    rlSwerveModuleAngleActual.setDouble(rl_twistEncoder.get());
-    rrSwerveModuleAngleActual.setDouble(rr_twistEncoder.get());
   }
 }
