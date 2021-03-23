@@ -278,6 +278,22 @@ public class SwerveModule {
     return m_driveMotor.getTemperature();
   }
   
+  public boolean overheating(){
+    if (m_driveMotor.getTemperature() > 92) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+
+  public boolean gettingWarm(){
+    if (m_driveMotor.getTemperature() > 80)  {
+      return true;
+    }else {
+      return false;
+    }
+  }
+
   public double getTwistTemperature(){
     return m_twistMotor.getTemperature();
   }

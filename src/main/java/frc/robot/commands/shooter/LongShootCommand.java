@@ -58,9 +58,6 @@ public class LongShootCommand extends CommandBase {
   @Override
   public void execute() 
   {
-
-    System.out.println(shootingOffset);
-
     double trigger_value = operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger);
 
     if (trigger_value >= 0.1) 

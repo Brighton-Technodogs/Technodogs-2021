@@ -102,17 +102,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     .withProperties(Map.of("min", 0, "max", 120))
     .getEntry();
 
-    private NetworkTableEntry sbFLTwistTemp = subsystemShuffleboardTab.add("FL Twist Temp", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 120))
-    .getEntry();
-
     private NetworkTableEntry sbRLDriveTemp = subsystemShuffleboardTab.add("RL Drive Temp", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 120))
-    .getEntry();
-
-    private NetworkTableEntry sbRLTwistTemp = subsystemShuffleboardTab.add("RL Twist Temp", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 120))
     .getEntry();
@@ -122,19 +112,19 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     .withProperties(Map.of("min", 0, "max", 120))
     .getEntry();
 
-    private NetworkTableEntry sbFRTwistTemp = subsystemShuffleboardTab.add("FR Twist Temp", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 120))
-    .getEntry();
-
     private NetworkTableEntry sbRRDriveTemp = subsystemShuffleboardTab.add("RR Drive Temp", 0)
     .withWidget(BuiltInWidgets.kDial)
     .withProperties(Map.of("min", 0, "max", 120))
     .getEntry();
 
-    private NetworkTableEntry sbRRTwistTemp = subsystemShuffleboardTab.add("RR Twist Temp", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 120))
+    private NetworkTableEntry sbDriveTempWarn = subsystemShuffleboardTab.add("Temperature Warn", 0)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withProperties(Map.of("Color when true", 0xFFFF0000, "Color when false", 0x00000000))
+    .getEntry();
+
+    private NetworkTableEntry sbOverheating = subsystemShuffleboardTab.add("Overheating", 0)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .withProperties(Map.of("Color when true", 0xFF000000, "Color when false", 0x00000000))
     .getEntry();
 
   /**
@@ -324,13 +314,26 @@ public class DriveOdometrySubsystem extends SubsystemBase {
 
   public void sendSwerveModuleTempsToShuffleboard() {
     sbFLDriveTemp.setDouble(m_frontLeft.getDriveTemperature());
-    sbFLTwistTemp.setDouble(m_frontLeft.getTwistTemperature());
     sbRLDriveTemp.setDouble(m_rearLeft.getDriveTemperature());
-    sbRLTwistTemp.setDouble(m_rearLeft.getTwistTemperature());
     sbFRDriveTemp.setDouble(m_frontRight.getDriveTemperature());
-    sbFRTwistTemp.setDouble(m_frontRight.getTwistTemperature());
     sbRRDriveTemp.setDouble(m_rearRight.getDriveTemperature());
-    sbRRTwistTemp.setDouble(m_rearRight.getTwistTemperature());
+    sbDriveTempWarn.forceSetBoolean(driveTempCaution());
+    sbOverheating.forceSetBoolean(driveOverTemp());
+  }
+
+  public boolean driveOverTemp() {
+    if (m_frontLeft.overheating()||m_frontRight.overheating()||m_rearLeft.overheating()||m_rearRight.overheating()) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+  public boolean driveTempCaution() {
+    if (m_frontLeft.gettingWarm()||m_frontRight.gettingWarm()||m_rearLeft.gettingWarm()||m_rearRight.gettingWarm()) {
+      return true;
+    }else {
+      return false;
+    }
   }
 
   /**

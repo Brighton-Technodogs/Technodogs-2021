@@ -64,7 +64,7 @@ public final class Constants {
 
         //kPXController
 
-        public static final boolean kGyroReversed = true;
+        public static final boolean kGyroReversed = false;
 
         public static final double kWheelBase = 0.5842;  // in meters. = 23 inches
         public static final double kTrackWidth = 0.5588; // in meters. = 22 inches

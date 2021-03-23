@@ -145,24 +145,6 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    testShuffleboardTab = Shuffleboard.getTab("TestTab");
-    flSwerveModuleAngleActual = testShuffleboardTab.add("FL_degA", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
-    .getEntry();
-    frSwerveModuleAngleActual = testShuffleboardTab.add("FR_degA", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
-    .getEntry();
-    rlSwerveModuleAngleActual = testShuffleboardTab.add("RL_degA", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
-    .getEntry();
-    rrSwerveModuleAngleActual = testShuffleboardTab.add("RR_degA", 0)
-    .withWidget(BuiltInWidgets.kDial)
-    .withProperties(Map.of("min", 0, "max", 360))
-    .getEntry();
-    Shuffleboard.selectTab("TestTab");
   }
 
   /**
