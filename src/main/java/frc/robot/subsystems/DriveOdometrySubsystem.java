@@ -21,9 +21,11 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
@@ -41,6 +43,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
+
+  private Field2d v_Field2d = new Field2d();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(Constants.DriveSubsystem.kDriveKinematics, getAngle());
@@ -127,6 +131,10 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     .withProperties(Map.of("Color when true", 0xFF000000, "Color when false", 0x00000000))
     .getEntry();
 
+    private NetworkTableEntry sbDriveAligned = subsystemShuffleboardTab.add("Drive Aligned", false)
+    .withWidget(BuiltInWidgets.kBooleanBox)
+    .getEntry();
+
   /**
    * Creates a new DriveOdometrySubsystem.
    */
@@ -162,6 +170,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
                                     Constants.DriveSubsystem.kRearRightEncoderOffset,
                                     subsystemShuffleboardTab,
                                     "RR");
+
+    subsystemShuffleboardTab.add(v_Field2d);
   }
 
   /**
@@ -187,6 +197,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     sbPoseX.setDouble(m_odometry.getPoseMeters().getTranslation().getX());
     sbPoseY.setDouble(m_odometry.getPoseMeters().getTranslation().getY());
     sbPoseRotation.setDouble(m_odometry.getPoseMeters().getRotation().getDegrees());
+    v_Field2d.setRobotPose(m_odometry.getPoseMeters().getTranslation().getX(), m_odometry.getPoseMeters().getTranslation().getY(), m_odometry.getPoseMeters().getRotation());
     // sbDriveGyro.setValue(m_gyro.getAngle());
     // Update the odometry in the periodic block
 
@@ -370,6 +381,14 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (Constants.DriveSubsystem.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public void setAligned() {
+    sbDriveAligned.forceSetBoolean(true);
+  }
+
+  public void unsetAligned() {
+    sbDriveAligned.forceSetBoolean(false);
   }
 
 

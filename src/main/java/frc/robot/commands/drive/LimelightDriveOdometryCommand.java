@@ -112,11 +112,13 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       {
         rotation = -0.5;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
+        mDriveSubsystem.unsetAligned();
       }
       else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
       {
         rotation = 0.5;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
+        mDriveSubsystem.unsetAligned();
       }
       
       if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // stop rotation and tell dashboard that the robot is aligned
@@ -124,6 +126,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
+        mDriveSubsystem.setAligned();
       }
       else if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
       {
@@ -131,6 +134,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
         System.out.println("Pausing rotation alignment while LED is off...");
         rotation = 0;
         SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align on
+        mDriveSubsystem.unsetAligned();
       }
 
       // Not needed from Jacob T. Save for later if desired
