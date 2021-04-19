@@ -44,6 +44,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
   boolean currentButton = false;
 
   Timer limeTime = new Timer(); // it is lime time once again, my friends
+  Timer zeroTime = new Timer();
 
   public LimelightDriveOdometryCommand(DriveOdometrySubsystem driveSubsystem) {
     // System.out.println("Constructing DriveCommand");
@@ -66,17 +67,28 @@ public class LimelightDriveOdometryCommand extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    //nice
     double directionX = -m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
     double directionY = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
     double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
     boolean slowMode = m_driverController.getBumper(Hand.kLeft);
 
+    // makes start button togge fieldOriented boolean
     previousButton = currentButton;
     currentButton = m_driverController.getStartButton();
-
     if (currentButton && !previousButton) {
       fieldRelative = fieldRelative ? false : true;
+    }
+
+    // back button to reset heading for field oriented mode
+    // TODO: make sure this doesn't affect the odometry rotation calculation
+    if (m_driverController.getBackButton()) {
+      zeroTime.start();
+    } else {
+      zeroTime.stop();
+    }
+
+    if  (zeroTime.get() >= 1) {
+      this.mDriveSubsystem.zeroFO();
     }
 
     if (m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2) {

@@ -41,6 +41,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   private double directionStickDeadZone = 0.08;
   private double rotateStickDeadZone = 0.08;
 
+  private double foZeroAngle = 0;
+
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
 
@@ -181,7 +183,16 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
+    // Also only using offset if fieldRelative is true. this is a kind of hacky way to determine if fieldOriented is enabled because it just asks shuffleboard
+    return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0) + (sFieldRelative.getBoolean(false) ? foZeroAngle : 0));
+  }
+
+  public Rotation2d getNZAngle() {
     return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0));
+  }
+
+  public void zeroFO() {
+    foZeroAngle = getNZAngle().getDegrees() * -1;
   }
 
   @Override
