@@ -339,19 +339,11 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     sbRLDriveTemp.setDouble(m_rearLeft.getDriveTemperature());
     sbFRDriveTemp.setDouble(m_frontRight.getDriveTemperature());
     sbRRDriveTemp.setDouble(m_rearRight.getDriveTemperature());
-    sbDriveTempWarn.forceSetBoolean(driveTempCaution());
     sbOverheating.forceSetBoolean(driveOverTemp());
   }
 
   public boolean driveOverTemp() {
     if (m_frontLeft.overheating()||m_frontRight.overheating()||m_rearLeft.overheating()||m_rearRight.overheating()) {
-      return true;
-    }else {
-      return false;
-    }
-  }
-  public boolean driveTempCaution() {
-    if (m_frontLeft.gettingWarm()||m_frontRight.gettingWarm()||m_rearLeft.gettingWarm()||m_rearRight.gettingWarm()) {
       return true;
     }else {
       return false;
@@ -378,7 +370,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   /**
    * Returns the heading of the robot.
    *
-   * @return the robot's heading in degrees, from 180 to 180
+   * @return the robot's heading in Radians, with 0 being the last reset point
    */
   public double getHeading() {
     // return 0;

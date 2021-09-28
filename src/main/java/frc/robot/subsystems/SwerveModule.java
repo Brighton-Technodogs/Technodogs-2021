@@ -79,7 +79,7 @@ public class SwerveModule {
                         Constants.DriveSubsystem.kSwerveDrivePID_I,
                         Constants.DriveSubsystem.kSwerveDrivePID_D);
 
-  //Using a TrapezoidProfile PIDController to allow for smooth turning
+  //Using a Trapezoid ProfiledPIDController to allow for smooth turning
   // ^^ Actually doesn't use a ProfiledPIDController like a boss
   private final FixedPIDController m_twistPIDController
       = new FixedPIDController(
@@ -279,23 +279,11 @@ public class SwerveModule {
   }
   
   public boolean overheating(){
-    if (m_driveMotor.getTemperature() > 92) {
+    if (m_driveMotor.getTemperature() >= 90) {
       return true;
     }else {
       return false;
     }
-  }
-
-  public boolean gettingWarm(){
-    if (m_driveMotor.getTemperature() > 80)  {
-      return true;
-    }else {
-      return false;
-    }
-  }
-
-  public double getTwistTemperature(){
-    return m_twistMotor.getTemperature();
   }
 
   private double convertTicksToMeters(double ticks){
