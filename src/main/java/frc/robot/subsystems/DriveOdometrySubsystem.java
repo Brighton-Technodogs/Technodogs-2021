@@ -191,8 +191,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0));
   }
 
-  public void zeroFO() {
-    foZeroAngle = getNZAngle().getDegrees() * -1;
+  public Rotation2d getFOAngle() {
+    return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0) + 270);
   }
 
   @Override
@@ -306,17 +306,17 @@ public class DriveOdometrySubsystem extends SubsystemBase {
         && (rot < rotateStickDeadZone 
         && rot > rotateStickDeadZone*-1)) 
     {
-      m_frontLeft.setDesiredState(swerveModuleStates[2], true);
-      m_frontRight.setDesiredState(swerveModuleStates[0], true);
-      m_rearLeft.setDesiredState(swerveModuleStates[3], true);
-      m_rearRight.setDesiredState(swerveModuleStates[1], true);
+      m_frontLeft.setDesiredState(swerveModuleStates[2], true); //2
+      m_frontRight.setDesiredState(swerveModuleStates[0], true); //0
+      m_rearLeft.setDesiredState(swerveModuleStates[3], true); //3
+      m_rearRight.setDesiredState(swerveModuleStates[1], true); //1
     }
 
     else{
-      m_frontLeft.setDesiredState(swerveModuleStates[2], false);
-      m_frontRight.setDesiredState(swerveModuleStates[0], false);
-      m_rearLeft.setDesiredState(swerveModuleStates[3], false);
-      m_rearRight.setDesiredState(swerveModuleStates[1], false);
+      m_frontLeft.setDesiredState(swerveModuleStates[2], false); //2
+      m_frontRight.setDesiredState(swerveModuleStates[0], false); //0
+      m_rearLeft.setDesiredState(swerveModuleStates[3], false); //3
+      m_rearRight.setDesiredState(swerveModuleStates[1], false); //1
 
     }
   }
