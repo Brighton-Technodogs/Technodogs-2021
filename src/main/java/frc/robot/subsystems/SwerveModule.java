@@ -277,14 +277,6 @@ public class SwerveModule {
   public double getDriveTemperature(){
     return m_driveMotor.getTemperature();
   }
-  
-  public boolean overheating(){
-    if (m_driveMotor.getTemperature() >= 90) {
-      return true;
-    }else {
-      return false;
-    }
-  }
 
   private double convertTicksToMeters(double ticks){
 

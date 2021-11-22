@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.StreamReadFeature;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -33,6 +34,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
   private final DriveOdometrySubsystem mDriveSubsystem;
 
   XboxController m_driverController = new XboxController(Constants.DriverControl.driverControllerPort);
+  XboxController m_operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -42,8 +44,6 @@ public class LimelightDriveOdometryCommand extends CommandBase {
   boolean fieldRelative = false;
   boolean previousButton = false;
   boolean currentButton = false;
-
-  Timer limeTime = new Timer(); // it is lime time once again, my friends
   Timer zeroTime = new Timer();
 
   public LimelightDriveOdometryCommand(DriveOdometrySubsystem driveSubsystem) {
@@ -62,8 +62,6 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     // boolean fieldRelative = false;
   }
 
-  // Lidar lidarCrab = new Lidar(new DigitalInput(10));
-
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
@@ -72,7 +70,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
     boolean slowMode = m_driverController.getBumper(Hand.kLeft);
 
-    // makes start button togge fieldOriented boolean
+    // makes start button toggle fieldOriented boolean
     previousButton = currentButton;
     currentButton = m_driverController.getStartButton();
     if (currentButton && !previousButton) {
@@ -80,7 +78,6 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     }
 
     // back button to reset heading for field oriented mode
-    // TODO: make sure this doesn't affect the odometry rotation calculation
     if (m_driverController.getBackButton()) {
       zeroTime.start();
     } else {
@@ -92,26 +89,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     }
 
     if (m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2) {
-      // limelightTable.getEntry("ledMode").forceSetNumber(1); // set Limelight LED
-      // Mode to OFF
-
-      //SmartDashboard.putNumber("LimeLight Timer", limeTime.get()); // send the current value of the limelight timer to the dashboard
-      if (limeTime.get() == 0) {
-        System.out.println("Starting Limelight Timer and turning LED On");
-        limeTime.start(); // start the limelight LED timer
-        limelightTable.getEntry("ledMode").forceSetNumber(3); // set Limelight LED Mode to ON
-      } else if (limeTime.get() >= 5.75 && limelightTable.getEntry("ledMode").getDouble(0) == 1) { // if timer is over 5.75 and LED is off
-        System.out.println("Limelight timer has reached 5.75 seconds and will now reset");
-        limeTime.stop(); // stop the limelight timer
-        limeTime.reset(); // reset the limelight timer to 0
-      } else if (limeTime.get() >= 5 && limelightTable.getEntry("ledMode").getDouble(0) == 3) { // if timer is over 5 seconds and LED is on
-        System.out.println("Limelight timer has reached 5 seconds and the LED will turn off");
-        limelightTable.getEntry("ledMode").forceSetNumber(1); // Set the LED to off
-      } else if (limeTime.get() < 5 && limelightTable.getEntry("ledMode").getDouble(0) == 1) // if timer is less than 5 and LED is off
-      {
-        System.out.println("Limelight timer is under 5 seconds, turning the LED on");
-        limelightTable.getEntry("ledMode").forceSetNumber(3); // Set the LED to ON
-      }
+      limelightTable.getEntry("ledMode").setNumber(3); // set Limelight LED
 
       // find the center of target
       horizontalEntry = limelightTable.getEntry("tx");
@@ -120,33 +98,28 @@ public class LimelightDriveOdometryCommand extends CommandBase {
 
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
-      if (rotation > 0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
+      if (rotation > 0.2)
       {
         rotation = -0.5;
-        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
         mDriveSubsystem.unsetAligned();
+        m_operatorController.setRumble(RumbleType.kRightRumble, 0);
+        m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
-      else if (rotation < -0.2 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // only rotate if LED is on
+      else if (rotation < -0.2)
       {
         rotation = 0.5;
-        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align off
         mDriveSubsystem.unsetAligned();
+        m_operatorController.setRumble(RumbleType.kRightRumble, 0);
+        m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
       
-      if (Math.abs(rotation) <= 0.015 && limelightTable.getEntry("ledMode").getDouble(0) == 3) // stop rotation and tell dashboard that the robot is aligned
+      if (Math.abs(rotation) <= 0.015) // stop rotation and tell dashboard that the robot is aligned
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
-        SmartDashboard.putBoolean("Drive Aligned", true); // Dashboard drive align on
         mDriveSubsystem.setAligned();
-      }
-      else if (Math.abs(rotation) <= 0.015 || limelightTable.getEntry("ledMode").getDouble(0) == 1) // pause rotation if robot is aligned, or the LED is off
-      {
-        // this will be run when once the robot has aligned it self with the target
-        System.out.println("Pausing rotation alignment while LED is off...");
-        rotation = 0;
-        SmartDashboard.putBoolean("Drive Aligned", false); // Dashboard drive align on
-        mDriveSubsystem.unsetAligned();
+        m_operatorController.setRumble(RumbleType.kRightRumble, 0.5);
+        m_operatorController.setRumble(RumbleType.kLeftRumble, 0.5);
       }
 
       // Not needed from Jacob T. Save for later if desired
@@ -170,39 +143,23 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       }
     } else {
 
-      if (limelightTable.getEntry("ledMode").getDouble(0) == 3 || limeTime.get() >= 5) // If limelight led is set on or timer is greater than 5
+      if (limelightTable.getEntry("ledMode").getDouble(0) == 3) // If limelight led is set on or timer is greater than 5
       {
-        // ^^^^^^^^^ the limeTime.get() >=5 makes the timer reset when targeting mode is
-        // exited between 5 and 5.75 seconds
-        limeTime.stop();
-        limeTime.reset();
-        limelightTable.getEntry("ledMode").forceSetDouble(1);
-        SmartDashboard.putBoolean("Drive Aligned", false); // Shuffleboard drive align off
-        SmartDashboard.putNumber("LimeLight Timer", 0); // set the limelight timer to 0 when exiting alignment sequence
-        System.out.println("Targeting Mode Exited, turning LED off");
+        limelightTable.getEntry("ledMode").setDouble(1);
+        mDriveSubsystem.unsetAligned();
+        m_operatorController.setRumble(RumbleType.kRightRumble, 0);
+        m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
 
       rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
 
-      // SmartDashboard.putNumber("X Box X-Axis", directionX);
-      // SmartDashboard.putNumber("X Box Y-Axis", directionY);
-      // SmartDashboard.putNumber("X Box Rotation", rotation);
-
       // drive normally with joysticks
-      // this.mDriveSubsystem.drive(directionX, directionY, rotation, false, true,
-      // false);
       if (slowMode) {
         this.mDriveSubsystem.drive(directionX / 2, directionY / 2, rotation / 2, fieldRelative);
       } else {
         this.mDriveSubsystem.drive(directionX, directionY, rotation, fieldRelative);
       }
     }
-
-    // Robot.driveSubsystem.drive(-Robot.oi.driverController.getLeftStickXValue(),
-    // -Robot.oi.driverController.getLeftStickYValue(),
-    // -Robot.oi.driverController.getRightStickXValue(), false,
-    // Robot.oi.driverController.getRightBumperPressed(),
-    // Robot.oi.driverController.getXButtonPressed());
   }
 
 }

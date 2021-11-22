@@ -41,7 +41,8 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   private double directionStickDeadZone = 0.08;
   private double rotateStickDeadZone = 0.08;
 
-  private double foZeroAngle = 0;
+  private double foZeroOffset = 0;
+  private Boolean fieldOrientedOn = false;
 
   // The gyro sensor
   private final Gyro m_gyro = new ADXRS450_Gyro();
@@ -123,16 +124,6 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     .withProperties(Map.of("min", 0, "max", 120))
     .getEntry();
 
-    private NetworkTableEntry sbDriveTempWarn = subsystemShuffleboardTab.add("Temperature Warn", 0)
-    .withWidget(BuiltInWidgets.kBooleanBox)
-    .withProperties(Map.of("Color when true", 0xFFFF0000, "Color when false", 0x00000000))
-    .getEntry();
-
-    private NetworkTableEntry sbOverheating = subsystemShuffleboardTab.add("Overheating", 0)
-    .withWidget(BuiltInWidgets.kBooleanBox)
-    .withProperties(Map.of("Color when true", 0xFF000000, "Color when false", 0x00000000))
-    .getEntry();
-
     private NetworkTableEntry sbDriveAligned = subsystemShuffleboardTab.add("Drive Aligned", false)
     .withWidget(BuiltInWidgets.kBooleanBox)
     .getEntry();
@@ -183,8 +174,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    */
   public Rotation2d getAngle() {
     // Negating the angle because WPILib gyros are CW positive.
-    // Also only using offset if fieldRelative is true. this is a kind of hacky way to determine if fieldOriented is enabled because it just asks shuffleboard
-    return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0) + (sFieldRelative.getBoolean(false) ? foZeroAngle : 0));
+    return Rotation2d.fromDegrees(m_gyro.getAngle() * (Constants.DriveSubsystem.kGyroReversed ? 1.0 : -1.0) + (this.fieldOrientedOn ? foZeroOffset : 0));
   }
 
   public Rotation2d getNZAngle() {
@@ -212,9 +202,9 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     // sbDriveGyro.setValue(m_gyro.getAngle());
     // Update the odometry in the periodic block
 
-    // TODO: Are the motors in the right order?
-    m_odometry.update(new Rotation2d(java.lang.Math.toRadians(getHeading())), m_frontLeft.getState(), m_rearLeft.getState(),
-        m_frontRight.getState(), m_rearRight.getState());
+    // Are the motors in the right order? They were not, but they are now
+    m_odometry.update(new Rotation2d(java.lang.Math.toRadians(getHeading())), m_frontLeft.getState(), m_frontRight.getState(),
+        m_rearLeft.getState(), m_rearRight.getState());
 
         super.periodic();
   }
@@ -339,15 +329,6 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     sbRLDriveTemp.setDouble(m_rearLeft.getDriveTemperature());
     sbFRDriveTemp.setDouble(m_frontRight.getDriveTemperature());
     sbRRDriveTemp.setDouble(m_rearRight.getDriveTemperature());
-    sbOverheating.forceSetBoolean(driveOverTemp());
-  }
-
-  public boolean driveOverTemp() {
-    if (m_frontLeft.overheating()||m_frontRight.overheating()||m_rearLeft.overheating()||m_rearRight.overheating()) {
-      return true;
-    }else {
-      return false;
-    }
   }
 
   /**
@@ -361,10 +342,15 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   }
 
   /**
-   * Zeroes the heading of the robot.
+   * Zeroes the heading of the robot. Please note that this will break odometry, so it is not inteded to be used during competition
    */
   public void zeroHeading() {
     m_gyro.reset();
+  }
+
+  public void zeroFO () {
+    // TODO: check that this doesn't break field oriented mode
+    this.foZeroOffset = (m_gyro.getAngle() % 360); // normalize gyro angle to 0-360 as to not cause any problems
   }
 
   /**
@@ -387,37 +373,11 @@ public class DriveOdometrySubsystem extends SubsystemBase {
   }
 
   public void setAligned() {
-    sbDriveAligned.forceSetBoolean(true);
+    sbDriveAligned.setBoolean(true);
   }
 
   public void unsetAligned() {
-    sbDriveAligned.forceSetBoolean(false);
+    sbDriveAligned.setBoolean(false);
   }
-
-
-//   public void disableFrontRightWheelRotation(){
-//     m_frontRight.disableRotation();
-// }
-// public void disableFrontLeftWheelRotation(){
-//   m_frontLeft.disableRotation();
-// }
-// public void disableRearRightWheelRotation(){
-//   m_rearRight.disableRotation();
-// }
-// public void disableRearLeftWheelRotation(){
-//   m_rearLeft.disableRotation();
-// }
-// public void enableFrontRightWheelRotation(){
-//   m_frontRight.enableRotation();
-// }
-// public void enableFrontLeftWheelRotation(){
-//   m_frontLeft.enableRotation();
-// }
-// public void enableRearRightWheelRotation(){
-//   m_rearRight.enableRotation();
-// }
-// public void enableRearLeftWheelRotation(){
-//   m_rearLeft.enableRotation();
-// }
 
 }

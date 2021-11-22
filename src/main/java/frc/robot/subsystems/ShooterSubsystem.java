@@ -337,8 +337,7 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
 
     SmartDashboard.putNumber("Current Found Shooting Height", getVertical());
     SmartDashboard.putNumber("Current Velocity Target", velocity);
-    SmartDashboard.putNumber("Current Percentage Target", velocity / 17500);
-    spinToSpeed(velocity / 17500);
+    spinToSpeed(velocity);
   }
 
   //formula for shooting speed with velocity and height
@@ -429,9 +428,9 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
   //set the shooter motors to desired speed using velocity
   public void spinToSpeed (double spinSpeed)
   {
-    rightShooter.set(ControlMode.PercentOutput, spinSpeed * 1); // encoder ticks per 100ms
-    bottomShooter.set(ControlMode.PercentOutput, -1 * spinSpeed * bottomSpin);
-    leftShooter.set(ControlMode.PercentOutput, spinSpeed *  -1);
+    rightShooter.set(ControlMode.Velocity, spinSpeed * 1); // encoder ticks per 100ms
+    bottomShooter.set(ControlMode.Velocity, -1 * spinSpeed * bottomSpin);
+    leftShooter.set(ControlMode.Velocity, spinSpeed *  -1);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());

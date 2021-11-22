@@ -80,8 +80,8 @@ public class AutoShootCommand extends CommandBase {
 
     shooterSubsystem.displayEncoders();
 
-    if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
-    {
+    //if (operatorController.getRawAxis(Constants.OperatorControl.operatorRightTrigger) > 0.2)
+    //{
       //if trigger is held shoot at desired speed
       //shooterSubsystem.shoot(autoShooterSpeed, autoShooterSpeed * 1.75, autoShooterSpeed * 1.755);
       // shooterSubsystem.SpinToSpeed(autoShooterSpeed);
@@ -97,14 +97,14 @@ public class AutoShootCommand extends CommandBase {
       //   shooterSubsystem.disableLimelight();
       // }
   
-    }
-    else
-    {
+    //}
+    //else
+    //{
       //shooterSubsystem.disableLimelight();
       //else reset to 0 motor speed
-      shooterSubsystem.shoot(0, 0, 0);
-      firstShot = true;
-    }
+      // shooterSubsystem.shoot(0, 0, 0);
+      // firstShot = true;
+    //}
 
     /*SmartDashboard.putNumber("Array Index", autoShooterSpeed);
     

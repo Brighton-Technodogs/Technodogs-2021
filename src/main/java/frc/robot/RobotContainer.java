@@ -127,10 +127,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     System.out.println("Configuring Button Bindings");
 
-    operatorBButton.whenHeld(quickFireCommand);
-    operatorYButton.whenHeld(quickFireBackSpinCommand);
+    operatorBButton.whenHeld(quickFireCommand); // quickfire = 45% shooter power
+    operatorYButton.whenHeld(quickFireBackSpinCommand); // adds some back spin to the ball
 
-    operatorRightBumper.whenHeld(quickFireCommand);
+    operatorRightBumper.whenHeld(autoShootCommand); // calculates speeds from limelight
 
     operatorAButton.whenHeld(runStorageCommand);
 
