@@ -197,7 +197,7 @@ public class SwerveModule {
     double currentAngle_scaled;
 
     // display the actual angle of the wheel on shuffleboard.
-    // currentAngle -= this.offset;
+    currentAngle -= this.offset;
 
     currentAngle_scaled = MathUtil.inputModulus(currentAngle, 0, 360);
 
@@ -215,6 +215,9 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState state, boolean disableSwerve) {
     // Calculate the drive output from the drive PID controller.
 
+    new Rotation2d();
+    state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(this.m_twistEncoder.get()-offset));
+
     double setpoint, setpoint_scaled;
 
     // Our encoders are not aligned such that 0 means "the front of the robot".
@@ -224,6 +227,7 @@ public class SwerveModule {
 
     // setpoint = 200;
 
+    // TODO: note for future Beckett: you might have to comment this out if it starts oscillating
     setpoint += offset;
 
     // Because we added an offset, we now have to normalize the angle to 0-360
