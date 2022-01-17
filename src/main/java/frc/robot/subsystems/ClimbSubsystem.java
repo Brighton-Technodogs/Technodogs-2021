@@ -8,17 +8,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.controllers.LazyCANSparkMax;
+import frc.lib.controllers.LazyVictorSPX;
 import frc.robot.Constants;
 
 public class ClimbSubsystem extends SubsystemBase {
   
-  private VictorSPX climbMotor = new VictorSPX(Constants.ClimbSubsystemConstants.climbMotor);
-  private CANSparkMax winchMotor = new CANSparkMax(51, MotorType.kBrushless);
+  private LazyVictorSPX climbMotor = new LazyVictorSPX(Constants.ClimbSubsystemConstants.climbMotor);
+  private LazyCANSparkMax winchMotor = new LazyCANSparkMax(51, MotorType.kBrushless);
 
 
   public ClimbSubsystem() {

@@ -11,16 +11,13 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.controllers.LazyTalonFX;
 import frc.lib.sensors.Limelight;
 import frc.lib.sensors.LimelightPositionCalc;
 import frc.lib.sensors.Limelight.LimeLedMode;
@@ -29,9 +26,9 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   
   //create the shooter objects from constants can ID
-  private TalonFX bottomShooter = new TalonFX(Constants.ShooterSubsystem.bottomShooterFalconCan);
-  private TalonFX rightShooter = new TalonFX(Constants.ShooterSubsystem.rightShooterFalconCan);
-  private TalonFX leftShooter = new TalonFX(Constants.ShooterSubsystem.leftShooterFalconCan);
+  private LazyTalonFX bottomShooter = new LazyTalonFX(Constants.ShooterSubsystem.bottomShooterFalconCan);
+  private LazyTalonFX rightShooter = new LazyTalonFX(Constants.ShooterSubsystem.rightShooterFalconCan);
+  private LazyTalonFX leftShooter = new LazyTalonFX(Constants.ShooterSubsystem.leftShooterFalconCan);
   
   //create objects of sensor information for each shooter
   public final TalonFXSensorCollection bottomShooterSensor;
