@@ -9,13 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.auto.AutonomousSequentialCommandGroup;
-import frc.robot.commands.auto.AutoShootBasicWithXMode.AutoShootWithXModeSequesntialCommand;
-import frc.robot.commands.auto.autoBackwardsShooting.AutonomousBackwardsShootingSequentialCommand;
 import frc.robot.commands.climb.RunClimbCommand;
-import frc.robot.commands.drive.AssistedLimelightDriveCommand;
 import frc.robot.commands.drive.DriveOdometryCommand;
 import frc.robot.commands.drive.LimelightDriveOdometryCommand;
 import frc.robot.commands.intake.DeployIntakeCommand;
@@ -27,12 +24,12 @@ import frc.robot.commands.shooter.ChangeConfigCommand;
 import frc.robot.commands.shooter.LongShootCommand;
 import frc.robot.commands.shooter.QuickFireBackSpinCommand;
 import frc.robot.commands.shooter.QuickFireCommand;
+import frc.robot.commands.shooter.ShooterTestingCommand;
 import frc.robot.commands.storage.ReverseStorageCommand;
 import frc.robot.commands.storage.RunStorageCommand;
 import frc.robot.commands.storage.RunStorageWithSensorCommand;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveOdometrySubsystem;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
@@ -67,6 +64,7 @@ public class RobotContainer {
   private final QuickFireBackSpinCommand quickFireBackSpinCommand = new QuickFireBackSpinCommand(shooterSubsystem);
   private final ChangeConfigCommand changeConfigCommand = new ChangeConfigCommand(shooterSubsystem);
   private final LongShootCommand longShootCommand = new LongShootCommand(shooterSubsystem);
+  private final ShooterTestingCommand shooterTestingCommand = new ShooterTestingCommand(shooterSubsystem);
 
   //Storage Commands
   private final RunStorageCommand runStorageCommand = new RunStorageCommand(storageSubsystem);
@@ -94,10 +92,10 @@ public class RobotContainer {
   private final JoystickButton operatorAButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
   private final JoystickButton operatorXButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
   private final JoystickButton operatorYButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-  private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+  private final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
   private final JoystickButton operatorSelectButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
-  private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+  private final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
 
   //Driver Controller and Buttons
   private final XboxController driverController = new XboxController(0);
@@ -116,6 +114,9 @@ public class RobotContainer {
     intakeSubsystem.setDefaultCommand(runIntakeCommand);
 
     climbSubsystem.setDefaultCommand(runClimbCommand);
+
+    SmartDashboard.putData(shooterTestingCommand);
+    //SmartDashboard.putData();
  }
 
   /**

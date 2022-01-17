@@ -11,15 +11,15 @@ import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -272,7 +272,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
             : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
 
     // System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);
-    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
     // System.out.println("Normalized " + swerveModuleStates[0].speedMetersPerSecond);
 
 
@@ -317,7 +317,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DriveSubsystem.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0], false);
     m_frontRight.setDesiredState(desiredStates[1], false);
     m_rearLeft.setDesiredState(desiredStates[2], false);

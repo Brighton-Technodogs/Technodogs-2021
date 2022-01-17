@@ -1,0 +1,31 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [51]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ClimbSubsystem": "Subsystem",
+      "/LiveWindow/DriveOdometrySubsystem": "Subsystem",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
+      "/LiveWindow/ShooterSubsystem": "Subsystem",
+      "/LiveWindow/StorageSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/ADXRS450_Gyro[0]": "Gyro",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/Shuffleboard/Drive Odometry Subsystem/ADXRS450_Gyro[0]": "Gyro",
+      "/Shuffleboard/Drive Odometry Subsystem/Field": "Field2d",
+      "/SmartDashboard/ShooterTestingCommand": "Command"
+    }
+  }
+}

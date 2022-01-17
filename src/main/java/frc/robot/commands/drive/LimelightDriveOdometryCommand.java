@@ -9,19 +9,15 @@
 // it from being updated in the future.
 
 package frc.robot.commands.drive;
-
-import com.fasterxml.jackson.core.StreamReadFeature;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.lib.sensors.Limelight;
+import frc.lib.sensors.Limelight.LimeLedMode;
 import frc.robot.Constants;
 // import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveOdometrySubsystem;
@@ -36,7 +32,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
   XboxController m_driverController = new XboxController(Constants.DriverControl.driverControllerPort);
   XboxController m_operatorController = new XboxController(Constants.OperatorControl.operatorControllerPort);
 
-  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  Limelight limelight = new Limelight();
 
   NetworkTableEntry horizontalEntry;
   double horizontal;
@@ -68,7 +64,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     double directionX = -m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickXAxis);
     double directionY = m_driverController.getRawAxis(Constants.DriverControl.driverControllerLeftStickYAxis);
     double rotation = m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightStickXAxis);
-    boolean slowMode = m_driverController.getBumper(Hand.kLeft);
+    boolean slowMode = m_driverController.getLeftBumper();
 
     // makes start button toggle fieldOriented boolean
     previousButton = currentButton;
@@ -89,23 +85,22 @@ public class LimelightDriveOdometryCommand extends CommandBase {
     }
 
     if (m_driverController.getRawAxis(Constants.DriverControl.driverControllerRightTriggerAxis) > 0.2) {
-      limelightTable.getEntry("ledMode").setNumber(3); // set Limelight LED
+      limelight.setLED(LimeLedMode.ON); // set Limelight LED
 
       // find the center of target
-      horizontalEntry = limelightTable.getEntry("tx");
-      horizontal = horizontalEntry.getDouble(0);
+      horizontal = limelight.getHorizontalOffset();
       horizontal = horizontal - 2.9/* + limelightTable.getEntry("thor").getDouble(0) / 15 */;
 
       rotation = horizontal / 23.0;
       rotation = rotation - rotation * 0.55;
-      if (rotation > 0.2)
+      if (rotation > 0.1)
       {
         rotation = -0.5;
         mDriveSubsystem.unsetAligned();
         m_operatorController.setRumble(RumbleType.kRightRumble, 0);
         m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
-      else if (rotation < -0.2)
+      else if (rotation < -0.1)
       {
         rotation = 0.5;
         mDriveSubsystem.unsetAligned();
@@ -113,7 +108,7 @@ public class LimelightDriveOdometryCommand extends CommandBase {
         m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
       
-      if (Math.abs(rotation) <= 0.015) // stop rotation and tell dashboard that the robot is aligned
+      if (Math.abs(rotation) <= 0.09) // stop rotation and tell dashboard that the robot is aligned 0.015
       {
         // this will be run when once the robot has aligned it self with the target
         rotation = 0;
@@ -143,9 +138,9 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       }
     } else {
 
-      if (limelightTable.getEntry("ledMode").getDouble(0) == 3) // If limelight led is set on or timer is greater than 5
+      if (limelight.getLED() == LimeLedMode.ON) // If limelight led is set on or timer is greater than 5
       {
-        limelightTable.getEntry("ledMode").setDouble(1);
+        limelight.setLED(LimeLedMode.OFF);
         mDriveSubsystem.unsetAligned();
         m_operatorController.setRumble(RumbleType.kRightRumble, 0);
         m_operatorController.setRumble(RumbleType.kLeftRumble, 0);

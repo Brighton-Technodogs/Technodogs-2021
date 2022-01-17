@@ -21,6 +21,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.sensors.Limelight;
+import frc.lib.sensors.LimelightPositionCalc;
+import frc.lib.sensors.Limelight.LimeLedMode;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -46,6 +49,10 @@ public class ShooterSubsystem extends SubsystemBase {
   int maxIntegralAccumulator = 1000;
 
   double bottomSpin = 4; //1,25
+
+  Limelight limelight = new Limelight();
+  // numbers: Camera Height, Camera Angle, Target Height
+  LimelightPositionCalc limePosCalc = new LimelightPositionCalc(limelight, 2.5, 45, 8); // TODO: figure out these numbers
 
 
   private ShuffleboardTab subsystemShuffleboardTab = Shuffleboard.getTab("Shooter Subsystem");
@@ -141,6 +148,9 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
             .withProperties(Map.of("min", -1, "max", 1)) 
             .getEntry();
 
+private NetworkTableEntry calcDist = subsystemShuffleboardTab.add("Calc Dist", 0)
+            .getEntry();
+
   /**
    * Creates a new ShooterSubsystem.
    */
@@ -223,206 +233,20 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
     SmartDashboard.putNumber("Left Shooter Encoder", leftShooterSensor.getIntegratedSensorVelocity());
   }
 
-  //unused
-  int distanceOffset = 5;
-
-  //array for each heights taken everyfoot starting at 5 feet
-  int[] heights = 
-  {
-    46,
-    42,
-    40,
-    36,
-    34,
-    32,
-    30,
-    28,
-    26,
-    25,
-    24,
-    23,
-    22,
-    21,
-    20,
-    19,
-    18
-  };
-
-  //coordinating speed for each area index
-  public final double[] speeds = 
-  {
-      0.4, //0
-      0.4, //1
-      0.4, //2
-      0.4, //3
-      0.3, //4
-      0.30, //5
-      0.35, //6
-      0.275, //7
-      0.275, //8
-      0.2675, //9
-      0.3, //10
-      0.3, //11
-      0.31, //12
-      0.32, //13
-      0.32, //14
-      0.33, //15
-      0.40, //16
-      0.42, //17
-      0.42, //18
-      0.42, //19
-      0.42, //20
-      0.42, //21
-      0.42 //22
-  };
-
-  //report index of inputed area
-  public double getDistance (double area)
-  {
-      if (area == 0)
-      {
-        return 0;
-      }
-      else if (area < heights[heights.length - 1])
-      {
-        return heights.length;
-      }
-      return getDistance(area, 0, heights.length);
-  }
-
-  //recursive search for the desired area
-  public double getDistance (double area, int start, int end) throws ArrayIndexOutOfBoundsException
-  {
-    if (Math.abs(start - end) == 1)
-    {
-        return (end + start) / 2;
-    }
-
-    if (heights[(end + start) / 2] == area || (heights[(end + start) / 2] > area && heights[(end + start) / 2 + 1] < area))
-    {
-        return (end + start) / 2;
-    }
-    else if (heights[(end + start) / 2] < area)
-    {
-        return getDistance(area, start, (end + start) / 2);
-    }
-    else
-    {
-        return getDistance(area, (end + start) / 2, end);
-    }
-  }
-
   public void shootAtVelocity()
   {
-    double height = getVertical();
-
-    double velocity = 0;
-
-    // if (height > 21)
-    // {
-    //   velocity = getShootVelocityMid();
-    //   System.out.println("Shooting Mid");
-    // }
-    // else
-    // {
-    //   velocity = getShootVelocityFar();
-    //   System.out.println("Shooting Far");
-    // }
-
-    velocity = getShootVelocityMid();
-
-    velocity = velocity + getAngledSpeedDecrease();
-
-    // System.out.println(velocity);
-
-    SmartDashboard.putNumber("Current Found Shooting Height", getVertical());
-    SmartDashboard.putNumber("Current Velocity Target", velocity);
-    spinToSpeed(velocity);
+    double distance = limePosCalc.calculate();
+    calcDist.setDouble(distance);
+    double targetVelocity = getTargetVelocity(distance);
+    spinToSpeed(targetVelocity);
+    SmartDashboard.putNumber("Current Found Distance", distance);
+    SmartDashboard.putNumber("Current Velocity Target", targetVelocity);
   }
 
-  //formula for shooting speed with velocity and height
-  public double getShootVelocityMid ()
-  {
-    double height = getVertical();
-
-    // double velocity = 30 * Math.pow((height - 20), 2);
-    // velocity = velocity + 9000;
-
-    double velocity = 8 * Math.pow((height - 30), 2);
-    velocity = velocity + Math.abs(height * 10);
-    velocity = velocity + 3650;
-
-    //double velocity = 6350;
-
-    // System.out.println(velocity);
-
-    // velocity = 17500;
-
-    return velocity;
-  }
-
-  public double getShootVelocityFar ()
-  {
-    double height = getVertical();
-
-    double velocity = 15 * Math.pow((height - 18), 2);
-    velocity = velocity + Math.abs(height * 15);
-    velocity = velocity + 7650;
-
-    return velocity;
-  }
-
-  public double getAngledSpeedDecrease ()
-  {
-    double horizontal = getHorizontal();
-
-    double offset = 18500 / horizontal;
-
-    if (horizontal < 66)
-    {
-      offset = offset * 1.25;
-    }
-
-    return -offset;
-  }
-
-  //create limelight network table object
-  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-
-  //get the X Coordinate of target
-  public double getXCoord ()
-  {
-      return limelightTable.getEntry("tx").getDouble(0);
-  }
-  //get the Y Coordinate of target
-  public double getYCoord ()
-  {
-      return limelightTable.getEntry("ty").getDouble(0);
-  }
-  //get the Horizontal length of target
-  public double getHorizontal ()
-  {
-      return limelightTable.getEntry("thor").getDouble(0);
-  }
-  //get the Vertical Height of target
-  public double getVertical ()
-  {
-      return limelightTable.getEntry("tvert").getDouble(0);
-  }
-  //get the area of the target
-  public double getArea ()
-  {
-      return limelightTable.getEntry("thor").getDouble(0) * limelightTable.getEntry("tvert").getDouble(0);
-  }
-
-  public void enableLimelight()
-  {
-    limelightTable.getEntry("ledMode").forceSetNumber(3);
-  }
-
-  public void disableLimelight()
-  {
-    limelightTable.getEntry("ledMode").forceSetNumber(1);
+  public double getTargetVelocity(double distance) {
+    double vel = (distance * 1000);
+    // TODO: Make this equation
+    return vel; // testing speed
   }
 
   //set the shooter motors to desired speed using velocity
@@ -433,6 +257,13 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
     leftShooter.set(ControlMode.Velocity, spinSpeed *  -1);
     // SmartDashboard.putNumber("Current Velocity", rightShooterSensor.getIntegratedSensorVelocity());
 
+    shooterRV.setDouble(spinSpeed);
+    shooterBV.setDouble(spinSpeed*bottomSpin);
+    shooterLV.setDouble(spinSpeed);
+
+    gshooterRV.setDouble(spinSpeed);
+    gshooterBV.setDouble(spinSpeed*bottomSpin);
+    gshooterLV.setDouble(spinSpeed);
     // SmartDashboard.putNumber("right Output", rightShooter.getMotorOutputPercent());
     // SmartDashboard.putNumber("bottom Output", bottomShooter.getMotorOutputPercent());
     // SmartDashboard.putNumber("left Output", leftShooter.getMotorOutputPercent());
@@ -468,6 +299,26 @@ private NetworkTableEntry gshooterLS = subsystemShuffleboardTab.add("Graph Left 
   @Override
   public void periodic() 
   {
-    
+    if (limelight.getLED() == LimeLedMode.ON) {
+      SmartDashboard.putNumber("Limelight VO", limelight.getVerticalOffset());
+      SmartDashboard.putNumber("Limelight HO", limelight.getHorizontalOffset());
+      SmartDashboard.putNumber("Limelight Height", limelight.getTargetHeight());
+      SmartDashboard.putNumber("Limelight Width", limelight.getTargetWidth());
+      SmartDashboard.putNumber("Limelight Area", limelight.getTargetArea());
+
+      llXCoord.setDouble(limelight.getVerticalOffset());
+      llYCoord.setDouble(limelight.getVerticalOffset());
+      llHoriz.setDouble(limelight.getTargetWidth());
+      llVert.setDouble(limelight.getTargetHeight());
+      llArea.setDouble(limelight.getTargetArea());
+    }
+
+    shooterLS.setDouble(leftShooterSensor.getIntegratedSensorVelocity());
+    shooterBS.setDouble(bottomShooterSensor.getIntegratedSensorVelocity());
+    shooterRS.setDouble(rightShooterSensor.getIntegratedSensorVelocity());
+
+    gshooterLS.setDouble(leftShooterSensor.getIntegratedSensorVelocity());
+    gshooterBS.setDouble(bottomShooterSensor.getIntegratedSensorVelocity());
+    gshooterRS.setDouble(rightShooterSensor.getIntegratedSensorVelocity());
   }
 }
