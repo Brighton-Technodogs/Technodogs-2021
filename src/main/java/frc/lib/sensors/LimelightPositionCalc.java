@@ -31,7 +31,7 @@ public class LimelightPositionCalc {
     public double calculate() {
         if (limelight.targetVisible()){
         double lensToTarget = limelight.getVerticalOffset();
-        double distance = (targetHeight-lensHeight) / Math.tan(Math.toRadians(lensElevation)+Math.toRadians(lensToTarget));
+        double distance = (targetHeight-lensHeight) / Math.tan(Math.toRadians(lensElevation+lensToTarget));
         return distance;
         } else {
             return 0;

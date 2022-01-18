@@ -95,14 +95,14 @@ public class LimelightDriveOdometryCommand extends CommandBase {
       rotation = rotation - rotation * 0.55;
       if (rotation > 0.1)
       {
-        rotation = -0.5;
+        rotation = 0.5;
         mDriveSubsystem.unsetAligned();
         m_operatorController.setRumble(RumbleType.kRightRumble, 0);
         m_operatorController.setRumble(RumbleType.kLeftRumble, 0);
       }
       else if (rotation < -0.1)
       {
-        rotation = 0.5;
+        rotation = -0.5;
         mDriveSubsystem.unsetAligned();
         m_operatorController.setRumble(RumbleType.kRightRumble, 0);
         m_operatorController.setRumble(RumbleType.kLeftRumble, 0);

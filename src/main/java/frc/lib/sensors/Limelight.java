@@ -105,7 +105,8 @@ public class Limelight {
      * @return The horizontal offset
      */
     public double getHorizontalOffset() {
-        return limelightTable.getEntry("tx").getDouble(0);
+        // TODO: make this not fixed
+        return -limelightTable.getEntry("tx").getDouble(0);
     }
 
     /**
@@ -113,7 +114,7 @@ public class Limelight {
      * @return The vertical offset
      */
     public double getVerticalOffset() {
-        return limelightTable.getEntry("ty").getDouble(0);
+        return -limelightTable.getEntry("ty").getDouble(0);
     }
 
     /**

@@ -265,7 +265,7 @@ public class DriveOdometrySubsystem extends SubsystemBase {
     rot *= Constants.DriveSubsystem.kMaxTwistAngularVelocity;
     // Rotation speeds are in radians per second for some reason...
     var swerveModuleStates = Constants.DriveSubsystem.kDriveKinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getAngle())
+        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(forwardInput, sidewaysInput, rot, getFOAngle())
             : new ChassisSpeeds(forwardInput, sidewaysInput, rot));
 
     // System.out.println("Raw " + swerveModuleStates[0].speedMetersPerSecond);

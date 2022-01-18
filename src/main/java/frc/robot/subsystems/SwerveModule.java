@@ -11,6 +11,9 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.math.controller.PIDController;
@@ -47,8 +50,8 @@ for the velocity of the wheel.
 
 public class SwerveModule {
   private final String moduleIdentifier;
-  private final LazyTalonFX m_driveMotor;
-  private final LazyVictorSPX m_twistMotor;
+  private final TalonFX m_driveMotor;
+  private final VictorSPX m_twistMotor;
 
   // private boolean rotationEnabled = false;
 
@@ -156,8 +159,8 @@ public class SwerveModule {
     .withProperties(Map.of("min", 0, "max", 200))
     .getEntry();
 
-    m_driveMotor = new LazyTalonFX(driveMotorCanID);
-    m_twistMotor = new LazyVictorSPX(twistMotorCanID);
+    m_driveMotor = new TalonFX(driveMotorCanID);
+    m_twistMotor = new VictorSPX(twistMotorCanID);
     this.offset = offset;
     this.moduleIdentifier = moduleIdentifier;
 
